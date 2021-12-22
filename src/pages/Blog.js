@@ -1,9 +1,6 @@
-// material
 import { Container, Stack, Typography } from '@mui/material';
-// components
-import Page from '../components/Page';
 
-// ----------------------------------------------------------------------
+import Page from '../components/Page';
 
 export default function Blog() {
   return (

@@ -1,13 +1,9 @@
 import { motion } from 'framer-motion';
 import { Link as RouterLink } from 'react-router-dom';
-// material
 import { styled } from '@mui/material/styles';
 import { Box, Button, Typography, Container } from '@mui/material';
-// components
-import { MotionContainer, varBounceIn } from '../components/animate';
-import Page from '../components/Page';
-
-// ----------------------------------------------------------------------
+import { MotionContainer, varBounceIn } from '.';
+import Page from '../../components/Page';
 
 const RootStyle = styled(Page)(({ theme }) => ({
   display: 'flex',
@@ -17,11 +13,9 @@ const RootStyle = styled(Page)(({ theme }) => ({
   paddingBottom: theme.spacing(10)
 }));
 
-// ----------------------------------------------------------------------
-
 export default function Page404() {
   return (
-    <RootStyle title="404 Page Not Found | Minimal-UI">
+    <RootStyle>
       <Container>
         <MotionContainer initial="initial" open>
           <Box sx={{ maxWidth: 480, margin: 'auto', textAlign: 'center' }}>

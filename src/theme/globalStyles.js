@@ -1,8 +1,5 @@
-// material
 import { useTheme } from '@mui/material/styles';
 import { GlobalStyles as GlobalThemeStyles } from '@mui/material';
-
-// ----------------------------------------------------------------------
 
 export default function GlobalStyles() {
   const theme = useTheme();

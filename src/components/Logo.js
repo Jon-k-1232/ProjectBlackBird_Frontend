@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { Box } from '@mui/material';
-import crow from '../StaticIcons/crow.png';
+import crow from '../Static_Icons/crow.png';
 
 Logo.propTypes = {
   sx: PropTypes.object
