@@ -1,14 +1,13 @@
 import { Container, Stack, Typography } from '@mui/material';
-
 import Page from '../components/Page';
 
-export default function Blog() {
+export default function Profile() {
   return (
-    <Page title="Dashboard">
+    <Page title="Profile">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Blog
+            Profile
           </Typography>
         </Stack>
       </Container>

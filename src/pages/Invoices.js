@@ -1,16 +1,18 @@
-import { Icon } from '@iconify/react';
-import plusFill from '@iconify/icons-eva/plus-fill';
+import { Container, Button, Stack, Typography } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
-import { Stack, Button, Container, Typography } from '@mui/material';
+import plusFill from '@iconify/icons-eva/plus-fill';
+import { Icon } from '@iconify/react';
 import Page from '../components/Page';
+import dummyTableData from '../_mocks_/dataTable_mock';
+import DataTable from '../components/DataTable/DataTable';
 
-export default function User() {
+export default function Invoices() {
   return (
-    <Page title="User">
+    <Page title="Invoices">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            User
+            Invoices
           </Typography>
           <Button
             variant="contained"
@@ -18,9 +20,10 @@ export default function User() {
             to="#"
             startIcon={<Icon icon={plusFill} />}
           >
-            New User
+            New Invoice
           </Button>
         </Stack>
+        <DataTable data={dummyTableData} />
       </Container>
     </Page>
   );

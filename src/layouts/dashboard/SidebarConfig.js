@@ -1,11 +1,13 @@
 import { Icon } from '@iconify/react';
 import pieChart2Fill from '@iconify/icons-eva/pie-chart-2-fill';
 import peopleFill from '@iconify/icons-eva/people-fill';
-import shoppingBagFill from '@iconify/icons-eva/shopping-bag-fill';
 import fileTextFill from '@iconify/icons-eva/file-text-fill';
-import lockFill from '@iconify/icons-eva/lock-fill';
 import personAddFill from '@iconify/icons-eva/person-add-fill';
 import alertTriangleFill from '@iconify/icons-eva/alert-triangle-fill';
+import clockFill from '@iconify/icons-eva/clock-fill';
+import layersFill from '@iconify/icons-eva/layers-fill';
+import printerFill from '@iconify/icons-eva/printer-fill';
+import baselineWork from '@iconify/icons-ic/baseline-work';
 
 const getIcon = (name) => <Icon icon={name} width={22} height={22} />;
 
@@ -16,24 +18,34 @@ const sidebarConfig = [
     icon: getIcon(pieChart2Fill)
   },
   {
-    title: 'user',
-    path: '/dashboard/user',
+    title: 'clients',
+    path: '/dashboard/clients',
     icon: getIcon(peopleFill)
   },
   {
-    title: 'product',
-    path: '/dashboard/products',
-    icon: getIcon(shoppingBagFill)
+    title: 'Transactions',
+    path: '/dashboard/transactions',
+    icon: getIcon(clockFill)
   },
   {
-    title: 'blog',
-    path: '/dashboard/blog',
+    title: 'Invoices',
+    path: '/dashboard/invoices',
     icon: getIcon(fileTextFill)
   },
   {
-    title: 'login',
+    title: 'Post Invoices',
+    path: '/dashboard/postInvoices',
+    icon: getIcon(printerFill)
+  },
+  {
+    title: 'Login',
     path: '/login',
-    icon: getIcon(lockFill)
+    icon: getIcon(printerFill)
+  },
+  {
+    title: 'Jobs',
+    path: '/dashboard/jobs',
+    icon: getIcon(baselineWork)
   },
   {
     title: 'register',

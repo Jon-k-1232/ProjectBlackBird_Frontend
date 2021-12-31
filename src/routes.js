@@ -4,10 +4,13 @@ import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import DashboardApp from './pages/DashboardApp';
-import Products from './pages/Products';
-import Blog from './pages/Blog';
-import User from './pages/User';
+import Transactions from './pages/Transactions';
+import Invoices from './pages/Invoices';
+import Clients from './pages/Clients';
 import NotFound from './pages/Page404/Page404';
+import PostInvoices from './pages/PostInvoices';
+import Jobs from './pages/Jobs';
+import Profile from './pages/Profile';
 
 export default function Router() {
   return useRoutes([
@@ -17,9 +20,12 @@ export default function Router() {
       children: [
         { element: <Navigate to="/dashboard/app" replace /> },
         { path: 'app', element: <DashboardApp /> },
-        { path: 'user', element: <User /> },
-        { path: 'products', element: <Products /> },
-        { path: 'blog', element: <Blog /> }
+        { path: 'clients', element: <Clients /> },
+        { path: 'transactions', element: <Transactions /> },
+        { path: 'invoices', element: <Invoices /> },
+        { path: 'postInvoices', element: <PostInvoices /> },
+        { path: 'jobs', element: <Jobs /> },
+        { path: 'profile', element: <Profile /> }
       ]
     },
     {

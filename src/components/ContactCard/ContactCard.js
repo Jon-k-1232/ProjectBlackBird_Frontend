@@ -126,7 +126,7 @@ export default function ContactCard(props) {
   return (
     <Card className="contactWrapper">
       <CardContent style={styles()} className="contactHeader">
-        <Typography variant="h3">{companyName}</Typography>
+        <Typography variant="h4">{companyName}</Typography>
         <Typography variant="subtitle1">{inactive ? 'Inactive' : 'Active'}</Typography>
         <Typography variant="subtitle1">Client:{oid}</Typography>
         <EllipsisMenu edit={setEdit} menuOptions={['Edit']} />
