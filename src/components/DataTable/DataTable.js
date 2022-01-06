@@ -1,8 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import MUIDataTable from 'mui-datatables';
 
-// Table data is an array of arrays where each array is a seperate item
-// Column data is an array of strings. Each string is a new column head
+/**
+ * @param {*} props props.tableData, props.tableHeaders, props.route
+ * Column data is an array of strings. Each string is a new column head
+ * Table data is an array of arrays where each array is a seperate item
+ */
 export default function DataTable(props) {
 	const navigate = useNavigate();
 
@@ -19,9 +22,9 @@ export default function DataTable(props) {
 		responsive,
 		tableBodyHeight,
 		tableBodyMaxHeight,
-		// Passes the client ID to client details page through the state.
 		onRowClick: rowData => {
-			navigate('/dashboard/clientDetails/', { state: { id: `${rowData[0]}` } });
+			// Whole row of data will be stored in router state
+			navigate(`${props.route}`, { state: { rowData } });
 		}
 	};
 

@@ -17,7 +17,7 @@ export default function Clients({ allClients }) {
 						New Client
 					</Button>
 				</Stack>
-				<DataTable {...allClients} route='clientDetails' />
+				<DataTable {...allClients} route='/dashboard/clientDetails/' />
 			</Container>
 		</Page>
 	);

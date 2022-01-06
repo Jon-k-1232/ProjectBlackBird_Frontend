@@ -8,7 +8,7 @@ export default function ClientDetails({ allClients }) {
 	const location = useLocation();
 
 	// Data is being stored in props of routing.
-	const clientId = parseInt(location.state.id);
+	const clientId = parseInt(location.state.rowData[0]);
 	// While data cane be passed
 	const contactDetails = allClients.rawData.find(item => item.oid === clientId);
 
