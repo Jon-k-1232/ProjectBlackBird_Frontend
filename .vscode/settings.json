@@ -18,5 +18,15 @@
   "editor.fontFamily": "Menlo",
   "editor.tabSize": 5,
   "editor.multiCursorModifier": "ctrlCmd",
-  "prettier.jsxSingleQuote": true
+  "prettier.jsxSingleQuote": true,
+  "eslint.format.enable": true,
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
+  "javascript.format.insertSpaceAfterKeywordsInControlFlowStatements": false,
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "prettier.printWidth": 145,
+  "prettier.proseWrap": "never",
+  "prettier.singleQuote": true
 }
