@@ -30,7 +30,7 @@ export default function DataTable(props) {
 
 	return (
 		<>
-			<div style={{ marginTop: '30px' }}>
+			<div style={{ marginTop: '25px' }}>
 				<MUIDataTable data={props.tableData} columns={props.tableHeaders} options={options} />
 			</div>
 		</>

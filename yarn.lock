@@ -1445,10 +1445,25 @@
   "resolved" "https://registry.npmjs.org/@iconify/icons-eva/-/icons-eva-1.1.0.tgz"
   "version" "1.1.0"
 
+"@iconify/icons-fa-solid@^1.1.1":
+  "integrity" "sha512-jRdH5i99NUli+HD/uVjkNvj++LqnJC7x7t+FOUVhXcLzs35C0yIrJzEsu6CWUSBsYIgEE3Rd1cuhyG03VZ5zhw=="
+  "resolved" "https://registry.npmjs.org/@iconify/icons-fa-solid/-/icons-fa-solid-1.1.1.tgz"
+  "version" "1.1.1"
+
+"@iconify/icons-foundation@^1.1.0":
+  "integrity" "sha512-qVD6lX0ZOu17XFNtcEnFwnL+8VhDq+pvwjEb22bLNCh3Zb0iCs+cc+Ft4poxBWw52XX/GlLtUwB8BbYjK+oWVQ=="
+  "resolved" "https://registry.npmjs.org/@iconify/icons-foundation/-/icons-foundation-1.1.0.tgz"
+  "version" "1.1.0"
+
 "@iconify/icons-ic@^1.1.17":
   "integrity" "sha512-7hBao2xPa8ZAzXIMhl1sfWK74GTEZtBGhO0h53TX21JOY9xCto9uTWbbIOyEqA2Z0IzFl4tqhZKcS/4UJPB7XQ=="
   "resolved" "https://registry.npmjs.org/@iconify/icons-ic/-/icons-ic-1.1.17.tgz"
   "version" "1.1.17"
+
+"@iconify/icons-whh@^1.1.0":
+  "integrity" "sha512-WFDcwp3h4CLmfj4BcRkqtSFlDs9K6OQw4GDjHVqpx7BbO22001yKP0RvJETA0iuaUzLREmdOgdXN5jbrPw6raw=="
+  "resolved" "https://registry.npmjs.org/@iconify/icons-whh/-/icons-whh-1.1.0.tgz"
+  "version" "1.1.0"
 
 "@iconify/react@^3.1.1":
   "integrity" "sha512-KsMXgZD94UTah5kFO41qMTQGVSt9xYnC2OCX3LiV7aRThUuTdjTFyu9EfVzHLjwhgYnkP54/DZNa+3ssBqiLBQ=="
