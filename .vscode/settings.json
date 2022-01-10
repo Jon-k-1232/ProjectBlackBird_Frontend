@@ -10,7 +10,6 @@
   "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": true,
   "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
   "javascript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": true,
-  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
   "javascript.format.semicolons": "insert",
   "prettier.jsxBracketSameLine": true,
   "files.autoSave": "onFocusChange",
@@ -28,5 +27,11 @@
   },
   "prettier.printWidth": 145,
   "prettier.proseWrap": "never",
-  "prettier.singleQuote": true
+  "prettier.singleQuote": true,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+  "html.format.wrapLineLength": 145,
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "javascript.preferences.quoteStyle": "single",
+  "typescript.preferences.quoteStyle": "single"
 }

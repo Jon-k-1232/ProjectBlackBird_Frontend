@@ -14,33 +14,33 @@ import Profile from './Pages/Profile';
 import ClientDetails from './Pages/ClientDetails';
 
 export default function Router(allClients) {
-	return useRoutes([
-		{
-			path: '/dashboard',
-			element: <DashboardLayout />,
-			children: [
-				{ element: <Navigate to='/dashboard/app' replace /> },
-				{ path: 'app', element: <DashboardApp /> },
-				{ path: 'clients', element: <Clients {...allClients} /> },
-				{ path: 'clientDetails', element: <ClientDetails {...allClients} /> },
-				{ path: 'transactions', element: <Transactions /> },
-				{ path: 'invoices', element: <Invoices /> },
-				{ path: 'postInvoices', element: <PostInvoices /> },
-				{ path: 'jobs', element: <Jobs /> },
-				{ path: 'profile', element: <Profile /> }
-			]
-		},
-		{
-			path: '/',
-			element: <LogoOnlyLayout />,
-			children: [
-				{ path: 'login', element: <Login /> },
-				{ path: 'register', element: <Register /> },
-				{ path: '404', element: <NotFound /> },
-				{ path: '/', element: <Navigate to='/dashboard' /> },
-				{ path: '*', element: <Navigate to='/404' /> }
-			]
-		},
-		{ path: '*', element: <Navigate to='/404' replace /> }
-	]);
+  return useRoutes([
+    {
+      path: '/dashboard',
+      element: <DashboardLayout />,
+      children: [
+        { element: <Navigate to='/dashboard/app' replace /> },
+        { path: 'app', element: <DashboardApp /> },
+        { path: 'clients', element: <Clients {...allClients} /> },
+        { path: 'clientDetails', element: <ClientDetails {...allClients} /> },
+        { path: 'transactions', element: <Transactions /> },
+        { path: 'invoices', element: <Invoices /> },
+        { path: 'postInvoices', element: <PostInvoices /> },
+        { path: 'jobs', element: <Jobs /> },
+        { path: 'profile', element: <Profile /> },
+      ],
+    },
+    {
+      path: '/',
+      element: <LogoOnlyLayout />,
+      children: [
+        { path: 'login', element: <Login /> },
+        { path: 'register', element: <Register /> },
+        { path: '404', element: <NotFound /> },
+        { path: '/', element: <Navigate to='/dashboard' /> },
+        { path: '*', element: <Navigate to='/404' /> },
+      ],
+    },
+    { path: '*', element: <Navigate to='/404' replace /> },
+  ]);
 }

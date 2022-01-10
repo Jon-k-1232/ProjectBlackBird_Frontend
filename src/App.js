@@ -8,24 +8,24 @@ import { css } from '@emotion/react';
 import ClockLoader from 'react-spinners/ClipLoader';
 
 export default function App() {
-	const [companies, setCompanies] = useState(null);
+  const [companies, setCompanies] = useState(null);
 
-	useEffect(() => {
-		const allCompaniesRaw = getCompanies();
-		const allCompanies = companyDataAdapter(allCompaniesRaw);
-		setCompanies(allCompanies);
-	}, []);
+  useEffect(() => {
+    const allCompaniesRaw = getCompanies();
+    const allCompanies = companyDataAdapter(allCompaniesRaw);
+    setCompanies(allCompanies);
+  }, []);
 
-	const override = css`
-		display: block;
-		margin: 0 auto;
-		border-color: red;
-	`;
+  const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+  `;
 
-	return (
-		<ThemeConfig>
-			<GlobalStyles />
-			{companies ? <Router allClients={companies} /> : <ClockLoader color={'#ffffff'} loading={true} css={override} size={150} />}
-		</ThemeConfig>
-	);
+  return (
+    <ThemeConfig>
+      <GlobalStyles />
+      {companies ? <Router allClients={companies} /> : <ClockLoader color={'#ffffff'} loading={true} css={override} size={150} />}
+    </ThemeConfig>
+  );
 }
