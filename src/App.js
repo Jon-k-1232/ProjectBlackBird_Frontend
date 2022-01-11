@@ -5,7 +5,7 @@ import GlobalStyles from './Theme/globalStyles';
 import { getCompanies } from './ApiCalls/ApiCalls';
 import { companyDataAdapter } from './ApiCalls/DataAdapter';
 import { css } from '@emotion/react';
-import ClockLoader from 'react-spinners/ClipLoader';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 export default function App() {
   const [companies, setCompanies] = useState(null);
@@ -25,7 +25,13 @@ export default function App() {
   return (
     <ThemeConfig>
       <GlobalStyles />
-      {companies ? <Router allClients={companies} /> : <ClockLoader color={'#ffffff'} loading={true} css={override} size={150} />}
+      {companies ? (
+        <Router allClients={companies} />
+      ) : (
+        <div className='sweet-loading' style={{ height: '99vh', display: 'flex', alignItems: 'center' }}>
+          <ClipLoader sizeUnit={'px'} color={'#ffffff'} loading={true} css={override} size={150} />
+        </div>
+      )}
     </ThemeConfig>
   );
 }

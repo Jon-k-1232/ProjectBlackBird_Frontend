@@ -5,26 +5,27 @@ import { Stack, Button, Container, Typography } from '@mui/material';
 import Page from '../../Components/Page';
 import DataTable from '../../Components/DataTable/DataTable';
 
-export default function Clients({ allClients }) {
+export default function Employees() {
   const navigate = useNavigate();
+
   return (
-    <Page title='Clients'>
+    <Page title='employees'>
       <Container style={{ maxWidth: '1280px' }}>
         <Stack direction='row' alignItems='center' justifyContent='space-between' mb={5}>
           <Typography variant='h4' gutterBottom>
-            Clients
+            Employees
           </Typography>
           <Button
-            onClick={navigate('/dashboard/newClient/')}
+            onClick={navigate('/dashboard/newEmployee/')}
             variant='contained'
             component={RouterLink}
             to='#'
             startIcon={<Icon icon={plusFill} />}>
-            New Client
+            Add Employee
           </Button>
         </Stack>
-        <DataTable {...allClients} route='/dashboard/clientDetails/' />
       </Container>
+      <DataTable data={''} />
     </Page>
   );
 }

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Container } from '@mui/material';
-import Page from '../Components/Page';
-import ContactCard from '../Components/ContactCard/ContactCard';
-import HeaderMenu from '../Components/HeaderMenu/HeaderMenu';
-import DataTable from '../Components/DataTable/DataTable';
-import { typography } from '@mui/system';
+import Page from '../../Components/Page';
+import ContactCard from '../../Components/ContactCard/ContactCard';
+import HeaderMenu from '../../Components/HeaderMenu/HeaderMenu';
+import DataTable from '../../Components/DataTable/DataTable';
 import ComingSoon from 'src/Components/ComingSoon';
 
 export default function ClientDetails({ allClients }) {

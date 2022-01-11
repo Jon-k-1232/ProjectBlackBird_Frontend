@@ -1,29 +1,31 @@
-import { Icon } from '@iconify/react';
-import plusFill from '@iconify/icons-eva/plus-fill';
+import { Container, Button, Stack, Typography } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { Stack, Button, Container, Typography } from '@mui/material';
+import plusFill from '@iconify/icons-eva/plus-fill';
+import { Icon } from '@iconify/react';
 import Page from '../../Components/Page';
+import dummyTableData from '../../_mocks_/dataTable_mock';
 import DataTable from '../../Components/DataTable/DataTable';
 
-export default function Clients({ allClients }) {
+export default function Transactions() {
   const navigate = useNavigate();
+
   return (
-    <Page title='Clients'>
+    <Page title='Transactions'>
       <Container style={{ maxWidth: '1280px' }}>
         <Stack direction='row' alignItems='center' justifyContent='space-between' mb={5}>
-          <Typography variant='h4' gutterBottom>
-            Clients
+          <Typography variant='h4' sx={{ mb: 5 }}>
+            Transactions
           </Typography>
           <Button
-            onClick={navigate('/dashboard/newClient/')}
+            onClick={navigate('/dashboard/newTransaction/')}
             variant='contained'
             component={RouterLink}
             to='#'
             startIcon={<Icon icon={plusFill} />}>
-            New Client
+            New Transaction
           </Button>
         </Stack>
-        <DataTable {...allClients} route='/dashboard/clientDetails/' />
+        <DataTable name='Client List' data={dummyTableData} />
       </Container>
     </Page>
   );

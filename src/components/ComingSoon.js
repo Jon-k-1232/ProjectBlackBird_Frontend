@@ -1,4 +1,4 @@
-import { Typography, Card, Container } from '@mui/material';
+import { Typography, Card } from '@mui/material';
 
 export default function ComingSoon() {
   return (
