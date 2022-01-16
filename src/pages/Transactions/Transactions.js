@@ -1,10 +1,10 @@
-import { Container, Button, Stack, Typography } from '@mui/material';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Container, Stack } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import plusFill from '@iconify/icons-eva/plus-fill';
-import { Icon } from '@iconify/react';
 import Page from '../../Components/Page';
 import dummyTableData from '../../_mocks_/dataTable_mock';
 import DataTable from '../../Components/DataTable/DataTable';
+import HeaderMenu from '../../Components/HeaderMenu/HeaderMenu';
 
 export default function Transactions() {
   const navigate = useNavigate();
@@ -13,20 +13,12 @@ export default function Transactions() {
     <Page title='Transactions'>
       <Container style={{ maxWidth: '1280px' }}>
         <Stack direction='row' alignItems='center' justifyContent='space-between' mb={5}>
-          <Typography variant='h4' sx={{ mb: 5 }}>
-            Transactions
-          </Typography>
-          <Button
-            onClick={navigate('/dashboard/newTransaction/')}
-            variant='contained'
-            component={RouterLink}
-            to='#'
-            startIcon={<Icon icon={plusFill} />}>
-            New Transaction
-          </Button>
+          <HeaderMenu handleOnClick={(data) => navigate(`/dashboard/${data}/`)} page={'Transactions'} listOfButtons={button} />
         </Stack>
         <DataTable name='Client List' data={dummyTableData} />
       </Container>
     </Page>
   );
 }
+
+const button = [{ name: 'newTransaction', variant: 'contained', icon: plusFill, htmlName: 'New Transaction' }];

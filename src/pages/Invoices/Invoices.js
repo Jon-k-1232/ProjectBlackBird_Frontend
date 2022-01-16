@@ -1,10 +1,10 @@
-import { Container, Button, Stack, Typography } from '@mui/material';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Container, Stack } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import plusFill from '@iconify/icons-eva/plus-fill';
-import { Icon } from '@iconify/react';
 import Page from '../../Components/Page';
 import dummyTableData from '../../_mocks_/dataTable_mock';
 import DataTable from '../../Components/DataTable/DataTable';
+import HeaderMenu from '../../Components/HeaderMenu/HeaderMenu';
 
 export default function Invoices() {
   const navigate = useNavigate();
@@ -13,28 +13,15 @@ export default function Invoices() {
     <Page title='Invoices'>
       <Container style={{ maxWidth: '1280px' }}>
         <Stack direction='row' alignItems='center' justifyContent='space-between' mb={5}>
-          <div>
-            <Typography variant='h4' gutterBottom>
-              Invoices
-            </Typography>
-          </div>
-          <div style={{ width: '371px' }}>
-            <Button
-              onClick={navigate('/dashboard/newInvoice/')}
-              style={{ marginRight: '10px' }}
-              variant='contained'
-              component={RouterLink}
-              to='#'
-              startIcon={<Icon icon={plusFill} />}>
-              Create Monthly Invoices
-            </Button>
-            <Button style={{ marginRight: '10px' }} variant='contained' component={RouterLink} to='#' startIcon={<Icon icon={plusFill} />}>
-              New Invoice
-            </Button>
-          </div>
+          <HeaderMenu handleOnClick={(data) => navigate(`/dashboard/${data}/`)} page={'Invoices'} listOfButtons={button} />
         </Stack>
         <DataTable data={dummyTableData} />
       </Container>
     </Page>
   );
 }
+
+const button = [
+  { name: 'newInvoice', variant: 'contained', icon: plusFill, htmlName: 'Create Monthly Invoices' },
+  { name: 'newInvoice', variant: 'contained', icon: plusFill, htmlName: 'New Invoice' },
+];

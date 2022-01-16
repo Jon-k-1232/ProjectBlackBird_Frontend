@@ -15,7 +15,7 @@ import Employees from './Pages/Employees/Employees';
 import NewEmployee from './Pages/Employees/NewEmployee';
 import Jobs from './Pages/Jobs/Jobs';
 import NewJob from './Pages/Jobs/NewJob';
-import Profile from './Pages/Profile';
+import Profile from './Pages/Profile/Profile';
 import ClientDetails from './Pages/Clients/ClientDetails';
 
 export default function Router(allClients) {

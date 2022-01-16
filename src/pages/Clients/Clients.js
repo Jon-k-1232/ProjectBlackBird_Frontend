@@ -1,9 +1,9 @@
-import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { Stack, Button, Container, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Stack, Container } from '@mui/material';
 import Page from '../../Components/Page';
 import DataTable from '../../Components/DataTable/DataTable';
+import HeaderMenu from '../../Components/HeaderMenu/HeaderMenu';
 
 export default function Clients({ allClients }) {
   const navigate = useNavigate();
@@ -11,20 +11,12 @@ export default function Clients({ allClients }) {
     <Page title='Clients'>
       <Container style={{ maxWidth: '1280px' }}>
         <Stack direction='row' alignItems='center' justifyContent='space-between' mb={5}>
-          <Typography variant='h4' gutterBottom>
-            Clients
-          </Typography>
-          <Button
-            onClick={navigate('/dashboard/newClient/')}
-            variant='contained'
-            component={RouterLink}
-            to='#'
-            startIcon={<Icon icon={plusFill} />}>
-            New Client
-          </Button>
+          <HeaderMenu handleOnClick={(data) => navigate(`/dashboard/${data}/`)} page={'Clients'} listOfButtons={button} />
         </Stack>
         <DataTable {...allClients} route='/dashboard/clientDetails/' />
       </Container>
     </Page>
   );
 }
+
+const button = [{ name: 'newClient', variant: 'contained', icon: plusFill, htmlName: 'New Client' }];

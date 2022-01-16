@@ -1465,10 +1465,10 @@
   "resolved" "https://registry.npmjs.org/@iconify/icons-whh/-/icons-whh-1.1.0.tgz"
   "version" "1.1.0"
 
-"@iconify/react@^3.1.1":
-  "integrity" "sha512-KsMXgZD94UTah5kFO41qMTQGVSt9xYnC2OCX3LiV7aRThUuTdjTFyu9EfVzHLjwhgYnkP54/DZNa+3ssBqiLBQ=="
-  "resolved" "https://registry.npmjs.org/@iconify/react/-/react-3.1.1.tgz"
-  "version" "3.1.1"
+"@iconify/react@^3.1.2":
+  "integrity" "sha512-tMooMuTSgsaYAMgnPpzmDrAL/umwczcDkc6916u8igSFc3SO72SJicysDbiV+Jhbdg67BU+uUv59U2jq57Bj4g=="
+  "resolved" "https://registry.npmjs.org/@iconify/react/-/react-3.1.2.tgz"
+  "version" "3.1.2"
   dependencies:
     "cross-fetch" "^3.1.4"
 
