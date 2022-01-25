@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Container, Card, CardContent } from '@mui/material';
+import { Container } from '@mui/material';
 import Page from '../../Components/Page';
 import ContactCard from '../../Components/ContactCard/ContactCard';
 import HeaderMenu from '../../Components/HeaderMenu/HeaderMenu';
@@ -41,15 +41,11 @@ export default function ClientDetails({ allClients }) {
 }
 
 const button = [
-  { name: 'notes', onClick: 1, variant: 'contained', icon: clipboardNotes, htmlName: 'Notes' },
-  { name: 'transactions', onClick: 1, variant: 'contained', icon: clockFill, htmlName: 'Transactions' },
-  { name: 'newTransactions', onClick: 1, variant: 'contained', icon: plusFill, htmlName: 'New Transaction' },
-  { name: 'jobs', onClick: 1, variant: 'contained', icon: baselineWork, htmlName: 'Jobs' },
-  { name: 'newJob', onClick: 1, variant: 'contained', icon: plusFill, htmlName: 'New Job' },
-  { name: 'invoices', onClick: 1, variant: 'contained', icon: fileTextFill, htmlName: 'Invoices' },
-  { name: 'statistics', onClick: 1, variant: 'contained', icon: statisticsIcon, htmlName: 'Statistics' },
+  { name: 'notes', variant: 'contained', icon: clipboardNotes, htmlName: 'Notes' },
+  { name: 'transactions', variant: 'contained', icon: clockFill, htmlName: 'Transactions' },
+  { name: 'newTransactions', variant: 'contained', icon: plusFill, htmlName: 'New Transaction' },
+  { name: 'jobs', variant: 'contained', icon: baselineWork, htmlName: 'Jobs' },
+  { name: 'newJob', variant: 'contained', icon: plusFill, htmlName: 'New Job' },
+  { name: 'invoices', variant: 'contained', icon: fileTextFill, htmlName: 'Invoices' },
+  { name: 'statistics', variant: 'contained', icon: statisticsIcon, htmlName: 'Statistics' },
 ];
-
-const styles = () => ({
-  padding: '0px',
-});

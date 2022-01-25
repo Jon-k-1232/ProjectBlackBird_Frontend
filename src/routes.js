@@ -30,7 +30,7 @@ export default function Router(allClients) {
         { path: 'clientDetails', element: <ClientDetails {...allClients} /> },
         { path: 'newClient', element: <NewClient /> },
         { path: 'transactions', element: <Transactions /> },
-        { path: 'newTransaction', element: <NewTransactions /> },
+        { path: 'newTransaction', element: <NewTransactions {...allClients} /> },
         { path: 'invoices', element: <Invoices /> },
         { path: 'newInvoice', element: <NewInvoice /> },
         { path: 'employees', element: <Employees /> },

@@ -1,4 +1,4 @@
-import dummyTableData from "../_mocks_/dataTable_mock";
+import dummyTableData from '../_mocks_/dataTable_mock';
 
 export const getCompanies = () => {
   const cache = dummyTableData;
@@ -6,6 +6,16 @@ export const getCompanies = () => {
 };
 
 export const fetchCompanyTransactions = () => {
-  const allCompanies = "Transactions Working";
+  const allCompanies = 'Transactions Working';
   return allCompanies;
+};
+
+export const postTransaction = postTransactionData => {
+  const confirm = postTransactionData;
+  return confirm;
+};
+
+export const getCompanyJobs = companyOid => {
+  const jobInfo = [{}, {}];
+  return jobInfo;
 };
