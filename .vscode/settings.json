@@ -33,5 +33,7 @@
   "html.format.wrapLineLength": 145,
   "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
   "javascript.preferences.quoteStyle": "single",
-  "typescript.preferences.quoteStyle": "single"
+  "typescript.preferences.quoteStyle": "single",
+  "prettier.arrowParens": "avoid",
+  "prettier.trailingComma": "none"
 }

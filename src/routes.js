@@ -18,7 +18,7 @@ import NewJob from './Pages/Jobs/NewJob';
 import Profile from './Pages/Profile/Profile';
 import ClientDetails from './Pages/Clients/ClientDetails';
 
-export default function Router(allClients) {
+export default function Router(allClients, allEmployees) {
   return useRoutes([
     {
       path: '/dashboard',
@@ -30,15 +30,15 @@ export default function Router(allClients) {
         { path: 'clientDetails', element: <ClientDetails {...allClients} /> },
         { path: 'newClient', element: <NewClient /> },
         { path: 'transactions', element: <Transactions /> },
-        { path: 'newTransaction', element: <NewTransactions {...allClients} /> },
+        { path: 'newTransaction', element: <NewTransactions {...allClients} {...allEmployees} /> },
         { path: 'invoices', element: <Invoices /> },
         { path: 'newInvoice', element: <NewInvoice /> },
         { path: 'employees', element: <Employees /> },
         { path: 'newEmployee', element: <NewEmployee /> },
         { path: 'jobs', element: <Jobs /> },
         { path: 'newJob', element: <NewJob /> },
-        { path: 'profile', element: <Profile /> },
-      ],
+        { path: 'profile', element: <Profile /> }
+      ]
     },
     {
       path: '/',
@@ -48,9 +48,9 @@ export default function Router(allClients) {
         { path: 'register', element: <Register /> },
         { path: '404', element: <NotFound /> },
         { path: '/', element: <Navigate to='/dashboard/app' /> },
-        { path: '*', element: <Navigate to='/404' /> },
-      ],
+        { path: '*', element: <Navigate to='/404' /> }
+      ]
     },
-    { path: '*', element: <Navigate to='/404' replace /> },
+    { path: '*', element: <Navigate to='/404' replace /> }
   ]);
 }
