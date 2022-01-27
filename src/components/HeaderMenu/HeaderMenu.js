@@ -10,9 +10,10 @@ export default function HeaderMenu({ page, handleOnClick, listOfButtons }) {
         </Typography>
         <div>
           {listOfButtons &&
-            listOfButtons.map((button) => (
+            listOfButtons.map((button, i) => (
               <Button
-                onClick={(e) => handleOnClick(e.target.name)}
+                key={i}
+                onClick={e => handleOnClick(e.target.name)}
                 name={button.name}
                 style={{ height: '30px', marginLeft: '10px' }}
                 variant={button.variant}

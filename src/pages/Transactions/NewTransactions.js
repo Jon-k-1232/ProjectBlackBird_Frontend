@@ -1,18 +1,15 @@
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
 import { useFormik, Form, FormikProvider, FormikConsumer } from 'formik';
-import { useNavigate } from 'react-router-dom';
 import { Stack, TextField, Card, Button, Typography, Container } from '@mui/material';
 import Page from '../../Components/Page';
 import { FormControlLabel, Autocomplete, Checkbox } from '@mui/material';
-import { getCompanyJobs, postTransaction } from '../../ApiCalls/ApiCalls';
+import { getCompanyJobs } from '../../ApiCalls/ApiCalls';
+import checkValuesOne from '../Transactions/FormValidations';
 import dayjs from 'dayjs';
 
 export default function NewTransactions({ allClients, allEmployees, passedCompany }) {
-  const navigate = useNavigate();
-
   // ToDo Form final post object
-  // ToDo Write form validations to ensure only good data
 
   const [showDiscount, setShowDiscount] = useState(false);
   const [transactionType, setTransactionType] = useState(null);
@@ -20,39 +17,39 @@ export default function NewTransactions({ allClients, allEmployees, passedCompan
   const [companyJobs, setCompanyJobs] = useState(null);
 
   useEffect(() => {
-    if (company) {
-      const allJobs = getCompanyJobs(company);
+    if (company || passedCompany) {
+      const allJobs = passedCompany ? getCompanyJobs(passedCompany.value) : getCompanyJobs(company);
       setCompanyJobs(allJobs.rawData);
     }
   }, [company]);
 
+  // Form value handler
   const formik = useFormik({
     initialValues: {
-      company: passedCompany ? passedCompany.value : null,
-      job: null,
-      employee: null,
-      transactionType: null,
+      company: passedCompany ? passedCompany.value : '',
+      job: '',
+      employee: '',
+      transactionType: '',
       transactionDate: dayjs().format(),
       quantity: 1,
       unitOfMeasure: 'Each',
-      unitTransaction: null,
-      totalTransaction: 0.0,
-      startTime: null,
-      endTime: null,
-      reference: null,
-      noteOrDescription: null,
-      discount: null,
-      invoice: null,
-      userTag: null,
-      paymentApplied: null,
-      ignoreInAgeing: null
+      unitTransaction: '0.00',
+      totalTransaction: '0.00',
+      startTime: '',
+      endTime: '',
+      reference: '',
+      noteOrDescription: '',
+      discount: '',
+      invoice: '',
+      userTag: '',
+      paymentApplied: '',
+      ignoreInAgeing: ''
     },
     // validationSchema: RegisterSchema,
     onSubmit: (values, { resetForm }) => {
       const updatedValues = checkValuesOne(values);
       console.log(updatedValues);
       resetForm({ values: '' });
-      // navigate('/dashboard', { replace: true });
     }
   });
 
@@ -67,59 +64,29 @@ export default function NewTransactions({ allClients, allEmployees, passedCompan
   const totalPayment =
     transactionType === 'Charge' ? Math.abs(parseFloat(totalTransaction).toFixed(2)) : parseFloat(totalTransaction).toFixed(2);
 
-  // Checking values of form, edge cases
-  const checkValuesOne = formikValues => {
-    if (formikValues.discount < 0) formikValues.discount = Math.abs(formikValues.discount);
-
-    if (formikValues.transactionType === 'Charge' && totalCharges >= 0 && !formikValues.discount) {
-      formikValues.totalTransaction = parseInt(totalCharges, 10);
-    } else if (formikValues.discount) {
-      formikValues.totalTransaction = parseInt(totalCharges, 10);
-    }
-
-    // Handles edge cases for negative vs postive numbers being entered for transaction types
-    if (formikValues.transactionType === 'Charge' && formikValues.unitTransaction <= 0) {
-      formikValues.unitTransaction = Math.abs(formikValues.unitTransaction);
-      formikValues.totalTransaction = Math.abs(formikValues.totalTransaction);
-    } else if (formikValues.transactionType === 'Payment') {
-      formikValues.unitTransaction = Math.abs(formikValues.totalTransaction);
-      formikValues.totalTransaction = -Math.abs(formikValues.totalTransaction);
-    } else if (formikValues.transactionType !== 'Charge' && formikValues.totalTransaction <= 0) {
-      formikValues.unitTransaction = Math.abs(formikValues.totalTransaction);
-      formikValues.totalTransaction = -Math.abs(formikValues.totalTransaction);
-    }
-    return formikValues;
-  };
-
   return (
     <Page style={{ marginTop: '25px' }} title='NewTransactions'>
       <Card style={{ padding: '20px' }}>
         <FormikProvider value={formik}>
-          <Form id='transactionForm' onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit}>
             <Stack spacing={5}>
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 4 }}>
                 <Autocomplete
-                  disablePortal
-                  disableClearable
                   required
-                  id='combo-box-demo'
+                  disableClearable
                   options={allClients.rawData || []}
-                  value={company}
-                  onChange={(e, v) => {
-                    values.company = v.value;
-                    console.log(v.value);
-                    setCompany(v.value);
-                  }}
                   label='Select Company'
                   sx={{ width: 300 }}
+                  onChange={(e, v) => {
+                    values.company = v.value;
+                    setCompany(v.value);
+                  }}
                   renderInput={params => <TextField {...params} label='Company' />}
                 />
 
                 <Autocomplete
-                  disablePortal
-                  disableClearable
                   required
-                  id='combo-box-demo'
+                  disableClearable
                   options={companyJobs || []}
                   onChange={(e, v) => (values.job = v.value)}
                   label='Select Job'
@@ -128,10 +95,8 @@ export default function NewTransactions({ allClients, allEmployees, passedCompan
                 />
 
                 <Autocomplete
-                  disablePortal
-                  disableClearable
                   required
-                  id='combo-box-demo'
+                  disableClearable
                   options={allEmployees || []}
                   label='Select Employee'
                   sx={{ width: 300 }}
@@ -141,10 +106,8 @@ export default function NewTransactions({ allClients, allEmployees, passedCompan
               </Stack>
 
               <Autocomplete
-                disablePortal
-                disableClearable
                 required
-                id='transactionType'
+                disableClearable
                 options={transactionTypes || []}
                 sx={{ width: 300 }}
                 value={transactionType}
@@ -160,12 +123,10 @@ export default function NewTransactions({ allClients, allEmployees, passedCompan
               {transactionType === 'Charge' && (
                 <Container>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
-                    <TextField id='outlined-required' type='number' {...getFieldProps('quantity')} label='Quantity' />
+                    <TextField type='number' {...getFieldProps('quantity')} label='Quantity' />
 
                     <Autocomplete
-                      disablePortal
                       disableClearable
-                      id='unitOfMeasurement'
                       options={type || []}
                       label='Unit of Measure'
                       sx={{ width: 300 }}
@@ -173,11 +134,11 @@ export default function NewTransactions({ allClients, allEmployees, passedCompan
                       renderInput={params => <TextField {...params} label='Unit of Measure' />}
                     />
 
-                    <TextField type='number' id='amountPerUnit' label='Amount Per Unit' {...getFieldProps('unitTransaction')} />
+                    <TextField type='number' label='Amount Per Unit' {...getFieldProps('unitTransaction')} />
                   </Stack>
 
-                  <Container>
-                    <Typography style={{ marginBottom: '20px', color: '#92999f' }} variant='h5'>
+                  <Container style={{ marginBottom: '20px' }}>
+                    <Typography style={{ color: '#92999f' }} variant='h5'>
                       Sub Total $ {subTotal}
                     </Typography>
 
@@ -200,7 +161,6 @@ export default function NewTransactions({ allClients, allEmployees, passedCompan
 
                       {showDiscount && (
                         <TextField
-                          id='outlined-required'
                           onInput={event => (event.target.value < 0 ? (event.target.value = 0) : event.target.value)}
                           type='number'
                           {...getFieldProps('discount')}
@@ -216,7 +176,6 @@ export default function NewTransactions({ allClients, allEmployees, passedCompan
               {/* Handles the total payment box hiding */}
               {transactionType !== null && transactionType !== 'Charge' && (
                 <TextField
-                  id='paymentAndAdjustmentInput'
                   sx={{ width: 300 }}
                   type='number'
                   {...getFieldProps('totalTransaction')}
@@ -241,7 +200,7 @@ export default function NewTransactions({ allClients, allEmployees, passedCompan
                 )}
               </Stack>
 
-              <TextField id='notes' label='Add Note' {...getFieldProps('noteOrDescription')} />
+              <TextField label='Add Note' {...getFieldProps('noteOrDescription')} />
 
               <Button type='Submit' name='Submit' style={{ height: '30px', marginLeft: '10px' }}>
                 Submit
