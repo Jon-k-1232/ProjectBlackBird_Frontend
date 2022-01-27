@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
-import { useFormik, Form, FormikProvider, FormikConsumer } from 'formik';
+import { useFormik, Form, FormikProvider } from 'formik';
 import { Stack, TextField, Card, Button, Typography, Container } from '@mui/material';
 import Page from '../../Components/Page';
 import { FormControlLabel, Autocomplete, Checkbox } from '@mui/material';
@@ -9,8 +9,6 @@ import checkValuesOne from '../Transactions/FormValidations';
 import dayjs from 'dayjs';
 
 export default function NewTransactions({ allClients, allEmployees, passedCompany }) {
-  // ToDo Form final post object
-
   const [showDiscount, setShowDiscount] = useState(false);
   const [transactionType, setTransactionType] = useState(null);
   const [company, setCompany] = useState(null);
@@ -45,16 +43,15 @@ export default function NewTransactions({ allClients, allEmployees, passedCompan
       paymentApplied: '',
       ignoreInAgeing: ''
     },
-    // validationSchema: RegisterSchema,
     onSubmit: (values, { resetForm }) => {
-      const updatedValues = checkValuesOne(values);
-      console.log(updatedValues);
+      // const updatedValues = checkValuesOne(values);
+      checkValuesOne(values);
       resetForm({ values: '' });
     }
   });
 
   // Formik constants
-  const { errors, touched, handleSubmit, isSubmitting, getFieldProps, values } = formik;
+  const { handleSubmit, getFieldProps, values } = formik;
   const { discount, quantity, unitTransaction, totalTransaction } = formik.values;
 
   // Calculations for sub totals, totals and discounts
@@ -81,7 +78,7 @@ export default function NewTransactions({ allClients, allEmployees, passedCompan
                     values.company = v.value;
                     setCompany(v.value);
                   }}
-                  renderInput={params => <TextField {...params} label='Company' />}
+                  renderInput={params => <TextField required {...params} label='Company' />}
                 />
 
                 <Autocomplete
@@ -91,7 +88,7 @@ export default function NewTransactions({ allClients, allEmployees, passedCompan
                   onChange={(e, v) => (values.job = v.value)}
                   label='Select Job'
                   sx={{ width: 300 }}
-                  renderInput={params => <TextField {...params} label='Job' />}
+                  renderInput={params => <TextField required {...params} label='Job' />}
                 />
 
                 <Autocomplete
@@ -101,7 +98,7 @@ export default function NewTransactions({ allClients, allEmployees, passedCompan
                   label='Select Employee'
                   sx={{ width: 300 }}
                   onChange={(e, v) => (values.employee = v.value)}
-                  renderInput={params => <TextField {...params} label='Employee' />}
+                  renderInput={params => <TextField required {...params} label='Employee' />}
                 />
               </Stack>
 
@@ -116,14 +113,14 @@ export default function NewTransactions({ allClients, allEmployees, passedCompan
                   values.transactionType = v.value;
                   setTransactionType(e.target.innerText);
                 }}
-                renderInput={params => <TextField {...params} label='Transaction Type' />}
+                renderInput={params => <TextField required {...params} label='Transaction Type' />}
               />
 
               {/* Will conditionally render the quantity, unit of Measure and amount per unit with transaction type is set to 'Charge' */}
               {transactionType === 'Charge' && (
                 <Container>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
-                    <TextField type='number' {...getFieldProps('quantity')} label='Quantity' />
+                    <TextField required type='number' {...getFieldProps('quantity')} label='Quantity' />
 
                     <Autocomplete
                       disableClearable
@@ -131,13 +128,13 @@ export default function NewTransactions({ allClients, allEmployees, passedCompan
                       label='Unit of Measure'
                       sx={{ width: 300 }}
                       onChange={(e, v) => (values.unitOfMeasure = v.value)}
-                      renderInput={params => <TextField {...params} label='Unit of Measure' />}
+                      renderInput={params => <TextField required {...params} label='Unit of Measure' />}
                     />
 
-                    <TextField type='number' label='Amount Per Unit' {...getFieldProps('unitTransaction')} />
+                    <TextField required type='number' max='10' label='Amount Per Unit' {...getFieldProps('unitTransaction')} />
                   </Stack>
 
-                  <Container style={{ marginBottom: '20px' }}>
+                  <Container style={{ padding: '0', marginTop: '35px' }}>
                     <Typography style={{ color: '#92999f' }} variant='h5'>
                       Sub Total $ {subTotal}
                     </Typography>
@@ -145,7 +142,7 @@ export default function NewTransactions({ allClients, allEmployees, passedCompan
                     <Stack
                       direction={{ xs: 'column', sm: 'row' }}
                       spacing={{ xs: 1, sm: 2, md: 4 }}
-                      style={{ display: 'flex', alignItems: 'center' }}>
+                      style={{ display: 'flex', alignItems: 'center', marginTop: '30px' }}>
                       <FormControlLabel
                         label='Discount'
                         control={
@@ -161,8 +158,10 @@ export default function NewTransactions({ allClients, allEmployees, passedCompan
 
                       {showDiscount && (
                         <TextField
+                          required
                           onInput={event => (event.target.value < 0 ? (event.target.value = 0) : event.target.value)}
                           type='number'
+                          max='2'
                           {...getFieldProps('discount')}
                           label='Discount Percentage'
                         />
@@ -176,6 +175,8 @@ export default function NewTransactions({ allClients, allEmployees, passedCompan
               {/* Handles the total payment box hiding */}
               {transactionType !== null && transactionType !== 'Charge' && (
                 <TextField
+                  required
+                  max='10'
                   sx={{ width: 300 }}
                   type='number'
                   {...getFieldProps('totalTransaction')}
@@ -200,7 +201,7 @@ export default function NewTransactions({ allClients, allEmployees, passedCompan
                 )}
               </Stack>
 
-              <TextField label='Add Note' {...getFieldProps('noteOrDescription')} />
+              <TextField label='Add Note' max='300' {...getFieldProps('noteOrDescription')} />
 
               <Button type='Submit' name='Submit' style={{ height: '30px', marginLeft: '10px' }}>
                 Submit
