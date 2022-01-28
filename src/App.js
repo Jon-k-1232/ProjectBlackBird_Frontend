@@ -3,8 +3,8 @@ import Router from './routes';
 import ThemeConfig from './Theme';
 import GlobalStyles from './Theme/globalStyles';
 import { getCompanies, getEmployees } from './ApiCalls/ApiCalls';
-import { companyDataAdapter } from './ApiCalls/DataAdapter';
-import { employeeDataAdapter } from './ApiCalls/employeeDataAdapter';
+import { companyDataAdapter } from './ApiCalls/Adapters/DataAdapter';
+import { employeeDataAdapter } from './ApiCalls/Adapters/EmployeeAdapter';
 import { css } from '@emotion/react';
 import ClipLoader from 'react-spinners/ClipLoader';
 
@@ -17,9 +17,9 @@ export default function App() {
     const allCompanies = companyDataAdapter(allCompaniesRaw);
     setCompanies(allCompanies);
 
-    const allEmployeesRaw = getEmployees();
-    const allEmployees = employeeDataAdapter(allEmployeesRaw);
-    setEmployees(allEmployees);
+    // Mock Api Call
+    const allEmployees = getEmployees();
+    setEmployees(allEmployees.allEmployees);
   }, []);
 
   const override = css`

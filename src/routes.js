@@ -33,7 +33,7 @@ export default function Router(allClients, allEmployees) {
         { path: 'newTransaction', element: <NewTransactions {...allClients} {...allEmployees} /> },
         { path: 'invoices', element: <Invoices /> },
         { path: 'newInvoice', element: <NewInvoice /> },
-        { path: 'employees', element: <Employees /> },
+        { path: 'employees', element: <Employees {...allEmployees} /> },
         { path: 'newEmployee', element: <NewEmployee /> },
         { path: 'jobs', element: <Jobs /> },
         { path: 'newJob', element: <NewJob /> },

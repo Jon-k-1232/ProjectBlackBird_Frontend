@@ -1,0 +1,45 @@
+const allTransactions = [
+  {
+    OID: null,
+    company: null,
+    job: null,
+    employee: null,
+    transactiontype: null,
+    transactiondate: null,
+    quantity: null,
+    unitofmeasure: null,
+    unittransaction: null,
+    totaltransaction: null,
+    starttime: null,
+    endtime: null,
+    reference: null,
+    noteordescription: null,
+    discount: null,
+    invoice: null,
+    usertag: null,
+    paymentapplied: null,
+    ignoreinageing: null
+  },
+  {
+    OID: null,
+    company: null,
+    job: null,
+    employee: null,
+    transactiontype: null,
+    transactiondate: null,
+    quantity: null,
+    unitofmeasure: null,
+    unittransaction: null,
+    totaltransaction: null,
+    starttime: null,
+    endtime: null,
+    reference: null,
+    noteordescription: null,
+    discount: null,
+    invoice: null,
+    usertag: null,
+    paymentapplied: null,
+    ignoreinageing: null
+  }
+];
+export default allTransactions;

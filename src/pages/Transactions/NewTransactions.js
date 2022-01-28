@@ -17,7 +17,7 @@ export default function NewTransactions({ allClients, allEmployees, passedCompan
   useEffect(() => {
     if (company || passedCompany) {
       const allJobs = passedCompany ? getCompanyJobs(passedCompany.value) : getCompanyJobs(company);
-      setCompanyJobs(allJobs.rawData);
+      setCompanyJobs(allJobs.allCompanyJobs.rawData);
     }
   }, [company]);
 
@@ -94,7 +94,7 @@ export default function NewTransactions({ allClients, allEmployees, passedCompan
                 <Autocomplete
                   required
                   disableClearable
-                  options={allEmployees || []}
+                  options={allEmployees.rawData || []}
                   label='Select Employee'
                   sx={{ width: 300 }}
                   onChange={(e, v) => (values.employee = v.value)}
