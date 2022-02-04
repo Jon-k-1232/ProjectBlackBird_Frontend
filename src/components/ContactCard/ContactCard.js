@@ -3,7 +3,7 @@ import { Typography, Card, CardContent } from '@mui/material';
 import './ContactCard.css';
 import greenCheckmark from '../../Static_Icons/greenCheckmark.svg';
 import redCircle from '../../Static_Icons/redCircle.svg';
-import EllipsisMenu from '../EllipsisMenu/EllipsisMenu';
+// import EllipsisMenu from '../EllipsisMenu/EllipsisMenu';
 
 export default function ContactCard(props) {
   const {
@@ -15,19 +15,18 @@ export default function ContactCard(props) {
     companyName,
     currentBalance,
     email,
-    fax,
     firstName,
     inactive,
     lastName,
+    middleI,
     mobilePhone,
     newBalance,
     notBillable,
     oid,
     phoneNumber1,
-    phoneNumber2,
     state,
     statementBalance,
-    zip,
+    zip
   } = props.data;
 
   const [edit, setEdit] = useState(false);
@@ -41,7 +40,7 @@ export default function ContactCard(props) {
       <tr>
         <th>Name:</th>
         <td>
-          {lastName}, {firstName}
+          {lastName}, {firstName}, {middleI}
         </td>
       </tr>
       <tr>
@@ -65,16 +64,6 @@ export default function ContactCard(props) {
       <tr>
         <th>Landline:</th>
         <td>{phoneNumber1}</td>
-      </tr>
-      {phoneNumber2 && (
-        <tr>
-          <th>Secondary Landline:</th>
-          <td>{phoneNumber2}</td>
-        </tr>
-      )}
-      <tr>
-        <th>Fax:</th>
-        <td>{fax}</td>
       </tr>
       <tr>
         <th>Email:</th>
@@ -123,7 +112,7 @@ export default function ContactCard(props) {
         <Typography variant='h4'>{companyName}</Typography>
         <Typography variant='subtitle1'>{inactive ? 'Inactive' : 'Active'}</Typography>
         <Typography variant='subtitle1'>Client: {oid}</Typography>
-        <EllipsisMenu edit={setEdit} menuOptions={['Edit']} />
+        {/* <EllipsisMenu edit={setEdit} menuOptions={['Edit']} /> */}
       </CardContent>
       <CardContent style={styles()} className='contactTables'>
         {basicContactInformation()}
@@ -134,5 +123,5 @@ export default function ContactCard(props) {
 }
 
 const styles = () => ({
-  padding: '0px',
+  padding: '0px'
 });

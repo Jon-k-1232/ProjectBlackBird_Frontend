@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Router from './routes';
 import ThemeConfig from './Theme';
 import GlobalStyles from './Theme/globalStyles';
-import { getCompanies, getEmployees } from './ApiCalls/ApiCalls';
-import { companyDataAdapter } from './ApiCalls/Adapters/DataAdapter';
-import { employeeDataAdapter } from './ApiCalls/Adapters/EmployeeAdapter';
+import { getAllCompanies } from './ApiCalls/ApiCalls';
 import { css } from '@emotion/react';
 import ClipLoader from 'react-spinners/ClipLoader';
 
@@ -13,13 +11,12 @@ export default function App() {
   const [employees, setEmployees] = useState(null);
 
   useEffect(() => {
-    const allCompaniesRaw = getCompanies();
-    const allCompanies = companyDataAdapter(allCompaniesRaw);
-    setCompanies(allCompanies);
+    const allCompanies = getAllCompanies();
+    setCompanies(allCompanies.allCompanies);
 
     // Mock Api Call
-    const allEmployees = getEmployees();
-    setEmployees(allEmployees.allEmployees);
+    // const allEmployees = getEmployees();
+    // setEmployees(allEmployees.allEmployees);
   }, []);
 
   const override = css`

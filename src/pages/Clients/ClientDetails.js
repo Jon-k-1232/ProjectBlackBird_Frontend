@@ -14,26 +14,30 @@ import statisticsIcon from '@iconify/icons-whh/statistics';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import NewTransactions from '../Transactions/NewTransactions';
 
-export default function ClientDetails({ allClients }) {
+export default function ClientDetails({ allClients, allEmployees }) {
   const [dataToShow, setDataToShow] = useState('notes');
 
   const location = useLocation();
 
   // Data is being stored in props of routing.
   const clientId = parseInt(location.state.rowData[0]);
-  // While data cane be passed
-  const contactDetails = allClients.rawData.find((item) => item.oid === clientId);
+  // While data can be passed
+  const contactDetails = allClients.rawData.find(item => item.oid === clientId);
 
   return (
     <Page title='Client Details'>
       <Container style={{ maxWidth: '1280px' }}>
-        <HeaderMenu handleOnClick={(data) => setDataToShow(data)} page={'Client Details'} listOfButtons={button} />
+        <HeaderMenu handleOnClick={data => setDataToShow(data)} page={'Client Details'} listOfButtons={button} />
+
         <ContactCard data={contactDetails} />
-        {dataToShow === 'notes' && <DataTable data={''} />}
-        {dataToShow === 'transactions' && <DataTable data={''} />}
-        {dataToShow === 'newTransactions' && <NewTransactions />}
-        {dataToShow === 'jobs' && <DataTable data={''} />}
-        {dataToShow === 'invoices' && <DataTable data={''} />}
+
+        {dataToShow === 'notes' && <DataTable data={[]} />}
+        {dataToShow === 'transactions' && <DataTable data={[]} />}
+        {dataToShow === 'newTransactions' && (
+          <NewTransactions allClients={allClients} allEmployees={allEmployees} passedCompany={contactDetails} />
+        )}
+        {dataToShow === 'jobs' && <DataTable data={[]} />}
+        {dataToShow === 'invoices' && <DataTable data={[]} />}
         {dataToShow === 'statistics' && <ComingSoon />}
       </Container>
     </Page>
@@ -47,5 +51,5 @@ const button = [
   { name: 'jobs', variant: 'contained', icon: baselineWork, htmlName: 'Jobs' },
   { name: 'newJob', variant: 'contained', icon: plusFill, htmlName: 'New Job' },
   { name: 'invoices', variant: 'contained', icon: fileTextFill, htmlName: 'Invoices' },
-  { name: 'statistics', variant: 'contained', icon: statisticsIcon, htmlName: 'Statistics' },
+  { name: 'statistics', variant: 'contained', icon: statisticsIcon, htmlName: 'Statistics' }
 ];

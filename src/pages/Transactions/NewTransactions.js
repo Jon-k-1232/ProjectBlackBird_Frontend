@@ -1,214 +1,230 @@
-import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
-import { useFormik, Form, FormikProvider } from 'formik';
-import { Stack, TextField, Card, Button, Typography, Container } from '@mui/material';
+import { Stack, TextField, Card, Button, Typography } from '@mui/material';
 import Page from '../../Components/Page';
-import { FormControlLabel, Autocomplete, Checkbox } from '@mui/material';
-import { getCompanyJobs } from '../../ApiCalls/ApiCalls';
-import checkValuesOne from '../Transactions/FormValidations';
+import { getCompanyJobs, getAllEmployees, getAllCompanies } from '../../ApiCalls/ApiCalls';
 import dayjs from 'dayjs';
+import SingleSelectionDropDown from '../../Components/DropDowns/SingleSelectionDropDown';
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import AdapterDayjs from '@mui/lab/AdapterDayjs';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
-export default function NewTransactions({ allClients, allEmployees, passedCompany }) {
-  const [showDiscount, setShowDiscount] = useState(false);
-  const [transactionType, setTransactionType] = useState(null);
-  const [company, setCompany] = useState(null);
-  const [companyJobs, setCompanyJobs] = useState(null);
+export default function NewTransactions({ passedCompany }) {
+  const [selectedCompany, setSelectedCompany] = useState(null);
+  const [allCompanies, setAllCompanies] = useState(null);
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [companyJobList, setCompanyJobList] = useState(null);
+  const [allEmployees, setAllEmployees] = useState(null);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(dayjs().format());
+  const [selectedQuantity, setSelectedQuantity] = useState(1);
+  const [selectedType, setSelectedType] = useState(null);
+  const [selectedAmount, setSelectedAmount] = useState(null);
+  const [totalTransaction, setTotalTransaction] = useState(0);
 
   useEffect(() => {
-    if (company || passedCompany) {
-      const allJobs = passedCompany ? getCompanyJobs(passedCompany.value) : getCompanyJobs(company);
-      setCompanyJobs(allJobs.allCompanyJobs.rawData);
+    const companies = getAllCompanies();
+    setAllCompanies(companies.allCompanies.rawData);
+
+    const employees = getAllEmployees();
+    setAllEmployees(employees.allEmployees.rawData);
+
+    if (selectedCompany) {
+      const allJobs = passedCompany ? getCompanyJobs(passedCompany.oid) : getCompanyJobs(selectedCompany.oid);
+      setCompanyJobList(allJobs.allCompanyJobs.rawData);
     }
-  }, [company]);
+  }, [selectedCompany]);
 
-  // Form value handler
-  const formik = useFormik({
-    initialValues: {
-      company: passedCompany ? passedCompany.value : '',
-      job: '',
-      employee: '',
-      transactionType: '',
-      transactionDate: dayjs().format(),
-      quantity: 1,
-      unitOfMeasure: 'Each',
-      unitTransaction: '0.00',
-      totalTransaction: '0.00',
-      startTime: '',
-      endTime: '',
-      reference: '',
-      noteOrDescription: '',
-      discount: '',
-      invoice: '',
-      userTag: '',
-      paymentApplied: '',
-      ignoreInAgeing: ''
-    },
-    onSubmit: (values, { resetForm }) => {
-      // const updatedValues = checkValuesOne(values);
-      checkValuesOne(values);
-      resetForm({ values: '' });
-    }
-  });
+  useEffect(() => {
+    resetQuantityAmountAndTotal();
+  }, [selectedTransaction]);
 
-  // Formik constants
-  const { handleSubmit, getFieldProps, values } = formik;
-  const { discount, quantity, unitTransaction, totalTransaction } = formik.values;
+  // Resets amount fields when type of transaction is switched. This solves amount carrying over from charge to write of and others.
+  const resetQuantityAmountAndTotal = () => {
+    setSelectedQuantity(1);
+    setSelectedAmount(0);
+    setTotalTransaction(0);
+  };
 
-  // Calculations for sub totals, totals and discounts
-  const subTotal = Math.abs(parseFloat(quantity * unitTransaction).toFixed(2));
-  const amountToDiscount = Math.abs(parseFloat(subTotal - (subTotal * (100 - discount)) / 100).toFixed(2));
-  const totalCharges = discount ? Math.abs(parseFloat((subTotal * (100 - discount)) / 100).toFixed(2)) : Math.abs(subTotal);
-  const totalPayment =
-    transactionType === 'Charge' ? Math.abs(parseFloat(totalTransaction).toFixed(2)) : parseFloat(totalTransaction).toFixed(2);
+  const handleSubmit = e => {
+    e.preventDefault();
+    const objectToPost = formObjectForPost();
+    console.log(objectToPost);
+    // TODO Handle DATA
+  };
+
+  const formObjectForPost = () => {
+    const postObj = {
+      company: selectedCompany.oid,
+      job: selectedJob.jobDefinition,
+      employee: selectedEmployee.oid,
+      transactionType: selectedTransaction.displayValue,
+      transactionDate: dayjs(selectedDate).format(),
+      quantity: parseInt(selectedQuantity, 10),
+      unitOfMeasure: selectedType ? selectedType.displayValue : 'Each',
+      unitTransaction: parseInt(selectedAmount, 10),
+      totalTransaction: parseInt(totalTransaction, 10),
+      discount: selectedTransaction === 'writeOff' ? parseInt(selectedAmount, 10) : null,
+      invoice: null,
+      paymentApplied: null,
+      ignoreInAgeing: null
+    };
+    return postObj;
+  };
 
   return (
     <Page style={{ marginTop: '25px' }} title='NewTransactions'>
       <Card style={{ padding: '20px' }}>
-        <FormikProvider value={formik}>
-          <Form onSubmit={handleSubmit}>
-            <Stack spacing={5}>
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 4 }}>
-                <Autocomplete
-                  required
-                  disableClearable
-                  options={allClients.rawData || []}
-                  label='Select Company'
-                  sx={{ width: 300 }}
-                  onChange={(e, v) => {
-                    values.company = v.value;
-                    setCompany(v.value);
-                  }}
-                  renderInput={params => <TextField required {...params} label='Company' />}
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <form onSubmit={handleSubmit}>
+            <Stack spacing={3}>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
+                <SingleSelectionDropDown
+                  setSelection={setSelectedCompany}
+                  options={allCompanies}
+                  dropValue={selectedCompany}
+                  passedCompany={passedCompany}
+                  labelPropertyOne='companyName'
+                  valueProperty='oid'
+                  dropPlaceholder='Select Company'
                 />
 
-                <Autocomplete
-                  required
-                  disableClearable
-                  options={companyJobs || []}
-                  onChange={(e, v) => (values.job = v.value)}
-                  label='Select Job'
-                  sx={{ width: 300 }}
-                  renderInput={params => <TextField required {...params} label='Job' />}
+                <SingleSelectionDropDown
+                  setSelection={setSelectedJob}
+                  options={companyJobList}
+                  dropValue={selectedJob}
+                  labelPropertyOne='description'
+                  valueProperty='jobDefinition'
+                  dropPlaceholder='Select Job'
                 />
 
-                <Autocomplete
-                  required
-                  disableClearable
-                  options={allEmployees.rawData || []}
-                  label='Select Employee'
-                  sx={{ width: 300 }}
-                  onChange={(e, v) => (values.employee = v.value)}
-                  renderInput={params => <TextField required {...params} label='Employee' />}
+                <SingleSelectionDropDown
+                  setSelection={setSelectedEmployee}
+                  options={allEmployees}
+                  dropValue={selectedEmployee}
+                  labelPropertyOne='firstName'
+                  labelPropertyTwo='lastName'
+                  valueProperty='oid'
+                  dropPlaceholder='Select Employee'
                 />
               </Stack>
 
-              <Autocomplete
-                required
-                disableClearable
-                options={transactionTypes || []}
-                sx={{ width: 300 }}
-                value={transactionType}
-                label={transactionType}
-                onChange={(e, v) => {
-                  values.transactionType = v.value;
-                  setTransactionType(e.target.innerText);
-                }}
-                renderInput={params => <TextField required {...params} label='Transaction Type' />}
-              />
-
-              {/* Will conditionally render the quantity, unit of Measure and amount per unit with transaction type is set to 'Charge' */}
-              {transactionType === 'Charge' && (
-                <Container>
-                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
-                    <TextField required type='number' {...getFieldProps('quantity')} label='Quantity' />
-
-                    <Autocomplete
-                      disableClearable
-                      options={type || []}
-                      label='Unit of Measure'
-                      sx={{ width: 300 }}
-                      onChange={(e, v) => (values.unitOfMeasure = v.value)}
-                      renderInput={params => <TextField required {...params} label='Unit of Measure' />}
-                    />
-
-                    <TextField required type='number' max='10' label='Amount Per Unit' {...getFieldProps('unitTransaction')} />
-                  </Stack>
-
-                  <Container style={{ padding: '0', marginTop: '35px' }}>
-                    <Typography style={{ color: '#92999f' }} variant='h5'>
-                      Sub Total $ {subTotal}
-                    </Typography>
-
-                    <Stack
-                      direction={{ xs: 'column', sm: 'row' }}
-                      spacing={{ xs: 1, sm: 2, md: 4 }}
-                      style={{ display: 'flex', alignItems: 'center', marginTop: '30px' }}>
-                      <FormControlLabel
-                        label='Discount'
-                        control={
-                          <Checkbox
-                            checked={showDiscount}
-                            onChange={e => {
-                              setShowDiscount(e.target.checked);
-                              if (!e.target.checked) formik.values.discount = null;
-                            }}
-                          />
-                        }
-                      />
-
-                      {showDiscount && (
-                        <TextField
-                          required
-                          onInput={event => (event.target.value < 0 ? (event.target.value = 0) : event.target.value)}
-                          type='number'
-                          max='2'
-                          {...getFieldProps('discount')}
-                          label='Discount Percentage'
-                        />
-                      )}
-                      {showDiscount && <Typography>Amount to Discount ${amountToDiscount}</Typography>}
-                    </Stack>
-                  </Container>
-                </Container>
-              )}
-
-              {/* Handles the total payment box hiding */}
-              {transactionType !== null && transactionType !== 'Charge' && (
-                <TextField
-                  required
-                  max='10'
-                  sx={{ width: 300 }}
-                  type='number'
-                  {...getFieldProps('totalTransaction')}
-                  label={`Enter ${transactionType} Amount`}
-                  helperText={
-                    transactionType === 'Adjustment' &&
-                    '* When making a subtraction adjustment you will need to manually insert the subtraction sign ( - )'
-                  }
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
+                <SingleSelectionDropDown
+                  setSelection={setSelectedTransaction}
+                  options={transactionTypes}
+                  dropValue={selectedTransaction}
+                  labelPropertyOne='displayValue'
+                  valueProperty='value'
+                  dropPlaceholder='Select Transaction Type'
                 />
-              )}
 
-              <Stack
-                direction={{ xs: 'column', sm: 'row' }}
-                spacing={{ xs: 1, sm: 2, md: 4 }}
-                style={{ display: 'flex', alignItems: 'baseline' }}>
-                <Typography variant='h3'>Total {transactionType === 'Charge' ? totalCharges : totalPayment}</Typography>
-
-                {discount && (
-                  <Typography variant='caption' style={{ color: 'red' }}>
-                    * Discount of {discount}% applied
-                  </Typography>
-                )}
+                <DesktopDatePicker
+                  label='Select Transaction Date'
+                  inputFormat='MM/DD/YYYY'
+                  value={selectedDate}
+                  onChange={newValue => setSelectedDate(newValue.$d)}
+                  renderInput={params => <TextField {...params} />}
+                />
               </Stack>
 
-              <TextField label='Add Note' max='300' {...getFieldProps('noteOrDescription')} />
+              {selectedTransaction && selectedTransaction.value === 'charge' && (
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
+                  <TextField
+                    required
+                    type='number'
+                    value={selectedQuantity}
+                    onChange={e => {
+                      setSelectedQuantity(e.target.value);
+                      setTotalTransaction(Math.abs(e.target.value * selectedAmount).toFixed(2));
+                    }}
+                    label='Quantity'
+                  />
 
-              <Button type='Submit' name='Submit' style={{ height: '30px', marginLeft: '10px' }}>
+                  <SingleSelectionDropDown
+                    setSelection={setSelectedType}
+                    options={type}
+                    dropValue={selectedType}
+                    labelPropertyOne='displayValue'
+                    valueProperty='value'
+                    dropPlaceholder='Select Unit Type'
+                  />
+
+                  <TextField
+                    required
+                    type='number'
+                    max='10'
+                    label='Amount Per Unit'
+                    value={selectedAmount}
+                    onChange={e => {
+                      e.target.value >= 0 && setSelectedAmount(e.target.value);
+                      setTotalTransaction(Math.abs(e.target.value * selectedQuantity).toFixed(2));
+                    }}
+                  />
+                </Stack>
+              )}
+
+              {selectedTransaction && selectedTransaction.value === 'payment' && (
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
+                  <TextField
+                    required
+                    type='number'
+                    max='10'
+                    label='Payment Amount'
+                    value={selectedAmount}
+                    onChange={e => {
+                      setSelectedAmount(e.target.value);
+                      Math.abs(selectedAmount).toFixed(2);
+                      setTotalTransaction(-Math.abs(e.target.value * selectedQuantity).toFixed(2));
+                    }}
+                    helperText='* Minus ( - ) already applied. Minus indicates payment/ credit'
+                  />
+                </Stack>
+              )}
+
+              {selectedTransaction && selectedTransaction.value === 'adjustment' && (
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
+                  <TextField
+                    required
+                    type='number'
+                    max='10'
+                    label='Adjustment Amount'
+                    value={selectedAmount}
+                    onChange={e => {
+                      setSelectedAmount(e.target.value);
+                      setTotalTransaction((e.target.value * selectedQuantity).toFixed(2));
+                    }}
+                    helperText='* To make a credit to the job use the minus ( - ) in front of the amount.'
+                  />
+                </Stack>
+              )}
+
+              {selectedTransaction && selectedTransaction.value === 'writeOff' && (
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
+                  <TextField
+                    required
+                    type='number'
+                    max='10'
+                    label='Write Off Amount'
+                    value={selectedAmount}
+                    onChange={e => {
+                      e.target.value >= 0 && setSelectedAmount(e.target.value);
+                      setTotalTransaction(-Math.abs(e.target.value * selectedQuantity).toFixed(2));
+                    }}
+                    helperText='* Amount will reflect as negative in total amount. This credits the account/job.'
+                  />
+                </Stack>
+              )}
+
+              <Typography style={{ color: '#92999f' }} variant='h5'>
+                Total ${totalTransaction}
+              </Typography>
+              <Button type='submit' name='submit'>
                 Submit
               </Button>
             </Stack>
-          </Form>
-        </FormikProvider>
+          </form>
+        </LocalizationProvider>
       </Card>
     </Page>
   );
@@ -216,26 +232,30 @@ export default function NewTransactions({ allClients, allEmployees, passedCompan
 
 const transactionTypes = [
   {
-    value: 'Charge',
-    label: 'Charge'
+    displayValue: 'Charge',
+    value: 'charge'
   },
   {
-    value: 'Payment',
-    label: 'Payment'
+    displayValue: 'Payment',
+    value: 'payment'
   },
   {
-    value: 'Adjustment',
-    label: 'Adjustment'
+    displayValue: 'Adjustment',
+    value: 'adjustment'
+  },
+  {
+    displayValue: 'Write Off',
+    value: 'writeOff'
   }
 ];
 
 const type = [
   {
-    value: 'Hour',
-    label: 'Hour'
+    displayValue: 'Hour',
+    value: 'hour'
   },
   {
-    value: 'Each',
-    label: 'Each'
+    displayValue: 'Each',
+    value: 'each'
   }
 ];

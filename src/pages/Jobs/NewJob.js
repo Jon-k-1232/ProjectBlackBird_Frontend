@@ -1,94 +1,147 @@
-import * as Yup from 'yup';
-import { useState } from 'react';
-import { Icon } from '@iconify/react';
+import { useEffect, useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
-import eyeFill from '@iconify/icons-eva/eye-fill';
-import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
-import { useNavigate } from 'react-router-dom';
-import { Stack, TextField, IconButton, InputAdornment, Typography } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import { Stack, TextField, Card, Button, Typography, Container } from '@mui/material';
+import Page from '../../Components/Page';
+import { FormControlLabel, Autocomplete, Checkbox } from '@mui/material';
+import { getAllCompanies, getAllJobCodes } from '../../ApiCalls/ApiCalls';
+import dayjs from 'dayjs';
 
-export default function RegisterForm() {
-  const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
+export default function NewJob({ passedCompany }) {
+  const [showDiscount, setShowDiscount] = useState(false);
+  const [allCompanies, setAllCompanies] = useState(null);
+  const [allJobCodes, setAllJobCodes] = useState(null);
 
-  const RegisterSchema = Yup.object().shape({
-    firstName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('First name required'),
-    lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name required'),
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
-    password: Yup.string().required('Password is required')
-  });
+  useEffect(() => {
+    const getAllCompanies = getAllCompanies();
+    setAllCompanies(getAllCompanies.allCompanies.rawData);
 
+    const getJobCodes = getAllJobCodes();
+    setAllJobCodes(getJobCodes.allJobCodes.rawData);
+  }, []);
+
+  // Form value handler
   const formik = useFormik({
     initialValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: ''
+      oid: '',
+      jobDefinition: '',
+      company: '',
+      targetPrice: '',
+      defaultTargetPrice: '',
+      scheduledDate: dayjs().format(),
+      startDate: dayjs().format(),
+      actualDate: dayjs().format(),
+      contact: '',
+      contactPhone: '',
+      contactEmail: '',
+      description: '',
+      defaultDescription: '',
+      percentComplete: '',
+      discount: '',
+      hoursToComplete: '',
+      isComplete: ''
     },
-    validationSchema: RegisterSchema,
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+    onSubmit: (values, { resetForm }) => {
+      //ToDo create Post for new company job
+      //ToDo anything need to be done with completed or other fields?
+      console.log(values);
+      resetForm({ values: '' });
     }
   });
 
-  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
+  // Formik constants
+  const { handleSubmit, getFieldProps, values } = formik;
+  const passedCompanyArray = [passedCompany];
 
   return (
-    <FormikProvider value={formik}>
-      <Typography variant='h4' sx={{ mb: 5 }}>
-        Enter New Job
+    <Page style={{ marginTop: '25px' }} title='NewTransactions'>
+      <Typography variant='h3' style={{ marginBottom: '20px' }}>
+        Create New Job for a Company
       </Typography>
-      <Form autoComplete='off' noValidate onSubmit={handleSubmit}>
-        <Stack spacing={3}>
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-            <TextField
-              fullWidth
-              label='First name'
-              {...getFieldProps('firstName')}
-              error={Boolean(touched.firstName && errors.firstName)}
-              helperText={touched.firstName && errors.firstName}
-            />
 
-            <TextField
-              fullWidth
-              label='Last name'
-              {...getFieldProps('lastName')}
-              error={Boolean(touched.lastName && errors.lastName)}
-              helperText={touched.lastName && errors.lastName}
-            />
-          </Stack>
+      <Card style={{ padding: '20px' }}>
+        <FormikProvider value={formik}>
+          <Form onSubmit={handleSubmit}>
+            <Stack spacing={5}>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 4 }}>
+                <Autocomplete
+                  required
+                  disableClearable
+                  options={!passedCompany ? allCompanies : passedCompanyArray}
+                  label='Select Company'
+                  sx={{ width: 300 }}
+                  onChange={(e, v) => {
+                    values.company = v.value;
+                    values.contact = `${v.firstName} ${v.lastName}`;
+                    values.contactPhone = v.phoneNumber1;
+                    values.contactEmail = v.email;
+                  }}
+                  renderInput={params => <TextField required {...params} label='Company' />}
+                />
 
-          <TextField
-            fullWidth
-            autoComplete='username'
-            type='email'
-            label='Email address'
-            {...getFieldProps('email')}
-            error={Boolean(touched.email && errors.email)}
-            helperText={touched.email && errors.email}
-          />
+                <Autocomplete
+                  required
+                  disableClearable
+                  options={allJobCodes || []}
+                  label='Select Job'
+                  sx={{ width: 300 }}
+                  onChange={(e, v) => {
+                    values.job = v.value;
+                    values.defaultDescription = v.description;
+                  }}
+                  renderInput={params => <TextField required {...params} label='Job' />}
+                />
+              </Stack>
 
-          <TextField
-            fullWidth
-            autoComplete='current-password'
-            type={showPassword ? 'text' : 'password'}
-            label='Password'
-            {...getFieldProps('password')}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position='end'>
-                  <IconButton edge='end' onClick={() => setShowPassword(prev => !prev)}>
-                    <Icon icon={showPassword ? eyeFill : eyeOffFill} />
-                  </IconButton>
-                </InputAdornment>
-              )
-            }}
-            error={Boolean(touched.password && errors.password)}
-            helperText={touched.password && errors.password}
-          />
-        </Stack>
-      </Form>
-    </FormikProvider>
+              <TextField
+                label='Add a sub description of job'
+                max='300'
+                {...getFieldProps('description')}
+                helperText='Will display on clients bill'
+              />
+
+              <Stack
+                direction={{ xs: 'column', sm: 'row' }}
+                spacing={{ xs: 1, sm: 2, md: 4 }}
+                style={{ display: 'flex', alignItems: 'start', marginTop: '30px' }}>
+                <FormControlLabel
+                  label='Discount'
+                  control={
+                    <Checkbox
+                      checked={showDiscount}
+                      onChange={e => {
+                        setShowDiscount(e.target.checked);
+                        if (!e.target.checked) formik.values.discount = null;
+                      }}
+                    />
+                  }
+                />
+
+                {showDiscount && (
+                  <Container>
+                    <TextField
+                      required
+                      onInput={event => (event.target.value < 0 ? (event.target.value = 0) : event.target.value)}
+                      type='number'
+                      max='2'
+                      {...getFieldProps('discount')}
+                      label='Discount Percentage'
+                    />
+                    <Typography style={{ color: 'red' }}>
+                      ** ALERT ** <br />
+                      You are adding a discount the the job in its entirety. <br /> If you are wanting to add a one time discount log a new
+                      charge in transactions.
+                    </Typography>
+                  </Container>
+                )}
+              </Stack>
+
+              <Button type='Submit' name='Submit' style={{ height: '30px', marginLeft: '10px' }}>
+                Submit
+              </Button>
+            </Stack>
+          </Form>
+        </FormikProvider>
+      </Card>
+    </Page>
   );
 }

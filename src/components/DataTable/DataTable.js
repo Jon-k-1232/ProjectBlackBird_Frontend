@@ -22,10 +22,10 @@ export default function DataTable(props) {
     responsive,
     tableBodyHeight,
     tableBodyMaxHeight,
-    onRowClick: (rowData) => {
+    onRowClick: rowData => {
       // Whole row of data will be stored in router state
       navigate(`${props.route}`, { state: { rowData } });
-    },
+    }
   };
 
   return (

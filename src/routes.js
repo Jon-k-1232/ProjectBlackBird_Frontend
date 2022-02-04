@@ -15,6 +15,7 @@ import Employees from './Pages/Employees/Employees';
 import NewEmployee from './Pages/Employees/NewEmployee';
 import Jobs from './Pages/Jobs/Jobs';
 import NewJob from './Pages/Jobs/NewJob';
+import JobDetails from './Pages/Jobs/JobDetails';
 import Profile from './Pages/Profile/Profile';
 import ClientDetails from './Pages/Clients/ClientDetails';
 
@@ -27,7 +28,7 @@ export default function Router(allClients, allEmployees) {
         { element: <Navigate to='/dashboard/app' replace /> },
         { path: 'app', element: <DashboardApp /> },
         { path: 'clients', element: <Clients {...allClients} /> },
-        { path: 'clientDetails', element: <ClientDetails {...allClients} /> },
+        { path: 'clientDetails', element: <ClientDetails {...allClients} {...allEmployees} /> },
         { path: 'newClient', element: <NewClient /> },
         { path: 'transactions', element: <Transactions /> },
         { path: 'newTransaction', element: <NewTransactions {...allClients} {...allEmployees} /> },
@@ -37,6 +38,7 @@ export default function Router(allClients, allEmployees) {
         { path: 'newEmployee', element: <NewEmployee /> },
         { path: 'jobs', element: <Jobs /> },
         { path: 'newJob', element: <NewJob /> },
+        { path: 'jobDetails', element: <JobDetails /> },
         { path: 'profile', element: <Profile /> }
       ]
     },

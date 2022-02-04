@@ -13,7 +13,7 @@
   "javascript.format.semicolons": "insert",
   "prettier.jsxBracketSameLine": true,
   "files.autoSave": "onFocusChange",
-  "editor.fontSize": 14,
+  "editor.fontSize": 16,
   "editor.fontFamily": "Menlo",
   "editor.tabSize": 5,
   "editor.multiCursorModifier": "ctrlCmd",
