@@ -10,10 +10,21 @@ export const getAllCompanies = () => {
   return { allCompanies };
 };
 
+export const getCompanyTransactions = companyId => {
+  const allCompanyTransactions = tableAndLabelCreation(allTransactions, 'oid', 'company');
+  return { allCompanyTransactions };
+};
+
 export const getAllTransactions = () => {
   // Formatting for tables and drops
   const transactions = tableAndLabelCreation(allTransactions, 'oid', 'company');
   return { transactions };
+};
+
+export const getJobTransactions = jobId => {
+  // Formatting for tables and drops
+  const jobTransactions = tableAndLabelCreation(allTransactions, 'oid', 'company');
+  return { jobTransactions };
 };
 
 export const getAllJobs = () => {

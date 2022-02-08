@@ -1,7 +1,7 @@
 const allTransactions = [
   {
-    oid: null,
-    company: null,
+    oid: 1,
+    company: 'c1',
     job: null,
     employee: null,
     transactionType: null,
@@ -16,8 +16,8 @@ const allTransactions = [
     ignoreInAgeing: null
   },
   {
-    oid: null,
-    company: null,
+    oid: 2,
+    company: 'c2',
     job: null,
     employee: null,
     transactionType: null,

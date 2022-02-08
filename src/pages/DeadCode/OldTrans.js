@@ -5,7 +5,7 @@ import { Stack, TextField, Card, Button, Typography, Container } from '@mui/mate
 import Page from '../../Components/Page';
 import { FormControlLabel, Autocomplete, Checkbox } from '@mui/material';
 import { getCompanyJobs } from '../../ApiCalls/ApiCalls';
-import checkValuesOne from '../Transactions/FormValidations';
+import checkValuesOne from './FormValidations';
 import dayjs from 'dayjs';
 
 export default function old({ allClients, allEmployees, passedCompany }) {

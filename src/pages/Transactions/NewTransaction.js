@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Stack, TextField, Card, Button, Typography } from '@mui/material';
-import Page from '../../Components/Page';
+import { Stack, TextField, Card, Button, Typography, CardContent } from '@mui/material';
 import { getCompanyJobs, getAllEmployees, getAllCompanies } from '../../ApiCalls/ApiCalls';
 import dayjs from 'dayjs';
 import SingleSelectionDropDown from '../../Components/DropDowns/SingleSelectionDropDown';
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import { DesktopDatePicker, LocalizationProvider } from '@mui/lab';
 import AdapterDayjs from '@mui/lab/AdapterDayjs';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 export default function NewTransactions({ passedCompany }) {
   const [selectedCompany, setSelectedCompany] = useState(null);
@@ -42,8 +40,8 @@ export default function NewTransactions({ passedCompany }) {
   // Resets amount fields when type of transaction is switched. This solves amount carrying over from charge to write of and others.
   const resetQuantityAmountAndTotal = () => {
     setSelectedQuantity(1);
-    setSelectedAmount(0);
-    setTotalTransaction(0);
+    setSelectedAmount(null);
+    setTotalTransaction(null);
   };
 
   const handleSubmit = e => {
@@ -73,8 +71,8 @@ export default function NewTransactions({ passedCompany }) {
   };
 
   return (
-    <Page style={{ marginTop: '25px' }} title='NewTransactions'>
-      <Card style={{ padding: '20px' }}>
+    <Card style={{ marginTop: '25px' }}>
+      <CardContent style={{ padding: '20px' }}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <form onSubmit={handleSubmit}>
             <Stack spacing={3}>
@@ -225,8 +223,8 @@ export default function NewTransactions({ passedCompany }) {
             </Stack>
           </form>
         </LocalizationProvider>
-      </Card>
-    </Page>
+      </CardContent>
+    </Card>
   );
 }
 

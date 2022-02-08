@@ -5,7 +5,7 @@ import Login from './Pages/Login/Login';
 import Register from './Pages/Register/Register';
 import DashboardApp from './Pages/DashboardApp';
 import Transactions from './Pages/Transactions/Transactions';
-import NewTransactions from './Pages/Transactions/NewTransactions';
+import NewTransactions from './Pages/Transactions/NewTransaction';
 import Invoices from './Pages/Invoices/Invoices';
 import NewInvoice from './Pages/Invoices/NewInvoice';
 import Clients from './Pages/Clients/Clients';

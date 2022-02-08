@@ -27,7 +27,7 @@ export default function ContactCard(props) {
     state,
     statementBalance,
     zip
-  } = props.data;
+  } = props;
 
   const [edit, setEdit] = useState(false);
 
