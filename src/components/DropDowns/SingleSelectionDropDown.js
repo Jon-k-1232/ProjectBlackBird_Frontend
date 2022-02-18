@@ -7,7 +7,6 @@ export default function SingleSelectionDropDown({
   passedCompany,
   labelPropertyOne,
   labelPropertyTwo,
-  valueProperty,
   dropPlaceholder
 }) {
   const passedCompanyArray = passedCompany && [passedCompany];

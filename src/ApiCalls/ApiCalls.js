@@ -10,6 +10,14 @@ export const getAllCompanies = () => {
   return { allCompanies };
 };
 
+export const getCompanyInformation = companyId => {
+  //For mock purpose
+  const mockCompany = companies[companyId];
+
+  const selectedCompanyInfo = mockCompany;
+  return { selectedCompanyInfo };
+};
+
 export const getCompanyTransactions = companyId => {
   const allCompanyTransactions = tableAndLabelCreation(allTransactions, 'oid', 'company');
   return { allCompanyTransactions };
@@ -44,9 +52,9 @@ export const getCompanyJobs = companyOid => {
   return { allCompanyJobs };
 };
 
-export const getAllJobCodes = () => {
-  const allJobCodes = tableAndLabelCreation(jobDefinitions, 'oid', 'description');
-  return { allJobCodes };
+export const getAllJobDefinitions = () => {
+  const allJobDefinitions = tableAndLabelCreation(jobDefinitions, 'oid', 'description');
+  return { allJobDefinitions };
 };
 
 export const getAllEmployees = () => {
