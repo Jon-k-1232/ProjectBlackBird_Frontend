@@ -2,22 +2,19 @@ const jobDefinitions = [
   {
     oid: 1,
     description: 'This is a description 1',
-    defaultTargetPrice: null,
-    hoursToComplete: null,
+    defaultTargetPrice: 100,
     billable: null
   },
   {
     oid: 2,
     description: 'This is a description 2',
-    defaultTargetPrice: null,
-    hoursToComplete: null,
+    defaultTargetPrice: 200,
     billable: null
   },
   {
     oid: 3,
     description: 'This is a description 3',
-    defaultTargetPrice: null,
-    hoursToComplete: null,
+    defaultTargetPrice: 300,
     billable: null
   }
 ];

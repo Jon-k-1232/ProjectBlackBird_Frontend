@@ -1,27 +1,28 @@
 import { useEffect, useState } from 'react';
-import { Stack, TextField, Card, Button, Typography, CardContent } from '@mui/material';
+import { Stack, TextField, Card, Button, CardContent, Typography, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
 import { DesktopDatePicker, LocalizationProvider } from '@mui/lab';
 import AdapterDayjs from '@mui/lab/AdapterDayjs';
 import SingleSelectionDropDown from '../../Components/DropDowns/SingleSelectionDropDown';
 import { getAllCompanies, getAllJobDefinitions, getCompanyInformation } from '../../ApiCalls/ApiCalls';
 import dayjs from 'dayjs';
 
-// TODO CREATE FORM FOR NEW JOB
 export default function NewJob({ passedCompany }) {
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [allCompanies, setAllCompanies] = useState(null);
   const [selectedJobDescription, setJobDescription] = useState(null);
   const [allJobDescriptions, setAllJobDescriptions] = useState(null);
   const [selectedDate, setSelectedDate] = useState(dayjs().format());
+  const [subDescription, setSubDescription] = useState('');
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    const companies = getAllCompanies();
-    setAllCompanies(companies.allCompanies.rawData);
-
     if (passedCompany) {
       console.log('UPDATE PASSED COMPANY, EITHER OBJECT OR ID');
       const company = getCompanyInformation(passedCompany);
       setSelectedCompany(company.selectedCompanyInfo.rawData);
+    } else {
+      const companies = getAllCompanies();
+      setAllCompanies(companies.allCompanies.rawData);
     }
 
     const allJobDescriptions = getAllJobDefinitions();
@@ -30,8 +31,32 @@ export default function NewJob({ passedCompany }) {
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log('test');
+    const dataToPost = objectToPost();
+    console.log(dataToPost);
+    resetForm();
     // TODO Handle DATA
+  };
+
+  const objectToPost = () => {
+    return {
+      jobDefinition: selectedJobDescription.oid,
+      company: selectedCompany.oid,
+      targetPrice: selectedJobDescription.defaultTargetPrice,
+      startDate: selectedDate,
+      contact: `${selectedCompany.firstName}, ${selectedCompany.lastName}`,
+      contactPhone: selectedCompany.phoneNumber1,
+      description: selectedJobDescription.description,
+      defaultDescription: subDescription,
+      isComplete: false
+    };
+  };
+
+  const resetForm = () => {
+    setSelectedCompany(null);
+    setJobDescription(null);
+    setSelectedDate(dayjs().format());
+    setSubDescription('');
+    setChecked(false);
   };
 
   return (
@@ -64,6 +89,28 @@ export default function NewJob({ passedCompany }) {
                   renderInput={params => <TextField {...params} />}
                 />
               </Stack>
+              {selectedJobDescription && (
+                <Stack>
+                  <Typography>Target Job Price ${selectedJobDescription.defaultTargetPrice}</Typography>
+                </Stack>
+              )}
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 1 }}>
+                <TextField
+                  fullWidth
+                  required
+                  type='text'
+                  max='100'
+                  label='Sub Description'
+                  value={subDescription}
+                  onChange={e => {
+                    setSubDescription(e.target.value);
+                  }}
+                  helperText='Enter Sub Description of Job. This will show on bill.'
+                />
+              </Stack>
+              <FormGroup>
+                <FormControlLabel control={<Checkbox checked={checked} onChange={e => setChecked(e.target.checked)} />} label='Not Billable' />
+              </FormGroup>
               <Button type='submit' name='submit'>
                 Submit
               </Button>

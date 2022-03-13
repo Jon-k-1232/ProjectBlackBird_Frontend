@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Container } from '@mui/material';
-import { getAllCompanies, getCompanyJobs, getCompanyTransactions } from '../../ApiCalls/ApiCalls';
+import { getAllCompanies, getCompanyJobs, getCompanyTransactions, getCompanyInvoices } from '../../ApiCalls/ApiCalls';
 import Page from '../../Components/Page';
 import ContactCard from '../../Components/ContactCard/ContactCard';
 import HeaderMenu from '../../Components/HeaderMenu/HeaderMenu';
@@ -14,12 +14,14 @@ import clockFill from '@iconify/icons-eva/clock-fill';
 import statisticsIcon from '@iconify/icons-whh/statistics';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import NewTransactions from '../Transactions/NewTransaction';
+import NewJob from '../Jobs/NewJob';
 
 export default function ClientDetails() {
   const [dataToShow, setDataToShow] = useState('notes');
   const [company, setCompany] = useState(null);
   const [companyJobs, setCompanyJobs] = useState(null);
   const [jobTransactions, setJobTransactions] = useState(null);
+  const [companyInvoices, setCompanyInvoices] = useState(null);
 
   const location = useLocation();
 
@@ -33,12 +35,16 @@ export default function ClientDetails() {
     setCompany(contactDetails);
 
     // Company transactions
-    const companyTransactions = getCompanyTransactions(companyId).allCompanyTransactions;
-    setJobTransactions(companyTransactions);
+    const companyTransactions = getCompanyTransactions(companyId);
+    setJobTransactions(companyTransactions.allCompanyTransactions);
 
     // Company jobs
-    const companyJobs = getCompanyJobs(companyId).allCompanyJobs;
-    setCompanyJobs(companyJobs);
+    const companyJobs = getCompanyJobs(companyId);
+    setCompanyJobs(companyJobs.allCompanyJobs);
+
+    // Company invoices
+    const companyInvoices = getCompanyInvoices(companyId);
+    setCompanyInvoices(companyInvoices.allCompanyInvoices);
   }, []);
 
   return (
@@ -50,7 +56,8 @@ export default function ClientDetails() {
         {dataToShow === 'transactions' && <DataTable {...jobTransactions} />}
         {dataToShow === 'newTransactions' && <NewTransactions passedCompany={company} />}
         {dataToShow === 'jobs' && <DataTable {...companyJobs} route='/dashboard/jobDetails/' />}
-        {dataToShow === 'invoices' && <DataTable data={[]} />}
+        {dataToShow === 'newJob' && <NewJob passedCompany={company} />}
+        {dataToShow === 'invoices' && <DataTable {...companyInvoices} />}
         {dataToShow === 'statistics' && <ComingSoon />}
       </Container>
     </Page>

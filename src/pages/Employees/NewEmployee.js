@@ -1,94 +1,77 @@
-import * as Yup from 'yup';
 import { useState } from 'react';
-import { Icon } from '@iconify/react';
-import { useFormik, Form, FormikProvider } from 'formik';
-import eyeFill from '@iconify/icons-eva/eye-fill';
-import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
-import { useNavigate } from 'react-router-dom';
-import { Stack, TextField, IconButton, InputAdornment, Typography } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import { Stack, TextField, Card, Button, CardContent, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
 
-export default function RegisterForm() {
-  const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
+export default function NewEmployee() {
+  const [checked, setChecked] = useState(true);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [middleName, setMiddleName] = useState('');
+  const [hourlyCost, setHourlyCost] = useState('');
 
-  const RegisterSchema = Yup.object().shape({
-    firstName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('First name required'),
-    lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name required'),
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
-    password: Yup.string().required('Password is required'),
-  });
+  const handleSubmit = e => {
+    e.preventDefault();
+    const dataToPost = objectToPost();
+    console.log(dataToPost);
+    resetForm();
+    // TODO Handle DATA
+  };
 
-  const formik = useFormik({
-    initialValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-    },
-    validationSchema: RegisterSchema,
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
-    },
-  });
+  const objectToPost = () => {
+    return {
+      firstName: firstName,
+      lastName: lastName,
+      middleI: middleName,
+      hourlyCost: hourlyCost,
+      inactive: checked
+    };
+  };
 
-  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
+  const resetForm = () => {
+    setChecked(true);
+    setFirstName('');
+    setLastName('');
+    setMiddleName('');
+    setHourlyCost('');
+  };
 
   return (
-    <FormikProvider value={formik}>
-      <Typography variant='h4' sx={{ mb: 5 }}>
-        Enter New Employee
-      </Typography>
-      <Form autoComplete='off' noValidate onSubmit={handleSubmit}>
-        <Stack spacing={3}>
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-            <TextField
-              fullWidth
-              label='First name'
-              {...getFieldProps('firstName')}
-              error={Boolean(touched.firstName && errors.firstName)}
-              helperText={touched.firstName && errors.firstName}
-            />
-
-            <TextField
-              fullWidth
-              label='Last name'
-              {...getFieldProps('lastName')}
-              error={Boolean(touched.lastName && errors.lastName)}
-              helperText={touched.lastName && errors.lastName}
-            />
+    <Card style={{ marginTop: '25px' }}>
+      <CardContent style={{ padding: '20px' }}>
+        <form onSubmit={handleSubmit}>
+          <Stack spacing={3}>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
+              <TextField
+                fullWidth
+                required
+                type='text'
+                max='26'
+                label='First name'
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+              />
+              <TextField fullWidth required type='26' max='100' label='Last name' value={lastName} onChange={e => setLastName(e.target.value)} />
+              <TextField
+                fullWidth
+                required
+                type='text'
+                max='15'
+                label='Middle name'
+                value={middleName}
+                onChange={e => setMiddleName(e.target.value)}
+              />
+            </Stack>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
+              <TextField required type='text' max='6' label='Hourly Cost' value={hourlyCost} onChange={e => setHourlyCost(e.target.value)} />
+            </Stack>
+            <FormGroup>
+              <FormControlLabel control={<Checkbox checked={checked} onChange={e => setChecked(e.target.checked)} />} label='Active' />
+            </FormGroup>
+            <Button type='submit' name='submit'>
+              Submit
+            </Button>
           </Stack>
-
-          <TextField
-            fullWidth
-            autoComplete='username'
-            type='email'
-            label='Email address'
-            {...getFieldProps('email')}
-            error={Boolean(touched.email && errors.email)}
-            helperText={touched.email && errors.email}
-          />
-
-          <TextField
-            fullWidth
-            autoComplete='current-password'
-            type={showPassword ? 'text' : 'password'}
-            label='Password'
-            {...getFieldProps('password')}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position='end'>
-                  <IconButton edge='end' onClick={() => setShowPassword((prev) => !prev)}>
-                    <Icon icon={showPassword ? eyeFill : eyeOffFill} />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            error={Boolean(touched.password && errors.password)}
-            helperText={touched.password && errors.password}
-          />
-        </Stack>
-      </Form>
-    </FormikProvider>
+        </form>
+      </CardContent>
+    </Card>
   );
 }

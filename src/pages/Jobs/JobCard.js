@@ -7,43 +7,47 @@ export default function JobCard({ selectedJob, company }) {
 
   const jobDetail = () => (
     <table style={{ textAlign: 'justify' }}>
-      <tr>
-        <th>Job Name:</th>
-        <td>{defaultDescription}</td>
-      </tr>
-      <tr>
-        <th>Additional Detail:</th>
-        <td>{description}</td>
-      </tr>
-      <tr>
-        <th>Target Price:</th>
-        <td>{defaultTargetPrice}</td>
-      </tr>
-      <tr>
-        <th>Job Status:</th>
-        <td>{isComplete ? 'Completed' : 'Active'}</td>
-      </tr>
+      <tbody>
+        <tr>
+          <th>Job Name:</th>
+          <td>{defaultDescription}</td>
+        </tr>
+        <tr>
+          <th>Additional Detail:</th>
+          <td>{description}</td>
+        </tr>
+        <tr>
+          <th>Target Price:</th>
+          <td>{defaultTargetPrice}</td>
+        </tr>
+        <tr>
+          <th>Job Status:</th>
+          <td>{isComplete ? 'Completed' : 'Active'}</td>
+        </tr>
+      </tbody>
     </table>
   );
 
   const jobDetailTwo = () => (
     <table style={{ textAlign: 'justify' }}>
-      <tr>
-        <th>Due on Account:</th>
-        <td>Placeholder Text</td>
-      </tr>
-      <tr>
-        <th>Amount Due on Job:</th>
-        <td>Placeholder Text</td>
-      </tr>
-      <tr>
-        <th> Write Off:</th>
-        <td>Placeholder Text</td>
-      </tr>
-      <tr>
-        <th> Average Time:</th>
-        <td>Placeholder Text</td>
-      </tr>
+      <tbody>
+        <tr>
+          <th>Due on Account:</th>
+          <td>Placeholder Text</td>
+        </tr>
+        <tr>
+          <th>Amount Due on Job:</th>
+          <td>Placeholder Text</td>
+        </tr>
+        <tr>
+          <th> Write Off:</th>
+          <td>Placeholder Text</td>
+        </tr>
+        <tr>
+          <th> Average Time:</th>
+          <td>Placeholder Text</td>
+        </tr>
+      </tbody>
     </table>
   );
 

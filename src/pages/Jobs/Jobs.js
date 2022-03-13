@@ -28,7 +28,8 @@ export default function Jobs() {
   );
 }
 
+// Name is name of route
 const button = [
   { name: 'newJob', variant: 'contained', icon: plusFill, htmlName: 'Create New Job' },
-  { name: 'createNewJobCode', variant: 'contained', icon: plusFill, htmlName: 'Create New Job Code' }
+  { name: 'createNewJobDescription', variant: 'contained', icon: plusFill, htmlName: 'Create New Job Code' }
 ];

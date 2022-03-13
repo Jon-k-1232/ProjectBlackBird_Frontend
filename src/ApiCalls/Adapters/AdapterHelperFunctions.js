@@ -61,6 +61,15 @@ const getFormValuesNames = (rawData, value, labelFirst, labelLast) => {
   });
 };
 
+/**
+ *  MAIN ORCHESTRATOR FOR THIS FILE. CREATES A LABEL, AND VALUE FOR DROP DOWNS. EXAMPLE: LABEL FOR DROP DOWN IS 'MICKEY MOUSE', VALUE CAN BE THE 'COMPANY ID'
+ * @param {*} rawData
+ * @param {*} value
+ * @param {*} label
+ * @param {*} label2
+ * @param {*} type
+ * @returns
+ */
 // Orchestrates adding header, table and drop down data
 export const tableAndLabelCreation = (rawData, value, label, label2, type) => {
   const tableHeaders = getTableHeaders(rawData);

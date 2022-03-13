@@ -24,7 +24,8 @@ export default function DataTable(props) {
     tableBodyMaxHeight,
     onRowClick: rowData => {
       // Whole row of data will be stored in router state
-      navigate(`${props.route}`, { state: { rowData } });
+      // If 'route' is not present onClick will not fire.
+      props.route && navigate(`${props.route}`, { state: { rowData } });
     }
   };
 

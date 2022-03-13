@@ -20,7 +20,9 @@ export default function SingleSelectionDropDown({
         labelPropertyTwo ? option => `${option[labelPropertyOne]} ${option[labelPropertyTwo]}` : option => option[labelPropertyOne]
       }
       onChange={(e, v) => {
-        setSelection(v);
+        if (v != null) {
+          setSelection(v);
+        }
       }}
       sx={{ width: 350 }}
       renderInput={params => <TextField required {...params} label={dropPlaceholder} />}

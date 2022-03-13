@@ -1,21 +1,28 @@
+import React, { useState, useEffect } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { useNavigate } from 'react-router-dom';
 import { Stack, Container } from '@mui/material';
 import Page from '../../Components/Page';
 import DataTable from '../../Components/DataTable/DataTable';
 import HeaderMenu from '../../Components/HeaderMenu/HeaderMenu';
+import { getAllEmployees } from '../../ApiCalls/ApiCalls';
 
 export default function Employees() {
   const navigate = useNavigate();
 
+  const [allEmployees, setAllEmployees] = useState(null);
+
+  useEffect(() => {
+    const allEmployees = getAllEmployees();
+    setAllEmployees(allEmployees.allEmployees);
+  }, []);
+
   return (
     <Page title='employees'>
       <Container style={{ maxWidth: '1280px' }}>
-        <Stack direction='row' alignItems='center' justifyContent='space-between' mb={5}>
-          <HeaderMenu handleOnClick={(data) => navigate(`/dashboard/${data}/`)} page={'Employees'} listOfButtons={button} />
-        </Stack>
+        <HeaderMenu handleOnClick={data => navigate(`/dashboard/${data}/`)} page={'Employees'} listOfButtons={button} />
       </Container>
-      <DataTable data={''} />
+      <DataTable {...allEmployees} />
     </Page>
   );
 }

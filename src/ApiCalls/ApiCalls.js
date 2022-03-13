@@ -3,6 +3,7 @@ import jobs from '../_mocks_/jobs_mock';
 import jobDefinitions from '../_mocks_/jobDefinitions_mock';
 import employees from '../_mocks_/employees_mock';
 import allTransactions from '../_mocks_/allTransactions_mock';
+import invoices from '../_mocks_/invoices_mock';
 import { tableAndLabelCreation } from './Adapters/AdapterHelperFunctions';
 
 export const getAllCompanies = () => {
@@ -10,9 +11,9 @@ export const getAllCompanies = () => {
   return { allCompanies };
 };
 
-export const getCompanyInformation = companyId => {
+export const getCompanyInformation = company => {
   //For mock purpose
-  const mockCompany = companies[companyId];
+  const mockCompany = company;
 
   const selectedCompanyInfo = mockCompany;
   return { selectedCompanyInfo };
@@ -21,6 +22,11 @@ export const getCompanyInformation = companyId => {
 export const getCompanyTransactions = companyId => {
   const allCompanyTransactions = tableAndLabelCreation(allTransactions, 'oid', 'company');
   return { allCompanyTransactions };
+};
+
+export const getCompanyInvoices = companyId => {
+  const allCompanyInvoices = tableAndLabelCreation(invoices, 'oid', 'contactName');
+  return { allCompanyInvoices };
 };
 
 export const getAllTransactions = () => {
@@ -61,4 +67,9 @@ export const getAllEmployees = () => {
   // Formatting for tables and drops
   const allEmployees = tableAndLabelCreation(employees, 'oid', 'firstName', 'lastName', 'employees');
   return { allEmployees };
+};
+
+export const getAllInvoices = () => {
+  const allInvoices = tableAndLabelCreation(invoices, 'oid', 'contactName');
+  return { allInvoices };
 };

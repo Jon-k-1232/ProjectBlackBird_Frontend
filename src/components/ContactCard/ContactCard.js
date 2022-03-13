@@ -33,72 +33,76 @@ export default function ContactCard(props) {
 
   const basicContactInformation = () => (
     <table className='contactColumnOne'>
-      <tr>
-        <th>Company Name:</th>
-        <td>{companyName}</td>
-      </tr>
-      <tr>
-        <th>Name:</th>
-        <td>
-          {lastName}, {firstName}, {middleI}
-        </td>
-      </tr>
-      <tr>
-        <th>Primary Address:</th>
-        <td>
-          {address1} {city}, {state} {zip}
-        </td>
-      </tr>
-      {address2 && (
+      <tbody>
         <tr>
-          <th>Secondary Address:</th>
+          <th>Company Name:</th>
+          <td>{companyName}</td>
+        </tr>
+        <tr>
+          <th>Name:</th>
           <td>
-            {address2} {city}, {state} {zip}
+            {lastName}, {firstName}, {middleI}
           </td>
         </tr>
-      )}
-      <tr>
-        <th>Cell:</th>
-        <td>{mobilePhone}</td>
-      </tr>
-      <tr>
-        <th>Landline:</th>
-        <td>{phoneNumber1}</td>
-      </tr>
-      <tr>
-        <th>Email:</th>
-        <td>{email}</td>
-      </tr>
+        <tr>
+          <th>Primary Address:</th>
+          <td>
+            {address1} {city}, {state} {zip}
+          </td>
+        </tr>
+        {address2 && (
+          <tr>
+            <th>Secondary Address:</th>
+            <td>
+              {address2} {city}, {state} {zip}
+            </td>
+          </tr>
+        )}
+        <tr>
+          <th>Cell:</th>
+          <td>{mobilePhone}</td>
+        </tr>
+        <tr>
+          <th>Landline:</th>
+          <td>{phoneNumber1}</td>
+        </tr>
+        <tr>
+          <th>Email:</th>
+          <td>{email}</td>
+        </tr>
+      </tbody>
     </table>
   );
 
   const additionalDetail = () => (
     <table className='contactColumnTwo'>
-      <tr>
-        <th>Beginning Balance:</th>
-        <td>{beginningBalance}</td>
-      </tr>
-      <tr>
-        <th>Statement Balance:</th>
-        <td>{statementBalance}</td>
-      </tr>
-      <tr>
-        <th>Current Balance:</th>
-        <td>{currentBalance}</td>
-      </tr>
-      <tr>
-        <th>New Balance:</th>
-        {conditionalCheckboxs(newBalance)}
-      </tr>
+      <tbody>
+        <tr>
+          <th>Beginning Balance:</th>
+          <td>{beginningBalance}</td>
+        </tr>
+        <tr>
+          <th>Statement Balance:</th>
+          <td>{statementBalance}</td>
+        </tr>
+        <tr>
+          <th>Current Balance:</th>
+          <td>{currentBalance}</td>
+        </tr>
+        <tr>
+          <th>New Balance:</th>
+          {conditionalCheckboxs(newBalance)}
+        </tr>
 
-      <tr>
-        <th>Balance Changed Since Last Statement:</th>
-        {conditionalCheckboxs(balanceChanged)}
-      </tr>
-      <tr>
-        <th>Billable:</th>
-        {conditionalCheckboxs(!notBillable)}
-      </tr>
+        <tr>
+          <th>Balance Changed Since Last Statement:</th>
+          {conditionalCheckboxs(balanceChanged)}
+        </tr>
+        <tr>
+          <th>Billable:</th>
+          {conditionalCheckboxs(!notBillable)}
+        </tr>
+      </tbody>
     </table>
   );
 

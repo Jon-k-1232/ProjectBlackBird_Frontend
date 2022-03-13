@@ -1,13 +1,20 @@
+import { useEffect, useState } from 'react';
 import { Container, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import Page from '../../Components/Page';
-import dummyTableData from '../../_mocks_/companies_mock';
 import DataTable from '../../Components/DataTable/DataTable';
 import HeaderMenu from '../../Components/HeaderMenu/HeaderMenu';
+import { getAllInvoices } from '../../ApiCalls/ApiCalls';
 
 export default function Invoices() {
+  const [invoices, setInvoices] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const allInvoicesToDate = getAllInvoices();
+    setInvoices(allInvoicesToDate.allInvoices);
+  }, []);
 
   return (
     <Page title='Invoices'>
@@ -15,7 +22,8 @@ export default function Invoices() {
         <Stack direction='row' alignItems='center' justifyContent='space-between' mb={5}>
           <HeaderMenu handleOnClick={data => navigate(`/dashboard/${data}/`)} page={'Invoices'} listOfButtons={button} />
         </Stack>
-        <DataTable data={dummyTableData} />
+        {/* If invoice detail needed pass a route below in DataTable - route='/dashboard/invoiceDetails/' */}
+        <DataTable {...invoices} />
       </Container>
     </Page>
   );

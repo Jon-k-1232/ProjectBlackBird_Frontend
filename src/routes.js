@@ -18,6 +18,7 @@ import NewJob from './Pages/Jobs/NewJob';
 import JobDetails from './Pages/Jobs/JobDetails';
 import Profile from './Pages/Profile/Profile';
 import ClientDetails from './Pages/Clients/ClientDetails';
+import NewJobDescription from './Pages/Jobs/NewJobDescription';
 
 export default function Router(allClients, allEmployees) {
   return useRoutes([
@@ -39,6 +40,7 @@ export default function Router(allClients, allEmployees) {
         { path: 'jobs', element: <Jobs /> },
         { path: 'newJob', element: <NewJob /> },
         { path: 'jobDetails', element: <JobDetails /> },
+        { path: 'createNewJobDescription', element: <NewJobDescription /> },
         { path: 'profile', element: <Profile /> }
       ]
     },
