@@ -1,10 +1,12 @@
 import companies from '../_mocks_/companies_mock';
 import jobs from '../_mocks_/jobs_mock';
 import jobDefinitions from '../_mocks_/jobDefinitions_mock';
-import employees from '../_mocks_/employees_mock';
+// import employees from '../_mocks_/employees_mock';
 import allTransactions from '../_mocks_/allTransactions_mock';
 import invoices from '../_mocks_/invoices_mock';
 import { tableAndLabelCreation } from './Adapters/AdapterHelperFunctions';
+import config from '../config';
+import employees from 'src/_mocks_/employees_mock';
 
 export const getAllCompanies = () => {
   const allCompanies = tableAndLabelCreation(companies, 'oid', 'company');
@@ -64,9 +66,29 @@ export const getAllJobDefinitions = () => {
 };
 
 export const getAllEmployees = () => {
-  // Formatting for tables and drops
-  const allEmployees = tableAndLabelCreation(employees, 'oid', 'firstName', 'lastName', 'employees');
-  return { allEmployees };
+  const allEmployees = fetch(`${config.API_ENDPOINT}/employee/all`, {
+    method: 'GET'
+    // headers: {
+    //   'content-type': 'application/json',
+    //   Authorization: `Bearer ${config.API_KEY2}`,
+    //   Origin: `${config.FRONT_WEB}`
+    // }
+  })
+    .then(resp => {
+      if (!resp.ok) {
+        throw new Error(resp.status);
+      }
+      return resp.json();
+    })
+    .then(data => {
+      const { employees } = data;
+      return tableAndLabelCreation(employees, 'oid', 'firstName', 'lastName', 'employees');
+    })
+    .catch(error => {
+      console.log(error);
+      return error;
+    });
+  return allEmployees;
 };
 
 export const getAllInvoices = () => {

@@ -12,9 +12,9 @@ export default function Employees() {
 
   const [allEmployees, setAllEmployees] = useState(null);
 
-  useEffect(() => {
-    const allEmployees = getAllEmployees();
-    setAllEmployees(allEmployees.allEmployees);
+  useEffect(async () => {
+    const allEmployees = await getAllEmployees();
+    setAllEmployees(allEmployees);
   }, []);
 
   return (
