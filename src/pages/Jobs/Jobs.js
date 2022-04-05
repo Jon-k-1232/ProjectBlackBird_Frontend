@@ -12,8 +12,11 @@ export default function Jobs() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const allJobs = getAllJobs();
-    setJobs(allJobs.allJobs);
+    const fetchData = async () => {
+      const allJobs = await getAllJobs();
+      setJobs(allJobs);
+    };
+    fetchData();
   }, []);
 
   return (

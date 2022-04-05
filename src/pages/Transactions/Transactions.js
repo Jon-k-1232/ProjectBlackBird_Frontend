@@ -12,8 +12,11 @@ export default function Transactions() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const allTransactionsToDate = getAllTransactions();
-    setTransactions(allTransactionsToDate.transactions);
+    const fetchData = async () => {
+      const allTransactionsToDate = await getAllTransactions(730);
+      setTransactions(allTransactionsToDate);
+    };
+    fetchData();
   }, []);
 
   return (

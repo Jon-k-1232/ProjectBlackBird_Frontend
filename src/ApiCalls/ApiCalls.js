@@ -1,72 +1,46 @@
-import companies from '../_mocks_/companies_mock';
-import jobs from '../_mocks_/jobs_mock';
-import jobDefinitions from '../_mocks_/jobDefinitions_mock';
-// import employees from '../_mocks_/employees_mock';
-import allTransactions from '../_mocks_/allTransactions_mock';
-import invoices from '../_mocks_/invoices_mock';
 import { tableAndLabelCreation } from './Adapters/AdapterHelperFunctions';
 import config from '../config';
-import employees from 'src/_mocks_/employees_mock';
+import pMemoize from 'p-memoize';
 
-export const getAllCompanies = () => {
-  const allCompanies = tableAndLabelCreation(companies, 'oid', 'company');
-  return { allCompanies };
-};
+/**
+ * Gets all company information
+ * @returns [{},{},{}] Array of objects
+ */
+export const getAllCompanies = pMemoize(
+  () => {
+    return fetch(`${config.API_ENDPOINT}/contacts/all`, {
+      method: 'GET'
+      // headers: {
+      //   'content-type': 'application/json',
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+      // }
+    })
+      .then(resp => {
+        if (!resp.ok) {
+          throw new Error(resp.status);
+        }
+        return resp.json();
+      })
+      .then(data => {
+        const { allContactInfo } = data;
+        return tableAndLabelCreation(allContactInfo, 'oid', 'company');
+      })
+      .catch(error => {
+        console.log(error);
+        return error;
+      });
+  },
+  { cacheKey: arguments_ => JSON.stringify(arguments_) }
+);
 
-export const getCompanyInformation = company => {
-  //For mock purpose
-  const mockCompany = company;
-
-  const selectedCompanyInfo = mockCompany;
-  return { selectedCompanyInfo };
-};
-
-export const getCompanyTransactions = companyId => {
-  const allCompanyTransactions = tableAndLabelCreation(allTransactions, 'oid', 'company');
-  return { allCompanyTransactions };
-};
-
-export const getCompanyInvoices = companyId => {
-  const allCompanyInvoices = tableAndLabelCreation(invoices, 'oid', 'contactName');
-  return { allCompanyInvoices };
-};
-
-export const getAllTransactions = () => {
-  // Formatting for tables and drops
-  const transactions = tableAndLabelCreation(allTransactions, 'oid', 'company');
-  return { transactions };
-};
-
-export const getJobTransactions = jobId => {
-  // Formatting for tables and drops
-  const jobTransactions = tableAndLabelCreation(allTransactions, 'oid', 'company');
-  return { jobTransactions };
-};
-
-export const getAllJobs = () => {
-  // mock data
-  const rawAllJobs = jobs;
-  // Formatting for tables and drops
-  const allJobs = tableAndLabelCreation(rawAllJobs, 'jobDefinition', 'description');
-  return { allJobs };
-};
-
-export const getCompanyJobs = companyOid => {
-  // toDo company oid will be passed to api to get all jobs for that company
-  // mock data
-  const rawAllJobs = jobs;
-  // Formatting for tables and drops
-  const allCompanyJobs = tableAndLabelCreation(rawAllJobs, 'jobDefinition', 'description');
-  return { allCompanyJobs };
-};
-
-export const getAllJobDefinitions = () => {
-  const allJobDefinitions = tableAndLabelCreation(jobDefinitions, 'oid', 'description');
-  return { allJobDefinitions };
-};
-
-export const getAllEmployees = () => {
-  const allEmployees = fetch(`${config.API_ENDPOINT}/employee/all`, {
+/**
+ * Gets company information via query
+ * @param {*} companyId Integer oid of company
+ * @returns {object} Object is company information
+ */
+export const getCompanyInformation = companyId => {
+  return fetch(`${config.API_ENDPOINT}/contacts/company/${companyId}`, {
     method: 'GET'
     // headers: {
     //   'content-type': 'application/json',
@@ -81,17 +55,295 @@ export const getAllEmployees = () => {
       return resp.json();
     })
     .then(data => {
-      const { employees } = data;
-      return tableAndLabelCreation(employees, 'oid', 'firstName', 'lastName', 'employees');
+      return data.companyContactInformation[0];
     })
     .catch(error => {
       console.log(error);
       return error;
     });
-  return allEmployees;
 };
 
-export const getAllInvoices = () => {
-  const allInvoices = tableAndLabelCreation(invoices, 'oid', 'contactName');
-  return { allInvoices };
-};
+/**
+ *
+ */
+export const getCompanyTransactions = pMemoize(
+  (companyId, time) => {
+    const allCompanyTransactions = fetch(`${config.API_ENDPOINT}/transactions/companyTransactions/${companyId}/${time}`, {
+      method: 'GET'
+      // headers: {
+      //   'content-type': 'application/json',
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+      // }
+    })
+      .then(resp => {
+        if (!resp.ok) {
+          throw new Error(resp.status);
+        }
+        return resp.json();
+      })
+      .then(data => {
+        const { sortedCompanyTransactions } = data;
+        return sortedCompanyTransactions.length > 0 ? tableAndLabelCreation(sortedCompanyTransactions, 'oid', 'company') : [];
+      })
+      .catch(error => {
+        console.log(error);
+        return error;
+      });
+    return allCompanyTransactions;
+  },
+  { cacheKey: arguments_ => JSON.stringify(arguments_) }
+);
+
+/**
+ *
+ */
+export const getCompanyInvoices = pMemoize(
+  companyId => {
+    return fetch(`${config.API_ENDPOINT}/invoices/all/company/${companyId}`, {
+      method: 'GET'
+      // headers: {
+      //   'content-type': 'application/json',
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+      // }
+    })
+      .then(resp => {
+        if (!resp.ok) {
+          throw new Error(resp.status);
+        }
+        return resp.json();
+      })
+      .then(data => {
+        const { invoicesWithNoDetail } = data;
+        return invoicesWithNoDetail.length > 0 ? tableAndLabelCreation(invoicesWithNoDetail, 'oid', 'contactName') : [];
+      })
+      .catch(error => {
+        console.log(error);
+        return error;
+      });
+  },
+  { cacheKey: arguments_ => JSON.stringify(arguments_) }
+);
+
+/**
+ *
+ */
+export const getAllTransactions = pMemoize(
+  time => {
+    return fetch(`${config.API_ENDPOINT}/transactions/all/${time}`, {
+      method: 'GET'
+      // headers: {
+      //   'content-type': 'application/json',
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+      // }
+    })
+      .then(resp => {
+        if (!resp.ok) {
+          throw new Error(resp.status);
+        }
+        return resp.json();
+      })
+      .then(data => {
+        const { allTransactions } = data;
+        return allTransactions.length > 0 ? tableAndLabelCreation(allTransactions, 'oid', 'company') : [];
+      })
+      .catch(error => {
+        console.log(error);
+        return error;
+      });
+  },
+
+  { cacheKey: arguments_ => JSON.stringify(arguments_) }
+);
+
+/**
+ *
+ */
+export const getJobTransactions = pMemoize(
+  (companyId, jobId) => {
+    return fetch(`${config.API_ENDPOINT}/transactions/jobTransactions/${companyId}/${jobId}`, {
+      method: 'GET'
+      // headers: {
+      //   'content-type': 'application/json',
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+      // }
+    })
+      .then(resp => {
+        if (!resp.ok) {
+          throw new Error(resp.status);
+        }
+        return resp.json();
+      })
+      .then(data => {
+        const { jobTransactions } = data;
+        return jobTransactions.length > 0 ? tableAndLabelCreation(jobTransactions, 'jobDefinition', 'description') : [];
+      })
+      .catch(error => {
+        console.log(error);
+        return error;
+      });
+  },
+
+  { cacheKey: arguments_ => JSON.stringify(arguments_) }
+);
+
+/**
+ *
+ */
+export const getAllJobs = pMemoize(
+  time => {
+    return fetch(`${config.API_ENDPOINT}/jobs/allJobs/${time}`, {
+      method: 'GET'
+      // headers: {
+      //   'content-type': 'application/json',
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+      // }
+    })
+      .then(resp => {
+        if (!resp.ok) {
+          throw new Error(resp.status);
+        }
+        return resp.json();
+      })
+      .then(data => {
+        const { allJobsWithinTimeframe } = data;
+        return allJobsWithinTimeframe.length > 0 ? tableAndLabelCreation(allJobsWithinTimeframe, 'jobDefinition', 'description') : [];
+      })
+      .catch(error => {
+        console.log(error);
+        return error;
+      });
+  },
+  { cacheKey: arguments_ => JSON.stringify(arguments_) }
+);
+
+/**
+ *
+ */
+export const getCompanyJobs = pMemoize(
+  (companyId, time) => {
+    return fetch(`${config.API_ENDPOINT}/jobs/all/${companyId}/${time}`, {
+      method: 'GET'
+      // headers: {
+      //   'content-type': 'application/json',
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+      // }
+    })
+      .then(resp => {
+        if (!resp.ok) {
+          throw new Error(resp.status);
+        }
+        return resp.json();
+      })
+      .then(data => {
+        const { jobs } = data;
+        return jobs.length > 0 ? tableAndLabelCreation(jobs, 'jobDefinition', 'description') : [];
+      })
+      .catch(error => {
+        console.log(error);
+        return error;
+      });
+  },
+  { cacheKey: arguments_ => JSON.stringify(arguments_) }
+);
+
+/**
+ * Gets all job types/descriptions/definitions
+ */
+export const getAllJobDefinitions = pMemoize(
+  () => {
+    return fetch(`${config.API_ENDPOINT}/jobDescription/all`, {
+      method: 'GET'
+      // headers: {
+      //   'content-type': 'application/json',
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+      // }
+    })
+      .then(resp => {
+        if (!resp.ok) {
+          throw new Error(resp.status);
+        }
+        return resp.json();
+      })
+      .then(data => {
+        const { allJobDescriptions } = data;
+        return allJobDescriptions.length > 0 ? tableAndLabelCreation(allJobDescriptions, 'oid', 'description') : [];
+      })
+      .catch(error => {
+        console.log(error);
+        return error;
+      });
+  },
+  { cacheKey: arguments_ => JSON.stringify(arguments_) }
+);
+
+/**
+ * Gets all Employees active and inactive
+ * @returns [{},{},{}] Array of objects. Each object is a employee
+ */
+export const getAllEmployees = pMemoize(
+  () => {
+    return fetch(`${config.API_ENDPOINT}/employee/all`, {
+      method: 'GET'
+      // headers: {
+      //   'content-type': 'application/json',
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+      // }
+    })
+      .then(resp => {
+        if (!resp.ok) {
+          throw new Error(resp.status);
+        }
+        return resp.json();
+      })
+      .then(data => {
+        const { employees } = data;
+        return employees.length > 0 ? tableAndLabelCreation(employees, 'oid', 'firstName', 'lastName', 'employees') : [];
+      })
+      .catch(error => {
+        console.log(error);
+        return error;
+      });
+  },
+  { cacheKey: arguments_ => JSON.stringify(arguments_) }
+);
+
+/**
+ * Gets all invoices
+ * @param {*} time Integer in days. How many days in past
+ * @returns [{},{},{}] arrays of objects, each object is a invoice
+ */
+export const getAllInvoices = pMemoize(
+  time => {
+    return fetch(`${config.API_ENDPOINT}/invoices/all/time/${time}`, {
+      method: 'GET'
+      // headers: {
+      //   'content-type': 'application/json',
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+      // }
+    })
+      .then(resp => {
+        if (!resp.ok) {
+          throw new Error(resp.status);
+        }
+        return resp.json();
+      })
+      .then(data => {
+        const { invoices } = data;
+        return invoices.length > 0 ? tableAndLabelCreation(invoices, 'oid', 'contactName') : [];
+      })
+      .catch(error => {
+        console.log(error);
+        return error;
+      });
+  },
+  { cacheKey: arguments_ => JSON.stringify(arguments_) }
+);

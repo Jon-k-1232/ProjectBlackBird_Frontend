@@ -12,8 +12,12 @@ export default function Invoices() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const allInvoicesToDate = getAllInvoices();
-    setInvoices(allInvoicesToDate.allInvoices);
+    const fetchData = async () => {
+      // Past 2 years = 730 days
+      const allInvoicesToDate = await getAllInvoices(730);
+      setInvoices(allInvoicesToDate);
+    };
+    fetchData();
   }, []);
 
   return (

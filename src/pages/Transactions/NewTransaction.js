@@ -21,16 +21,20 @@ export default function NewTransactions({ passedCompany }) {
   const [totalTransaction, setTotalTransaction] = useState(0);
 
   useEffect(() => {
-    const companies = getAllCompanies();
-    setAllCompanies(companies.allCompanies.rawData);
+    const fetchData = async () => {
+      const allCompanies = await getAllCompanies();
+      setAllCompanies(allCompanies.rawData);
 
-    const employees = getAllEmployees();
-    setAllEmployees(employees.allEmployees.rawData);
+      const allEmployees = await getAllEmployees();
+      setAllEmployees(allEmployees.rawData);
 
-    if (selectedCompany) {
-      const allJobs = passedCompany ? getCompanyJobs(passedCompany.oid) : getCompanyJobs(selectedCompany.oid);
-      setCompanyJobList(allJobs.allCompanyJobs.rawData);
-    }
+      //TODO MAKE SURE PASSING A COMPANY IN WORKS
+      if (selectedCompany) {
+        const allJobs = passedCompany ? await getCompanyJobs(passedCompany.oid, null) : await getCompanyJobs(selectedCompany.oid, null);
+        setCompanyJobList(allJobs.rawData);
+      }
+    };
+    fetchData();
   }, [selectedCompany]);
 
   useEffect(() => {

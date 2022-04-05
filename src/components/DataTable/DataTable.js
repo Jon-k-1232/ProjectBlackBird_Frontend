@@ -10,11 +10,14 @@ export default function DataTable(props) {
   const navigate = useNavigate();
 
   const responsive = 'vertical';
-  const tableBodyHeight = '600px';
+  const tableBodyHeight = '1000px';
   const tableBodyMaxHeight = '';
 
   // https://github.com/gregnb/mui-datatables#api
   const options = {
+    rowsPerPage: 50,
+    rowsPerPageOptions: [50, 150, 300],
+    draggableColumns: { enabled: true },
     filter: true,
     filterType: 'dropdown',
     searchOpen: true,

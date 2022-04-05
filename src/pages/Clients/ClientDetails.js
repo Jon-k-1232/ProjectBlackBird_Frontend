@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Container } from '@mui/material';
-import { getAllCompanies, getCompanyJobs, getCompanyTransactions, getCompanyInvoices } from '../../ApiCalls/ApiCalls';
+import { getCompanyJobs, getCompanyTransactions, getCompanyInvoices, getCompanyInformation } from '../../ApiCalls/ApiCalls';
 import Page from '../../Components/Page';
 import ContactCard from '../../Components/ContactCard/ContactCard';
 import HeaderMenu from '../../Components/HeaderMenu/HeaderMenu';
@@ -26,25 +26,28 @@ export default function ClientDetails() {
   const location = useLocation();
 
   useEffect(() => {
-    // Data is being stored in props of routing.
-    const companyId = parseInt(location.state.rowData[0]);
+    const fetchData = async () => {
+      // Data is being stored in props of routing.
+      const companyId = parseInt(location.state.rowData[0]);
 
-    // Selected company info
-    const allClients = getAllCompanies();
-    const contactDetails = allClients.allCompanies.rawData.find(item => item.oid === companyId);
-    setCompany(contactDetails);
+      // Selected company info
+      const contactDetails = await getCompanyInformation(companyId);
+      setCompany(contactDetails);
 
-    // Company transactions
-    const companyTransactions = getCompanyTransactions(companyId);
-    setJobTransactions(companyTransactions.allCompanyTransactions);
+      // Company transactions
+      // second argument, default null(365 days). This is used for time frame.
+      const companyTransactions = await getCompanyTransactions(companyId, null);
+      setJobTransactions(companyTransactions);
 
-    // Company jobs
-    const companyJobs = getCompanyJobs(companyId);
-    setCompanyJobs(companyJobs.allCompanyJobs);
+      // Company jobs
+      const companyJobs = await getCompanyJobs(companyId, null);
+      setCompanyJobs(companyJobs);
 
-    // Company invoices
-    const companyInvoices = getCompanyInvoices(companyId);
-    setCompanyInvoices(companyInvoices.allCompanyInvoices);
+      // Company invoices
+      const companyInvoices = await getCompanyInvoices(companyId);
+      setCompanyInvoices(companyInvoices);
+    };
+    fetchData();
   }, []);
 
   return (

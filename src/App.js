@@ -10,9 +10,9 @@ export default function App() {
   const [companies, setCompanies] = useState(null);
   const [employees, setEmployees] = useState(null);
 
-  useEffect(() => {
-    const allCompanies = getAllCompanies();
-    setCompanies(allCompanies.allCompanies);
+  useEffect(async () => {
+    const allCompanies = await getAllCompanies();
+    setCompanies(allCompanies);
 
     // Mock Api Call
     // const allEmployees = getEmployees();

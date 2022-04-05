@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Container, Typography } from '@mui/material';
+import { Container } from '@mui/material';
 import Page from '../../Components/Page';
 import DataTable from '../../Components/DataTable/DataTable';
-import { getCompanyJobs, getAllCompanies, getJobTransactions } from '../../ApiCalls/ApiCalls';
+import { getCompanyJobs, getCompanyInformation, getJobTransactions } from '../../ApiCalls/ApiCalls';
 import JobCard from './JobCard';
 import HeaderMenu from '../../Components/HeaderMenu/HeaderMenu';
 
@@ -15,21 +15,24 @@ export default function JobDetails() {
   const [selectedJob, setSelectedJob] = useState(null);
 
   useEffect(() => {
-    // Data is being stored in props of routing
-    const companyId = parseInt(location.state.rowData[2]);
-    const companyJobs = getCompanyJobs(companyId).allCompanyJobs.rawData;
+    const fetchData = async () => {
+      // Data is being stored in props of routing
+      const companyId = parseInt(location.state.rowData[2], 10);
+      const companyJobs = await getCompanyJobs(companyId, null);
 
-    // Getting contact info for company
-    const allClients = getAllCompanies();
-    const contactDetails = allClients.allCompanies.rawData.find(item => item.oid === companyId);
-    setCompany(contactDetails);
+      // Getting contact info for company
+      const contactDetails = await getCompanyInformation(companyId);
+      setCompany(contactDetails);
 
-    // Gets all transactions for job.
-    const jobNumber = parseInt(location.state.rowData[0]);
-    const selectedJob = companyJobs.find(jobItem => jobItem.oid === jobNumber);
-    setSelectedJob(selectedJob);
-    const transactions = getJobTransactions(jobNumber).jobTransactions.rawData;
-    setJobTransactions(transactions);
+      // Gets all transactions for job.
+      const jobNumber = parseInt(location.state.rowData[0], 10);
+      const selectedJob = companyJobs.rawData.find(jobItem => jobItem.oid === jobNumber);
+      setSelectedJob(selectedJob);
+
+      const jobTransactions = await getJobTransactions(companyId, selectedJob.jobDefinition);
+      setJobTransactions(jobTransactions);
+    };
+    fetchData();
   }, []);
 
   return (

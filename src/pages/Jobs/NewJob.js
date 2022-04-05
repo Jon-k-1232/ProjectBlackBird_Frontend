@@ -16,17 +16,19 @@ export default function NewJob({ passedCompany }) {
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    if (passedCompany) {
-      console.log('UPDATE PASSED COMPANY, EITHER OBJECT OR ID');
-      const company = getCompanyInformation(passedCompany);
-      setSelectedCompany(company.selectedCompanyInfo.rawData);
-    } else {
-      const companies = getAllCompanies();
-      setAllCompanies(companies.allCompanies.rawData);
-    }
+    const fetchData = async () => {
+      if (passedCompany) {
+        const contactDetails = await getCompanyInformation(passedCompany.oid);
+        setSelectedCompany(contactDetails);
+      } else {
+        const allCompanies = await getAllCompanies();
+        setAllCompanies(allCompanies);
+      }
 
-    const allJobDescriptions = getAllJobDefinitions();
-    setAllJobDescriptions(allJobDescriptions.allJobDefinitions.rawData);
+      const allJobDescriptions = await getAllJobDefinitions();
+      setAllJobDescriptions(allJobDescriptions.rawData);
+    };
+    fetchData();
   }, []);
 
   const handleSubmit = e => {
