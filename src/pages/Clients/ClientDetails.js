@@ -28,7 +28,7 @@ export default function ClientDetails() {
   useEffect(() => {
     const fetchData = async () => {
       // Data is being stored in props of routing.
-      const companyId = parseInt(location.state.rowData[0]);
+      const companyId = Number(location.state.rowData[0]);
 
       // Selected company info
       const contactDetails = await getCompanyInformation(companyId);

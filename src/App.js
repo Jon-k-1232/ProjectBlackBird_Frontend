@@ -8,15 +8,13 @@ import ClipLoader from 'react-spinners/ClipLoader';
 
 export default function App() {
   const [companies, setCompanies] = useState(null);
-  const [employees, setEmployees] = useState(null);
 
-  useEffect(async () => {
-    const allCompanies = await getAllCompanies();
-    setCompanies(allCompanies);
-
-    // Mock Api Call
-    // const allEmployees = getEmployees();
-    // setEmployees(allEmployees.allEmployees);
+  useEffect(() => {
+    const fetchData = async () => {
+      const allCompanies = await getAllCompanies();
+      setCompanies(allCompanies);
+    };
+    fetchData();
   }, []);
 
   const override = css`
@@ -29,7 +27,7 @@ export default function App() {
     <ThemeConfig>
       <GlobalStyles />
       {companies ? (
-        <Router allClients={companies} allEmployees={employees} />
+        <Router allClients={companies} />
       ) : (
         <div className='sweet-loading' style={{ height: '99vh', display: 'flex', alignItems: 'center' }}>
           <ClipLoader sizeUnit={'px'} color={'#ffffff'} loading={true} css={override} size={150} />

@@ -57,11 +57,10 @@ export default function old({ allClients, allEmployees, passedCompany }) {
   const passedCompanyArray = [passedCompany];
 
   // Calculations for sub totals, totals and discounts
-  const subTotal = Math.abs(parseFloat(quantity * unitTransaction).toFixed(2));
-  const amountToDiscount = Math.abs(parseFloat(subTotal - (subTotal * (100 - discount)) / 100).toFixed(2));
-  const totalCharges = discount ? Math.abs(parseFloat((subTotal * (100 - discount)) / 100).toFixed(2)) : Math.abs(subTotal);
-  const totalPayment =
-    transactionType === 'Charge' ? Math.abs(parseFloat(totalTransaction).toFixed(2)) : parseFloat(totalTransaction).toFixed(2);
+  const subTotal = Math.abs(Number(quantity * unitTransaction).toFixed(2));
+  const amountToDiscount = Math.abs(Number(subTotal - (subTotal * (100 - discount)) / 100).toFixed(2));
+  const totalCharges = discount ? Math.abs(Number((subTotal * (100 - discount)) / 100).toFixed(2)) : Math.abs(subTotal);
+  const totalPayment = transactionType === 'Charge' ? Math.abs(Number(totalTransaction).toFixed(2)) : Number(totalTransaction).toFixed(2);
 
   return (
     <Page style={{ marginTop: '25px' }} title='NewTransactions'>

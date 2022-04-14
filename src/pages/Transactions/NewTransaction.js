@@ -30,6 +30,7 @@ export default function NewTransactions({ passedCompany }) {
 
       //TODO MAKE SURE PASSING A COMPANY IN WORKS
       if (selectedCompany) {
+        // eslint-disable-next-line
         const allJobs = passedCompany ? await getCompanyJobs(passedCompany.oid, null) : await getCompanyJobs(selectedCompany.oid, null);
         setCompanyJobList(allJobs.rawData);
       }
@@ -62,11 +63,11 @@ export default function NewTransactions({ passedCompany }) {
       employee: selectedEmployee.oid,
       transactionType: selectedTransaction.displayValue,
       transactionDate: dayjs(selectedDate).format(),
-      quantity: parseInt(selectedQuantity, 10),
+      quantity: Number(selectedQuantity),
       unitOfMeasure: selectedType ? selectedType.displayValue : 'Each',
-      unitTransaction: parseInt(selectedAmount, 10),
-      totalTransaction: parseInt(totalTransaction, 10),
-      discount: selectedTransaction === 'writeOff' ? parseInt(selectedAmount, 10) : null,
+      unitTransaction: Number(selectedAmount),
+      totalTransaction: Number(totalTransaction),
+      discount: selectedTransaction === 'writeOff' ? Number(selectedAmount) : null,
       invoice: null,
       paymentApplied: null,
       ignoreInAgeing: null

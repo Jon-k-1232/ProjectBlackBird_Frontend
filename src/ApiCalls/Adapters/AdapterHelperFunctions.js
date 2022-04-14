@@ -1,4 +1,4 @@
-// Gets headers, capitolizes the first letters, and inserts spaces between numbers and caps.
+// Gets headers, capitalizes the first letters, and inserts spaces between numbers and caps.
 export const getTableHeaders = rawData => {
   const columns = Object.keys(rawData[0]);
 
@@ -18,7 +18,7 @@ export const getDataTable = rawData => {
   // Gets the values of the passed data. Converts from object to array
   const tableValues = rawData.map(Object.values);
 
-  // Stringifys each individual Value
+  // Stringifies each individual Value
   return tableValues.map(item =>
     item.map(value => {
       let stringedItem = value;

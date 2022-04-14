@@ -6,7 +6,6 @@ import eyeFill from '@iconify/icons-eva/eye-fill';
 import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
 import { useNavigate } from 'react-router-dom';
 import { Stack, TextField, IconButton, InputAdornment, Typography } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
 
 export default function RegisterForm() {
   const navigate = useNavigate();
@@ -16,7 +15,7 @@ export default function RegisterForm() {
     firstName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('First name required'),
     lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name required'),
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
-    password: Yup.string().required('Password is required'),
+    password: Yup.string().required('Password is required')
   });
 
   const formik = useFormik({
@@ -24,15 +23,15 @@ export default function RegisterForm() {
       firstName: '',
       lastName: '',
       email: '',
-      password: '',
+      password: ''
     },
     validationSchema: RegisterSchema,
     onSubmit: () => {
       navigate('/dashboard', { replace: true });
-    },
+    }
   });
 
-  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
+  const { errors, touched, handleSubmit, getFieldProps } = formik;
 
   return (
     <FormikProvider value={formik}>
@@ -78,11 +77,11 @@ export default function RegisterForm() {
             InputProps={{
               endAdornment: (
                 <InputAdornment position='end'>
-                  <IconButton edge='end' onClick={() => setShowPassword((prev) => !prev)}>
+                  <IconButton edge='end' onClick={() => setShowPassword(prev => !prev)}>
                     <Icon icon={showPassword ? eyeFill : eyeOffFill} />
                   </IconButton>
                 </InputAdornment>
-              ),
+              )
             }}
             error={Boolean(touched.password && errors.password)}
             helperText={touched.password && errors.password}

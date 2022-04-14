@@ -17,7 +17,7 @@ export default function JobDetails() {
   useEffect(() => {
     const fetchData = async () => {
       // Data is being stored in props of routing
-      const companyId = parseInt(location.state.rowData[2], 10);
+      const companyId = Number(location.state.rowData[2]);
       const companyJobs = await getCompanyJobs(companyId, null);
 
       // Getting contact info for company
@@ -25,7 +25,7 @@ export default function JobDetails() {
       setCompany(contactDetails);
 
       // Gets all transactions for job.
-      const jobNumber = parseInt(location.state.rowData[0], 10);
+      const jobNumber = Number(location.state.rowData[0]);
       const selectedJob = companyJobs.rawData.find(jobItem => jobItem.oid === jobNumber);
       setSelectedJob(selectedJob);
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { useNavigate } from 'react-router-dom';
-import { Stack, Container } from '@mui/material';
+import { Container } from '@mui/material';
 import Page from '../../Components/Page';
 import DataTable from '../../Components/DataTable/DataTable';
 import HeaderMenu from '../../Components/HeaderMenu/HeaderMenu';
@@ -12,9 +12,12 @@ export default function Employees() {
 
   const [allEmployees, setAllEmployees] = useState(null);
 
-  useEffect(async () => {
-    const allEmployees = await getAllEmployees();
-    setAllEmployees(allEmployees);
+  useEffect(() => {
+    const fetchData = async () => {
+      const allEmployees = await getAllEmployees();
+      setAllEmployees(allEmployees);
+    };
+    fetchData();
   }, []);
 
   return (
