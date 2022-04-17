@@ -7,7 +7,7 @@ import { DesktopDatePicker, LocalizationProvider } from '@mui/lab';
 import AdapterDayjs from '@mui/lab/AdapterDayjs';
 
 export default function NewTransactions({ passedCompany }) {
-  const [selectedCompany, setSelectedCompany] = useState(null);
+  const [selectedCompany, setSelectedCompany] = useState(passedCompany ? passedCompany : null);
   const [allCompanies, setAllCompanies] = useState(null);
   const [selectedJob, setSelectedJob] = useState(null);
   const [companyJobList, setCompanyJobList] = useState(null);
@@ -21,16 +21,19 @@ export default function NewTransactions({ passedCompany }) {
   const [totalTransaction, setTotalTransaction] = useState(0);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const allCompanies = await getAllCompanies();
-      setAllCompanies(allCompanies.rawData);
+    const fetchData = async passedCompany => {
+      const allCompanies = passedCompany ? passedCompany : await getAllCompanies();
+      setAllCompanies(passedCompany ? passedCompany : allCompanies.rawData);
 
       const allEmployees = await getAllEmployees();
       setAllEmployees(allEmployees.rawData);
+    };
+    fetchData();
+  }, []);
 
-      //TODO MAKE SURE PASSING A COMPANY IN WORKS
+  useEffect(() => {
+    const fetchData = async passedCompany => {
       if (selectedCompany) {
-        // eslint-disable-next-line
         const allJobs = passedCompany ? await getCompanyJobs(passedCompany.oid, null) : await getCompanyJobs(selectedCompany.oid, null);
         setCompanyJobList(allJobs.rawData);
       }
@@ -86,7 +89,6 @@ export default function NewTransactions({ passedCompany }) {
                   setSelection={setSelectedCompany}
                   options={allCompanies}
                   dropValue={selectedCompany}
-                  passedCompany={passedCompany}
                   labelPropertyOne='companyName'
                   valueProperty='oid'
                   dropPlaceholder='Select Company'

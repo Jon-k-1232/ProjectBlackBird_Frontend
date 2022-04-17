@@ -1,12 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Stack, TextField, Card, Button, CardContent, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
+import { useLocation } from 'react-router-dom';
+import { getEmployee } from '../../ApiCalls/ApiCalls';
 
 export default function NewEmployee() {
-  const [checked, setChecked] = useState(true);
+  const location = useLocation();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [middleName, setMiddleName] = useState('');
   const [hourlyCost, setHourlyCost] = useState('');
+  const [inactiveEmployeeChecked, setInactiveEmployeeChecked] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (location.state) {
+        const employeeID = Number(location.state.rowData[0]);
+        const employee = employeeID && (await getEmployee(employeeID));
+        console.log(employee);
+        setFirstName(employee.firstName);
+        setLastName(employee.lastName);
+        setMiddleName(employee.middleName);
+        setHourlyCost(employee.hourlyCost);
+        setInactiveEmployeeChecked(employee.inactive);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -22,12 +41,12 @@ export default function NewEmployee() {
       lastName: lastName,
       middleI: middleName,
       hourlyCost: hourlyCost,
-      inactive: checked
+      inactive: !inactiveEmployeeChecked
     };
   };
 
   const resetForm = () => {
-    setChecked(true);
+    setInactiveEmployeeChecked(true);
     setFirstName('');
     setLastName('');
     setMiddleName('');
@@ -64,7 +83,12 @@ export default function NewEmployee() {
               <TextField required type='text' max='6' label='Hourly Cost' value={hourlyCost} onChange={e => setHourlyCost(e.target.value)} />
             </Stack>
             <FormGroup>
-              <FormControlLabel control={<Checkbox checked={checked} onChange={e => setChecked(e.target.checked)} />} label='Active' />
+              <FormControlLabel
+                control={
+                  <Checkbox checked={inactiveEmployeeChecked} onChange={e => setInactiveEmployeeChecked(e.target.inactiveEmployeeChecked)} />
+                }
+                label='Active'
+              />
             </FormGroup>
             <Button type='submit' name='submit'>
               Submit

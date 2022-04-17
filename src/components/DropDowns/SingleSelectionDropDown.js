@@ -1,20 +1,11 @@
 import { Autocomplete, TextField } from '@mui/material';
 
-export default function SingleSelectionDropDown({
-  setSelection,
-  options,
-  dropValue,
-  passedCompany,
-  labelPropertyOne,
-  labelPropertyTwo,
-  dropPlaceholder
-}) {
-  const passedCompanyArray = passedCompany && [passedCompany];
+export default function SingleSelectionDropDown({ setSelection, options, dropValue, labelPropertyOne, labelPropertyTwo, dropPlaceholder }) {
   const optionslist = options ? options : [];
 
   return (
     <Autocomplete
-      options={!passedCompany ? optionslist : passedCompanyArray}
+      options={optionslist}
       value={dropValue}
       getOptionLabel={
         labelPropertyTwo ? option => `${option[labelPropertyOne]} ${option[labelPropertyTwo]}` : option => option[labelPropertyOne]

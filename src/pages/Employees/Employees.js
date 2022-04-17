@@ -25,7 +25,7 @@ export default function Employees() {
       <Container style={{ maxWidth: '1280px' }}>
         <HeaderMenu handleOnClick={data => navigate(`/dashboard/${data}/`)} page={'Employees'} listOfButtons={button} />
       </Container>
-      <DataTable {...allEmployees} />
+      <DataTable {...allEmployees} route='/dashboard/newEmployee/' />
     </Page>
   );
 }

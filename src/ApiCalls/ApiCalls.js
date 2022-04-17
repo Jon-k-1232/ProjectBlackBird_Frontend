@@ -242,7 +242,7 @@ export const getCompanyJobs = pMemoize(
       })
       .then(data => {
         const { jobs } = data;
-        return jobs.length > 0 ? tableAndLabelCreation(jobs, 'jobDefinition', 'description') : [];
+        return jobs.length > 0 ? tableAndLabelCreation(jobs, 'jobDefinition', 'description') : {};
       })
       .catch(error => {
         console.log(error);
@@ -306,6 +306,38 @@ export const getAllEmployees = pMemoize(
       .then(data => {
         const { employees } = data;
         return employees.length > 0 ? tableAndLabelCreation(employees, 'oid', 'firstName', 'lastName', 'employees') : [];
+      })
+      .catch(error => {
+        console.log(error);
+        return error;
+      });
+  },
+  { cacheKey: arguments_ => JSON.stringify(arguments_) }
+);
+
+/**
+ * Gets a specific employee
+ */
+
+export const getEmployee = pMemoize(
+  employeeId => {
+    return fetch(`${config.API_ENDPOINT}/employee/findEmployee/${employeeId}`, {
+      method: 'GET'
+      // headers: {
+      //   'content-type': 'application/json',
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+      // }
+    })
+      .then(resp => {
+        if (!resp.ok) {
+          throw new Error(resp.status);
+        }
+        return resp.json();
+      })
+      .then(data => {
+        const { employee } = data;
+        return employee[0];
       })
       .catch(error => {
         console.log(error);
