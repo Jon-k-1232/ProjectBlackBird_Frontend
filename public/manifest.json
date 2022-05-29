@@ -3,13 +3,13 @@
   "name": "React Material Minimal UI Kit",
   "icons": [
     {
-      "src": "favicon/android-chrome-192x192.png",
-      "sizes": "192x192",
+      "src": "favicon/favicon-96x96.png",
+      "sizes": "96x96",
       "type": "image/png"
     },
     {
-      "src": "favicon/android-chrome-512x512.png",
-      "sizes": "512x512",
+      "src": "favicon/favicon-96x96.png",
+      "sizes": "96x96",
       "type": "image/png"
     }
   ],

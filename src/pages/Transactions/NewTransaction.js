@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react';
-import { Stack, TextField, Card, Button, Typography, CardContent } from '@mui/material';
+import { Stack, Alert, TextField, Card, Button, Typography, CardContent } from '@mui/material';
 import { getCompanyJobs, getAllEmployees, getAllCompanies } from '../../ApiCalls/ApiCalls';
 import dayjs from 'dayjs';
 import SingleSelectionDropDown from '../../Components/DropDowns/SingleSelectionDropDown';
 import { DesktopDatePicker, LocalizationProvider } from '@mui/lab';
 import AdapterDayjs from '@mui/lab/AdapterDayjs';
+import { postTransactions } from '../../ApiCalls/PostApiCalls';
+import { SubdirectoryArrowLeftRounded } from '@mui/icons-material';
+
+// ToDo Need Form validation, espcially between the two invoice items
 
 export default function NewTransactions({ passedCompany }) {
   const [selectedCompany, setSelectedCompany] = useState(passedCompany ? passedCompany : null);
@@ -19,6 +23,11 @@ export default function NewTransactions({ passedCompany }) {
   const [selectedType, setSelectedType] = useState(null);
   const [selectedAmount, setSelectedAmount] = useState(null);
   const [totalTransaction, setTotalTransaction] = useState(0);
+  const [invoice, setInvoice] = useState(null);
+  const [confirmInvoice, setConfirmInvoice] = useState(null);
+  const [postStatus, setPostStatus] = useState(null);
+  const [invoiceAlert, setInvoiceAlert] = useState(false);
+  const [disableSubmit, setDisableSubmit] = useState(false);
 
   useEffect(() => {
     const fetchData = async passedCompany => {
@@ -52,11 +61,15 @@ export default function NewTransactions({ passedCompany }) {
     setTotalTransaction(null);
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
     const objectToPost = formObjectForPost();
-    console.log(objectToPost);
-    // TODO Handle DATA
+    const stat = await postTransactions(objectToPost);
+    setPostStatus(stat.status);
+    setTimeout(() => {
+      setPostStatus(null);
+    }, 4000);
+    resetState();
   };
 
   const formObjectForPost = () => {
@@ -66,16 +79,33 @@ export default function NewTransactions({ passedCompany }) {
       employee: selectedEmployee.oid,
       transactionType: selectedTransaction.displayValue,
       transactionDate: dayjs(selectedDate).format(),
-      quantity: Number(selectedQuantity),
+      quantity: selectedQuantity,
       unitOfMeasure: selectedType ? selectedType.displayValue : 'Each',
-      unitTransaction: Number(selectedAmount),
-      totalTransaction: Number(totalTransaction),
-      discount: selectedTransaction === 'writeOff' ? Number(selectedAmount) : null,
-      invoice: null,
-      paymentApplied: null,
-      ignoreInAgeing: null
+      unitTransaction: selectedAmount,
+      totalTransaction: totalTransaction,
+      discount: selectedTransaction === 'writeOff' ? selectedAmount : 0,
+      invoice: confirmInvoice,
+      paymentApplied: false,
+      ignoreInAgeing: false
     };
     return postObj;
+  };
+
+  const resetState = () => {
+    setSelectedCompany(passedCompany ? passedCompany : null);
+    setAllCompanies(null);
+    setSelectedJob(null);
+    setCompanyJobList(null);
+    setAllEmployees(null);
+    setSelectedEmployee(null);
+    setSelectedTransaction(null);
+    setSelectedDate(dayjs().format());
+    setSelectedQuantity(1);
+    setSelectedType(null);
+    setSelectedAmount(null);
+    setTotalTransaction(0);
+    setInvoice(null);
+    setConfirmInvoice(null);
   };
 
   return (
@@ -132,6 +162,50 @@ export default function NewTransactions({ passedCompany }) {
                   renderInput={params => <TextField {...params} />}
                 />
               </Stack>
+
+              {selectedTransaction && selectedTransaction.value !== 'charge' && (
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
+                  <TextField
+                    required
+                    type='number'
+                    value={invoice}
+                    onChange={e => {
+                      if (e.target.value !== confirmInvoice) {
+                        setInvoiceAlert(true);
+                        setDisableSubmit(true);
+                        setInvoice(e.target.value);
+                      } else {
+                        setInvoiceAlert(false);
+                        setDisableSubmit(false);
+                        setInvoice(e.target.value);
+                      }
+                    }}
+                    label='Invoice Number'
+                    helperText='This field is required in order to match the payment to the invoice. For anything not linked to an invoice, or an invoice has not been created, input 0.'
+                  />
+
+                  <TextField
+                    required
+                    type='number'
+                    value={confirmInvoice}
+                    onChange={e => {
+                      if (e.target.value !== invoice) {
+                        setInvoiceAlert(true);
+                        setDisableSubmit(true);
+                        setConfirmInvoice(e.target.value);
+                      } else {
+                        setInvoiceAlert(false);
+                        setDisableSubmit(false);
+                        setConfirmInvoice(e.target.value);
+                      }
+                    }}
+                    label='Invoice Confirmation'
+                    helperText='This field is required in order to match the payment to the invoice. For anything not linked to an invoice, or an invoice has not been created, input 0.'
+                  />
+                </Stack>
+              )}
+
+              {invoiceAlert && <Alert severity='warning'>Invoice does not match</Alert>}
 
               {selectedTransaction && selectedTransaction.value === 'charge' && (
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
@@ -224,9 +298,11 @@ export default function NewTransactions({ passedCompany }) {
               <Typography style={{ color: '#92999f' }} variant='h5'>
                 Total ${totalTransaction}
               </Typography>
-              <Button type='submit' name='submit'>
+              <Button disabled={disableSubmit} type='submit' name='submit'>
                 Submit
               </Button>
+              {postStatus === 200 && <Alert severity='success'>Transaction added successfully</Alert>}
+              {postStatus !== 200 && postStatus !== null && <Alert severity='error'>Failed. Transaction was not added.</Alert>}
             </Stack>
           </form>
         </LocalizationProvider>
