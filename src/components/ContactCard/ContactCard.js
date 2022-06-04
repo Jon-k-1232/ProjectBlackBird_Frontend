@@ -15,7 +15,6 @@ export default function ContactCard(props) {
     city,
     companyName,
     currentBalance,
-    email,
     firstName,
     inactive,
     lastName,
@@ -39,14 +38,13 @@ export default function ContactCard(props) {
 
   return (
     <Card className='contactWrapper'>
-      <CardContent style={styles()} className='contactHeader'>
+      <CardContent style={styles.header} className='contactHeader'>
         <Typography variant='h4'>{companyName}</Typography>
         <Typography variant='subtitle1'>{inactive ? 'Inactive' : 'Active'}</Typography>
         <Typography variant='subtitle1'>Client: {oid}</Typography>
         {/* <EllipsisMenu edit={setEdit} menuOptions={['Edit']} /> */}
       </CardContent>
-      <CardContent style={styles()} className='contactTables'>
-        {/* {basicContactInformation()} */}
+      <CardContent style={styles.tableBody} className='contactTables'>
         <table className='contactColumnOne'>
           <tbody>
             <tr>
@@ -77,13 +75,9 @@ export default function ContactCard(props) {
               <th>Landline:</th>
               <td>{phoneNumber1}</td>
             </tr>
-            <tr>
-              <th>Email:</th>
-              <td>{email}</td>
-            </tr>
           </tbody>
         </table>
-        {/* {additionalDetail()} */}
+
         <table className='contactColumnTwo'>
           <tbody>
             <tr>
@@ -117,6 +111,11 @@ export default function ContactCard(props) {
   );
 }
 
-const styles = () => ({
-  padding: '0px'
-});
+const styles = {
+  header: {
+    padding: '0px 0px 12px 0px'
+  },
+  tableBody: {
+    padding: '0px 10px'
+  }
+};

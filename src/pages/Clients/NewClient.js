@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Stack, TextField, Card, Button, Checkbox, FormGroup, CardContent, FormControlLabel } from '@mui/material';
 // import { getAllEmployees } from '../../ApiCalls/ApiCalls';
+import { updateContact } from '../../ApiCalls/PostApiCalls';
+import AlertBanner from '../../Components/AlertBanner/AlertBanner';
 
-export default function NewClient({ passedCompany }) {
+export default function NewClient({ passedCompany, updateContactCard }) {
   const [companyName, setCompanyName] = useState(passedCompany ? passedCompany.companyName : '');
   const [firstName, setFirstName] = useState(passedCompany ? passedCompany.firstName : '');
   const [lastName, setLastName] = useState(passedCompany ? passedCompany.lastName : '');
@@ -16,32 +18,17 @@ export default function NewClient({ passedCompany }) {
   const [mobilePhone, setMobilePhone] = useState(passedCompany ? passedCompany.mobilePhone : '');
   const [billableChecked, setBillableChecked] = useState(passedCompany ? !passedCompany.notBillable : true);
   const [activeChecked, setActiveChecked] = useState(passedCompany ? !passedCompany.inactive : true);
+  const [postStatus, setPostStatus] = useState(null);
 
-  console.log(passedCompany);
-
-  // // Resets amount fields when type of transaction is switched. This solves amount carrying over from charge to write of and others.
-  const resetQuantityAmountAndTotal = () => {
-    setCompanyName('');
-    setFirstName('');
-    setLastName('');
-    setMiddleName('');
-    setAddress('');
-    setCity('');
-    setState('');
-    setZip('');
-    setCountry('');
-    setPhone('');
-    setMobilePhone('');
-    setBillableChecked(true);
-    setActiveChecked(true);
-  };
-
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
     const objectToPost = formObjectForPost();
-    resetQuantityAmountAndTotal();
-    console.log(objectToPost);
-    // TODO Handle DATA
+    const companyOid = passedCompany ? passedCompany.oid : null;
+    const postedItem = await updateContact(objectToPost, companyOid);
+    updateContactCard(postedItem.updatedContact[0]);
+    setPostStatus(postedItem.status);
+    setTimeout(() => setPostStatus(null), 4000);
+    resetContactUpdate();
   };
 
   const formObjectForPost = () => {
@@ -69,6 +56,23 @@ export default function NewClient({ passedCompany }) {
     };
   };
 
+  // Resets amount fields when type of transaction is switched. This solves amount carrying over from charge to write of and others.
+  const resetContactUpdate = () => {
+    setCompanyName('');
+    setFirstName('');
+    setLastName('');
+    setMiddleName('');
+    setAddress('');
+    setCity('');
+    setState('');
+    setZip('');
+    setCountry('');
+    setPhone('');
+    setMobilePhone('');
+    setBillableChecked(true);
+    setActiveChecked(true);
+  };
+
   return (
     <Card style={{ marginTop: '25px' }}>
       <CardContent style={{ padding: '20px' }}>
@@ -80,7 +84,7 @@ export default function NewClient({ passedCompany }) {
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
               <TextField required type='text' value={firstName} onChange={e => setFirstName(e.target.value)} label='First Name' />
               <TextField required type='text' value={lastName} onChange={e => setLastName(e.target.value)} label='Last Name' />
-              <TextField required type='text' value={middleName} onChange={e => setMiddleName(e.target.value)} label='Middle Name' />
+              <TextField type='text' value={middleName} onChange={e => setMiddleName(e.target.value)} label='Middle Name' />
             </Stack>
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
               <TextField required type='text' value={address} onChange={e => setAddress(e.target.value)} label='Street' />
@@ -94,8 +98,8 @@ export default function NewClient({ passedCompany }) {
               <TextField required type='text' value={country} onChange={e => setCountry(e.target.value)} label='Country' />
             </Stack>
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
-              <TextField required type='tel' value={phone} onChange={e => setPhone(e.target.value)} label='Phone' />
-              <TextField required type='tel' value={mobilePhone} onChange={e => setMobilePhone(e.target.value)} label='Mobile Phone' />
+              <TextField required type='tel' value={phone} onChange={e => setPhone(e.target.value)} label='Primary Phone' />
+              <TextField type='tel' value={mobilePhone} onChange={e => setMobilePhone(e.target.value)} label='Mobile Phone' />
             </Stack>
 
             <FormGroup style={{ display: 'inline' }}>
@@ -112,6 +116,7 @@ export default function NewClient({ passedCompany }) {
             <Button type='submit' name='submit'>
               Submit
             </Button>
+            <AlertBanner postStatus={postStatus} />
           </Stack>
         </form>
       </CardContent>

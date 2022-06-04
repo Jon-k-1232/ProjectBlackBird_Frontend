@@ -6,9 +6,9 @@ import SingleSelectionDropDown from '../../Components/DropDowns/SingleSelectionD
 import { DesktopDatePicker, LocalizationProvider } from '@mui/lab';
 import AdapterDayjs from '@mui/lab/AdapterDayjs';
 import { postTransactions } from '../../ApiCalls/PostApiCalls';
-import { SubdirectoryArrowLeftRounded } from '@mui/icons-material';
+import AlertBanner from 'src/Components/AlertBanner/AlertBanner';
 
-// ToDo Need Form validation, espcially between the two invoice items
+// ToDo Need Form validation
 
 export default function NewTransactions({ passedCompany }) {
   const [selectedCompany, setSelectedCompany] = useState(passedCompany ? passedCompany : null);
@@ -66,9 +66,7 @@ export default function NewTransactions({ passedCompany }) {
     const objectToPost = formObjectForPost();
     const stat = await postTransactions(objectToPost);
     setPostStatus(stat.status);
-    setTimeout(() => {
-      setPostStatus(null);
-    }, 4000);
+    setTimeout(() => setPostStatus(null), 4000);
     resetState();
   };
 
@@ -143,7 +141,6 @@ export default function NewTransactions({ passedCompany }) {
                   dropPlaceholder='Select Employee'
                 />
               </Stack>
-
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
                 <SingleSelectionDropDown
                   setSelection={setSelectedTransaction}
@@ -162,7 +159,6 @@ export default function NewTransactions({ passedCompany }) {
                   renderInput={params => <TextField {...params} />}
                 />
               </Stack>
-
               {selectedTransaction && selectedTransaction.value !== 'charge' && (
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
                   <TextField
@@ -204,9 +200,7 @@ export default function NewTransactions({ passedCompany }) {
                   />
                 </Stack>
               )}
-
               {invoiceAlert && <Alert severity='warning'>Invoice does not match</Alert>}
-
               {selectedTransaction && selectedTransaction.value === 'charge' && (
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
                   <TextField
@@ -242,7 +236,6 @@ export default function NewTransactions({ passedCompany }) {
                   />
                 </Stack>
               )}
-
               {selectedTransaction && selectedTransaction.value === 'payment' && (
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
                   <TextField
@@ -260,7 +253,6 @@ export default function NewTransactions({ passedCompany }) {
                   />
                 </Stack>
               )}
-
               {selectedTransaction && selectedTransaction.value === 'adjustment' && (
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
                   <TextField
@@ -277,7 +269,6 @@ export default function NewTransactions({ passedCompany }) {
                   />
                 </Stack>
               )}
-
               {selectedTransaction && selectedTransaction.value === 'writeOff' && (
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
                   <TextField
@@ -294,15 +285,13 @@ export default function NewTransactions({ passedCompany }) {
                   />
                 </Stack>
               )}
-
               <Typography style={{ color: '#92999f' }} variant='h5'>
                 Total ${totalTransaction}
               </Typography>
               <Button disabled={disableSubmit} type='submit' name='submit'>
                 Submit
               </Button>
-              {postStatus === 200 && <Alert severity='success'>Transaction added successfully</Alert>}
-              {postStatus !== 200 && postStatus !== null && <Alert severity='error'>Failed. Transaction was not added.</Alert>}
+              <AlertBanner postStatus={postStatus} />
             </Stack>
           </form>
         </LocalizationProvider>

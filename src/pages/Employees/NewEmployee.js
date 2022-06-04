@@ -2,21 +2,26 @@ import { useEffect, useState } from 'react';
 import { Stack, TextField, Card, Button, CardContent, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import { getEmployee } from '../../ApiCalls/ApiCalls';
+import { updateEmployee } from '../../ApiCalls/PostApiCalls';
+import AlertBanner from '../../Components/AlertBanner/AlertBanner';
 
 export default function NewEmployee() {
   const location = useLocation();
+
+  const [employeeID, setEmployeeID] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [middleName, setMiddleName] = useState('');
   const [hourlyCost, setHourlyCost] = useState('');
   const [inactiveEmployeeChecked, setInactiveEmployeeChecked] = useState(false);
+  const [postStatus, setPostStatus] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       if (location.state) {
         const employeeID = Number(location.state.rowData[0]);
         const employee = employeeID && (await getEmployee(employeeID));
-        console.log(employee);
+        setEmployeeID(employee.oid);
         setFirstName(employee.firstName);
         setLastName(employee.lastName);
         setMiddleName(employee.middleName);
@@ -27,12 +32,13 @@ export default function NewEmployee() {
     fetchData();
   }, []);
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
     const dataToPost = objectToPost();
-    console.log(dataToPost);
+    const postedItem = await updateEmployee(dataToPost, employeeID);
+    setPostStatus(postedItem.status);
+    setTimeout(() => setPostStatus(null), 4000);
     resetForm();
-    // TODO Handle DATA
   };
 
   const objectToPost = () => {
@@ -41,7 +47,7 @@ export default function NewEmployee() {
       lastName: lastName,
       middleI: middleName,
       hourlyCost: hourlyCost,
-      inactive: !inactiveEmployeeChecked
+      inactive: inactiveEmployeeChecked
     };
   };
 
@@ -69,15 +75,7 @@ export default function NewEmployee() {
                 onChange={e => setFirstName(e.target.value)}
               />
               <TextField fullWidth required type='26' max='100' label='Last name' value={lastName} onChange={e => setLastName(e.target.value)} />
-              <TextField
-                fullWidth
-                required
-                type='text'
-                max='15'
-                label='Middle name'
-                value={middleName}
-                onChange={e => setMiddleName(e.target.value)}
-              />
+              <TextField fullWidth type='text' max='15' label='Middle name' value={middleName} onChange={e => setMiddleName(e.target.value)} />
             </Stack>
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
               <TextField required type='text' max='6' label='Hourly Cost' value={hourlyCost} onChange={e => setHourlyCost(e.target.value)} />
@@ -87,12 +85,13 @@ export default function NewEmployee() {
                 control={
                   <Checkbox checked={inactiveEmployeeChecked} onChange={e => setInactiveEmployeeChecked(e.target.inactiveEmployeeChecked)} />
                 }
-                label='Active'
+                label='Inactive'
               />
             </FormGroup>
             <Button type='submit' name='submit'>
               Submit
             </Button>
+            <AlertBanner postStatus={postStatus} />
           </Stack>
         </form>
       </CardContent>

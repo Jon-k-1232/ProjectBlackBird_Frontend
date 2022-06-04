@@ -63,7 +63,7 @@ export default function ClientDetails() {
         {dataToShow === 'invoices' && <DataTable {...companyInvoices} />}
         {dataToShow === 'notes' && <ComingSoon />}
         {dataToShow === 'statistics' && <ComingSoon />}
-        {dataToShow === 'newClient' && <NewClient passedCompany={company} />}
+        {dataToShow === 'newClient' && <NewClient passedCompany={company} updateContactCard={companyUpdates => setCompany(companyUpdates)} />}
       </Container>
     </Page>
   );
