@@ -31,6 +31,21 @@ export const updateContact = async (contact, companyId) => {
     .catch(error => error);
 };
 
+export const createNewContact = async contact => {
+  return fetch(`${config.API_ENDPOINT}/contacts/new/contact`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json'
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+    },
+    body: JSON.stringify(contact)
+  })
+    .then(res => res.json())
+    .then(res => res)
+    .catch(error => error);
+};
+
 export const updateEmployee = async (employee, employeeId) => {
   return fetch(`${config.API_ENDPOINT}/employee/update/employee/${employeeId}`, {
     method: 'POST',
@@ -40,6 +55,21 @@ export const updateEmployee = async (employee, employeeId) => {
       //   Origin: `${config.FRONT_WEB}`
     },
     body: JSON.stringify(employee)
+  })
+    .then(res => res.json())
+    .then(res => res)
+    .catch(error => error);
+};
+
+export const createNewJob = async job => {
+  return fetch(`${config.API_ENDPOINT}/jobs/addJob`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json'
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+    },
+    body: JSON.stringify(job)
   })
     .then(res => res.json())
     .then(res => res)

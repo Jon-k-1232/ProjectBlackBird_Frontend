@@ -3,27 +3,25 @@ import { Stack, TextField, Card, Button, CardContent, Typography, Checkbox, Form
 import { DesktopDatePicker, LocalizationProvider } from '@mui/lab';
 import AdapterDayjs from '@mui/lab/AdapterDayjs';
 import SingleSelectionDropDown from '../../Components/DropDowns/SingleSelectionDropDown';
-import { getAllCompanies, getAllJobDefinitions, getCompanyInformation } from '../../ApiCalls/ApiCalls';
+import { getAllCompanies, getAllJobDefinitions } from '../../ApiCalls/ApiCalls';
+import { createNewJob } from '../../ApiCalls/PostApiCalls';
 import dayjs from 'dayjs';
+import AlertBanner from '../../Components/AlertBanner/AlertBanner';
 
 export default function NewJob({ passedCompany }) {
-  const [selectedCompany, setSelectedCompany] = useState(null);
+  const [selectedCompany, setSelectedCompany] = useState(passedCompany ? passedCompany : null);
   const [allCompanies, setAllCompanies] = useState(null);
   const [selectedJobDescription, setJobDescription] = useState(null);
   const [allJobDescriptions, setAllJobDescriptions] = useState(null);
   const [selectedDate, setSelectedDate] = useState(dayjs().format());
   const [subDescription, setSubDescription] = useState('');
   const [checked, setChecked] = useState(false);
+  const [postStatus, setPostStatus] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (passedCompany) {
-        const contactDetails = await getCompanyInformation(passedCompany.oid);
-        setSelectedCompany(contactDetails);
-      } else {
-        const allCompanies = await getAllCompanies();
-        setAllCompanies(allCompanies);
-      }
+      const allCompanies = await getAllCompanies();
+      setAllCompanies(allCompanies.rawData);
 
       const allJobDescriptions = await getAllJobDefinitions();
       setAllJobDescriptions(allJobDescriptions.rawData);
@@ -31,12 +29,13 @@ export default function NewJob({ passedCompany }) {
     fetchData();
   }, []);
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
     const dataToPost = objectToPost();
-    console.log(dataToPost);
+    const postedItem = await createNewJob(dataToPost);
+    setPostStatus(postedItem.status);
+    setTimeout(() => setPostStatus(null), 2000);
     resetForm();
-    // TODO Handle DATA
   };
 
   const objectToPost = () => {
@@ -72,8 +71,8 @@ export default function NewJob({ passedCompany }) {
                   setSelection={setSelectedCompany}
                   options={allCompanies}
                   dropValue={selectedCompany}
-                  passedCompany={passedCompany}
                   labelPropertyOne='companyName'
+                  valueProperty='oid'
                   dropPlaceholder='Select Company'
                 />
                 <SingleSelectionDropDown
@@ -116,6 +115,7 @@ export default function NewJob({ passedCompany }) {
               <Button type='submit' name='submit'>
                 Submit
               </Button>
+              <AlertBanner postStatus={postStatus} type='Job' />
             </Stack>
           </form>
         </LocalizationProvider>

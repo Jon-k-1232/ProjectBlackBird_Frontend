@@ -28,8 +28,8 @@ export default function Router(allClients, allEmployees) {
       children: [
         { element: <Navigate to='/dashboard/app' replace /> },
         { path: 'app', element: <DashboardApp /> },
-        { path: 'clients', element: <Clients {...allClients} /> },
-        { path: 'clientDetails', element: <ClientDetails {...allClients} {...allEmployees} /> },
+        { path: 'clients', element: <Clients /> },
+        { path: 'clientDetails', element: <ClientDetails /> },
         { path: 'newClient', element: <NewClient /> },
         { path: 'transactions', element: <Transactions /> },
         { path: 'newTransaction', element: <NewTransactions {...allClients} {...allEmployees} /> },

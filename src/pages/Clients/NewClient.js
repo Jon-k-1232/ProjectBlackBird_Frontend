@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Stack, TextField, Card, Button, Checkbox, FormGroup, CardContent, FormControlLabel } from '@mui/material';
-// import { getAllEmployees } from '../../ApiCalls/ApiCalls';
-import { updateContact } from '../../ApiCalls/PostApiCalls';
+import { updateContact, createNewContact } from '../../ApiCalls/PostApiCalls';
 import AlertBanner from '../../Components/AlertBanner/AlertBanner';
 
 export default function NewClient({ passedCompany, updateContactCard }) {
@@ -24,10 +23,10 @@ export default function NewClient({ passedCompany, updateContactCard }) {
     e.preventDefault();
     const objectToPost = formObjectForPost();
     const companyOid = passedCompany ? passedCompany.oid : null;
-    const postedItem = await updateContact(objectToPost, companyOid);
-    updateContactCard(postedItem.updatedContact[0]);
+    const postedItem = passedCompany ? await updateContact(objectToPost, companyOid) : await createNewContact(objectToPost);
+    passedCompany && updateContactCard(postedItem.updatedContact[0]);
     setPostStatus(postedItem.status);
-    setTimeout(() => setPostStatus(null), 4000);
+    setTimeout(() => setPostStatus(null), 1000);
     resetContactUpdate();
   };
 
@@ -38,15 +37,15 @@ export default function NewClient({ passedCompany, updateContactCard }) {
       companyName: companyName,
       firstName: firstName,
       lastName: lastName,
-      middleI: middleName,
+      middleI: middleName || null,
       address1: address,
       address2: passedCompany ? passedCompany.address2 : null,
       city: city,
       state: state,
       zip: zip,
-      country: country,
+      country: country || null,
       phoneNumber1: phone,
-      mobilePhone: mobilePhone,
+      mobilePhone: mobilePhone || null,
       currentBalance: passedCompany ? passedCompany.currentBalance : 0.0,
       beginningBalance: passedCompany ? passedCompany.beginningBalance : 0.0,
       statementBalance: passedCompany ? passedCompany.statementBalance : 0.0,
@@ -95,7 +94,7 @@ export default function NewClient({ passedCompany, updateContactCard }) {
               <TextField required type='number' value={zip} onChange={e => setZip(e.target.value)} label='Zip' />
             </Stack>
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
-              <TextField required type='text' value={country} onChange={e => setCountry(e.target.value)} label='Country' />
+              <TextField type='text' value={country} onChange={e => setCountry(e.target.value)} label='Country' />
             </Stack>
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
               <TextField required type='tel' value={phone} onChange={e => setPhone(e.target.value)} label='Primary Phone' />
@@ -116,7 +115,7 @@ export default function NewClient({ passedCompany, updateContactCard }) {
             <Button type='submit' name='submit'>
               Submit
             </Button>
-            <AlertBanner postStatus={postStatus} />
+            <AlertBanner postStatus={postStatus} type='Contact' />
           </Stack>
         </form>
       </CardContent>

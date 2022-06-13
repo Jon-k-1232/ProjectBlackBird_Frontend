@@ -91,7 +91,7 @@ export default function NewEmployee() {
             <Button type='submit' name='submit'>
               Submit
             </Button>
-            <AlertBanner postStatus={postStatus} />
+            <AlertBanner postStatus={postStatus} type='Employee' />
           </Stack>
         </form>
       </CardContent>

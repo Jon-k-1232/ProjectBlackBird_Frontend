@@ -291,7 +291,7 @@ export default function NewTransactions({ passedCompany }) {
               <Button disabled={disableSubmit} type='submit' name='submit'>
                 Submit
               </Button>
-              <AlertBanner postStatus={postStatus} />
+              <AlertBanner postStatus={postStatus} type='Transaction' />
             </Stack>
           </form>
         </LocalizationProvider>
