@@ -430,3 +430,27 @@ export const getAllReadyToBillInvoices = () => {
       return error;
     });
 };
+
+export const getZippedInvoices = () => {
+  return fetch(`${config.API_ENDPOINT}/create/download`, {
+    method: 'GET',
+    headers: {
+      'content-type': 'application/octet-stream'
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+    }
+  })
+    .then(res => res.blob())
+    .then(data => {
+      var url = window.URL.createObjectURL(data);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'downloaded_file.zip';
+      // We need to append the element to the dom -> otherwise it will not work in firefox
+      document.body.appendChild(a);
+      a.click();
+      //afterwards we remove the element again
+      a.remove();
+    })
+    .catch(error => error);
+};
