@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Stack, TextField, Card, Button, CardContent, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import { getEmployee } from '../../ApiCalls/ApiCalls';
-import { updateEmployee } from '../../ApiCalls/PostApiCalls';
+import { updateEmployee, createEmployee } from '../../ApiCalls/PostApiCalls';
 import AlertBanner from '../../Components/AlertBanner/AlertBanner';
 
 export default function NewEmployee() {
@@ -35,7 +35,7 @@ export default function NewEmployee() {
   const handleSubmit = async e => {
     e.preventDefault();
     const dataToPost = objectToPost();
-    const postedItem = await updateEmployee(dataToPost, employeeID);
+    const postedItem = location.state ? await updateEmployee(dataToPost, employeeID) : await createEmployee(dataToPost);
     setPostStatus(postedItem.status);
     setTimeout(() => setPostStatus(null), 4000);
     resetForm();

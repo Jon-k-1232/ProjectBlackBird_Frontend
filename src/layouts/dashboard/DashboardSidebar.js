@@ -15,8 +15,8 @@ const DRAWER_WIDTH = 280;
 const RootStyle = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('lg')]: {
     flexShrink: 0,
-    width: DRAWER_WIDTH,
-  },
+    width: DRAWER_WIDTH
+  }
 }));
 
 const AccountStyle = styled('div')(({ theme }) => ({
@@ -24,12 +24,12 @@ const AccountStyle = styled('div')(({ theme }) => ({
   alignItems: 'center',
   padding: theme.spacing(2, 2.5),
   borderRadius: theme.shape.borderRadiusSm,
-  backgroundColor: theme.palette.grey[200],
+  backgroundColor: theme.palette.grey[200]
 }));
 
 DashboardSidebar.propTypes = {
   isOpenSidebar: PropTypes.bool,
-  onCloseSidebar: PropTypes.func,
+  onCloseSidebar: PropTypes.func
 };
 
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
@@ -49,11 +49,11 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
         '& .simplebar-content': {
           height: '100%',
           display: 'flex',
-          flexDirection: 'column',
-        },
+          flexDirection: 'column'
+        }
       }}>
       <Box sx={{ px: 2.5, py: 3 }}>
-        <Box component={RouterLink} to='/' sx={{ display: 'inline-flex' }}>
+        <Box component={RouterLink} to='/dashboard/clients' sx={{ display: 'inline-flex' }}>
           <Logo />
         </Box>
       </Box>
@@ -87,7 +87,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
           open={isOpenSidebar}
           onClose={onCloseSidebar}
           PaperProps={{
-            sx: { width: DRAWER_WIDTH },
+            sx: { width: DRAWER_WIDTH }
           }}>
           {renderContent}
         </Drawer>
@@ -100,8 +100,8 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
           PaperProps={{
             sx: {
               width: DRAWER_WIDTH,
-              bgcolor: 'background.default',
-            },
+              bgcolor: 'background.default'
+            }
           }}>
           {renderContent}
         </Drawer>

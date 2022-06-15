@@ -8,6 +8,7 @@ import Transactions from './Pages/Transactions/Transactions';
 import NewTransactions from './Pages/Transactions/NewTransaction';
 import Invoices from './Pages/Invoices/Invoices';
 import NewInvoice from './Pages/Invoices/NewInvoice';
+import InvoiceDetails from './Pages/InvoiceDetails/InvoiceDetails';
 import Clients from './Pages/Clients/Clients';
 import NewClient from './Pages/Clients/NewClient';
 import NotFound from './Pages/Page404/Page404';
@@ -18,7 +19,8 @@ import NewJob from './Pages/Jobs/NewJob';
 import JobDetails from './Pages/Jobs/JobDetails';
 import Profile from './Pages/Profile/Profile';
 import ClientDetails from './Pages/Clients/ClientDetails';
-import NewJobDescription from './Pages/Jobs/NewJobDescription';
+import NewJobDefinition from './Pages/JobDefinitions/NewJobDefinition';
+import JobDefinitions from './Pages/JobDefinitions/JobDefinitions';
 
 export default function Router(allClients, allEmployees) {
   return useRoutes([
@@ -35,12 +37,14 @@ export default function Router(allClients, allEmployees) {
         { path: 'newTransaction', element: <NewTransactions {...allClients} {...allEmployees} /> },
         { path: 'invoices', element: <Invoices /> },
         { path: 'newInvoice', element: <NewInvoice /> },
+        { path: 'invoiceDetails', element: <InvoiceDetails /> },
         { path: 'employees', element: <Employees {...allEmployees} /> },
         { path: 'newEmployee', element: <NewEmployee /> },
         { path: 'jobs', element: <Jobs /> },
         { path: 'newJob', element: <NewJob /> },
         { path: 'jobDetails', element: <JobDetails /> },
-        { path: 'createNewJobDescription', element: <NewJobDescription /> },
+        { path: 'jobDefinitions', element: <JobDefinitions /> },
+        { path: 'createNewJobDefinition', element: <NewJobDefinition /> },
         { path: 'profile', element: <Profile /> }
       ]
     },

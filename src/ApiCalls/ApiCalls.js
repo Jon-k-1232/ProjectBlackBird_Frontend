@@ -6,33 +6,30 @@ import pMemoize from 'p-memoize';
  * Gets all company information
  * @returns [{},{},{}] Array of objects
  */
-export const getAllCompanies = pMemoize(
-  () => {
-    return fetch(`${config.API_ENDPOINT}/contacts/all`, {
-      method: 'GET'
-      // headers: {
-      //   'content-type': 'application/json',
-      //   Authorization: `Bearer ${config.API_KEY2}`,
-      //   Origin: `${config.FRONT_WEB}`
-      // }
+export const getAllCompanies = () => {
+  return fetch(`${config.API_ENDPOINT}/contacts/all`, {
+    method: 'GET'
+    // headers: {
+    //   'content-type': 'application/json',
+    //   Authorization: `Bearer ${config.API_KEY2}`,
+    //   Origin: `${config.FRONT_WEB}`
+    // }
+  })
+    .then(resp => {
+      if (!resp.ok) {
+        throw new Error(resp.status);
+      }
+      return resp.json();
     })
-      .then(resp => {
-        if (!resp.ok) {
-          throw new Error(resp.status);
-        }
-        return resp.json();
-      })
-      .then(data => {
-        const { allContactInfo } = data;
-        return tableAndLabelCreation(allContactInfo, 'oid', 'company');
-      })
-      .catch(error => {
-        console.log(error);
-        return error;
-      });
-  },
-  { cacheKey: arguments_ => JSON.stringify(arguments_) }
-);
+    .then(data => {
+      const { allContactInfo } = data;
+      return tableAndLabelCreation(allContactInfo, 'oid', 'company');
+    })
+    .catch(error => {
+      console.log(error);
+      return error;
+    });
+};
 
 /**
  * Gets company information via query
@@ -287,33 +284,30 @@ export const getAllJobDefinitions = pMemoize(
  * Gets all Employees active and inactive
  * @returns [{},{},{}] Array of objects. Each object is a employee
  */
-export const getAllEmployees = pMemoize(
-  () => {
-    return fetch(`${config.API_ENDPOINT}/employee/all`, {
-      method: 'GET'
-      // headers: {
-      //   'content-type': 'application/json',
-      //   Authorization: `Bearer ${config.API_KEY2}`,
-      //   Origin: `${config.FRONT_WEB}`
-      // }
+export const getAllEmployees = () => {
+  return fetch(`${config.API_ENDPOINT}/employee/all`, {
+    method: 'GET'
+    // headers: {
+    //   'content-type': 'application/json',
+    //   Authorization: `Bearer ${config.API_KEY2}`,
+    //   Origin: `${config.FRONT_WEB}`
+    // }
+  })
+    .then(resp => {
+      if (!resp.ok) {
+        throw new Error(resp.status);
+      }
+      return resp.json();
     })
-      .then(resp => {
-        if (!resp.ok) {
-          throw new Error(resp.status);
-        }
-        return resp.json();
-      })
-      .then(data => {
-        const { employees } = data;
-        return employees.length > 0 ? tableAndLabelCreation(employees, 'oid', 'firstName', 'lastName', 'employees') : [];
-      })
-      .catch(error => {
-        console.log(error);
-        return error;
-      });
-  },
-  { cacheKey: arguments_ => JSON.stringify(arguments_) }
-);
+    .then(data => {
+      const { employees } = data;
+      return employees.length > 0 ? tableAndLabelCreation(employees, 'oid', 'firstName', 'lastName', 'employees') : [];
+    })
+    .catch(error => {
+      console.log(error);
+      return error;
+    });
+};
 
 /**
  * Gets a specific employee
@@ -376,6 +370,38 @@ export const getAllInvoices = pMemoize(
         console.log(error);
         return error;
       });
+  },
+  { cacheKey: arguments_ => JSON.stringify(arguments_) }
+);
+
+/**
+ * Gets a specific invoice
+ * @param {*} oid oid of invoice
+ * @returns [{}] array of objects. object is invoice
+ */
+export const getAnInvoice = pMemoize(
+  (invoiceId, companyId) => {
+    return fetch(`${config.API_ENDPOINT}/invoices/single/${invoiceId}/${companyId}`, {
+      method: 'GET'
+      // headers: {
+      //   'content-type': 'application/json',
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+      // }
+    })
+      .then(resp => {
+        if (!resp.ok) {
+          throw new Error(resp.status);
+        }
+        return resp.json();
+      })
+      .then(data => {
+        const { returnedInvoice, invoiceDetails } = data;
+        const invoice = returnedInvoice[0];
+        const details = invoiceDetails.length > 0 ? tableAndLabelCreation(invoiceDetails, 'oid', 'contactName') : [];
+        return { invoice, details };
+      })
+      .catch(error => error);
   },
   { cacheKey: arguments_ => JSON.stringify(arguments_) }
 );

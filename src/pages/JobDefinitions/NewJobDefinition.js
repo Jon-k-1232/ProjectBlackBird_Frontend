@@ -1,25 +1,46 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Stack, TextField, Card, Button, CardContent, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
+import { updateJobDefinition, createJobDefinition } from '../../ApiCalls/PostApiCalls';
+import AlertBanner from '../../Components/AlertBanner/AlertBanner';
 
-export default function NewJobDescription() {
+export default function NewJobDefinition() {
+  const location = useLocation();
+
   const [jobDescription, setJobDescription] = useState('');
   const [targetPrice, setTargetPrice] = useState('');
   const [billable, setBillable] = useState(null);
   const [checked, setChecked] = useState(false);
+  const [postStatus, setPostStatus] = useState(null);
 
-  const handleSubmit = e => {
+  useEffect(() => {
+    const fetchData = async () => {
+      if (location.state) {
+        const rowData = location.state.rowData;
+        setJobDescription(rowData[1]);
+        setTargetPrice(rowData[2]);
+        setBillable(Boolean(rowData[3]));
+        rowData[3] === 'true' && setChecked(true);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const handleSubmit = async e => {
     e.preventDefault();
     const dataToPost = objectToPost();
-    console.log(dataToPost);
+    const JobDefinitionId = location.state ? location.state.rowData[0] : null;
+    const postedItem = location.state ? await updateJobDefinition(dataToPost, JobDefinitionId) : await createJobDefinition(dataToPost);
+    setPostStatus(postedItem.status);
+    setTimeout(() => setPostStatus(null), 4000);
     resetForm();
-    // TODO Handle DATA
   };
 
   const objectToPost = () => {
     return {
       description: jobDescription,
       defaultTargetPrice: targetPrice,
-      billable: billable
+      billable: checked
     };
   };
 
@@ -61,11 +82,12 @@ export default function NewJobDescription() {
               />
             </Stack>
             <FormGroup>
-              <FormControlLabel control={<Checkbox checked={checked} onChange={e => setChecked(e.target.checked)} />} label='Not Billable' />
+              <FormControlLabel control={<Checkbox checked={checked} onChange={e => setChecked(e.target.checked)} />} label='Billable' />
             </FormGroup>
             <Button type='submit' name='submit'>
               Submit
             </Button>
+            <AlertBanner postStatus={postStatus} type='Job Definition' />
           </Stack>
         </form>
       </CardContent>

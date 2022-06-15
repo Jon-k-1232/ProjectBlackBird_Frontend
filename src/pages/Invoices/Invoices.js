@@ -27,7 +27,7 @@ export default function Invoices() {
           <HeaderMenu handleOnClick={data => navigate(`/dashboard/${data}/`)} page={'Invoices'} listOfButtons={button} />
         </Stack>
         {/* If invoice detail needed pass a route below in DataTable - route='/dashboard/invoiceDetails/' */}
-        <DataTable {...invoices} />
+        <DataTable {...invoices} route='/dashboard/invoiceDetails/' />
       </Container>
     </Page>
   );
