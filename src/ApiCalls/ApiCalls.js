@@ -405,3 +405,28 @@ export const getAnInvoice = pMemoize(
   },
   { cacheKey: arguments_ => JSON.stringify(arguments_) }
 );
+
+export const getAllReadyToBillInvoices = () => {
+  return fetch(`${config.API_ENDPOINT}/create/createInvoices/readyToBill`, {
+    method: 'GET'
+    // headers: {
+    //   'content-type': 'application/json',
+    //   Authorization: `Bearer ${config.API_KEY2}`,
+    //   Origin: `${config.FRONT_WEB}`
+    // }
+  })
+    .then(resp => {
+      if (!resp.ok) {
+        throw new Error(resp.status);
+      }
+      return resp.json();
+    })
+    .then(data => {
+      const { readyToBillContacts } = data;
+      return readyToBillContacts.length > 0 ? tableAndLabelCreation(readyToBillContacts, 'oid', 'firstName') : [];
+    })
+    .catch(error => {
+      console.log(error);
+      return error;
+    });
+};

@@ -17,11 +17,14 @@ export default function DataTable(props) {
   const options = {
     rowsPerPage: 50,
     rowsPerPageOptions: [50, 150, 300],
+    rowHover: true,
+    jumpToPage: true,
     draggableColumns: { enabled: true },
     filter: true,
     filterType: 'dropdown',
     searchOpen: true,
-    selectableRowsHideCheckboxes: true,
+    selectableRowsHideCheckboxes: props.useCheckboxes ? false : true,
+    selectableRowsOnClick: props.selectOnRowClick ? true : false,
     responsive,
     tableBodyHeight,
     tableBodyMaxHeight,
@@ -29,6 +32,11 @@ export default function DataTable(props) {
       // Whole row of data will be stored in router state
       // If 'route' is not present onClick will not fire.
       props.route && navigate(`${props.route}`, { state: { rowData } });
+    },
+    onRowSelectionChange: (rowsSelected, allRows, selectedIndex) => {
+      const data = props.rawData;
+      const dataToState = selectedIndex.map(item => data[item]);
+      props.selectedList(dataToState);
     }
   };
 
