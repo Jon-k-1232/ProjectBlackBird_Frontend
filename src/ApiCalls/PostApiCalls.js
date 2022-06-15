@@ -119,3 +119,18 @@ export const createJobDefinition = async jobDefinition => {
     .then(res => res)
     .catch(error => error);
 };
+
+export const createInvoices = async invoiceIds => {
+  return fetch(`${config.API_ENDPOINT}/create/createInvoices/readyToBill/${invoiceIds}`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json'
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+    },
+    body: JSON.stringify(invoiceIds)
+  })
+    .then(res => res.json())
+    .then(res => res)
+    .catch(error => error);
+};

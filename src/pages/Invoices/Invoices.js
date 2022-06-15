@@ -8,8 +8,8 @@ import HeaderMenu from '../../Components/HeaderMenu/HeaderMenu';
 import { getAllInvoices } from '../../ApiCalls/ApiCalls';
 
 export default function Invoices() {
-  const [invoices, setInvoices] = useState(null);
   const navigate = useNavigate();
+  const [invoices, setInvoices] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,14 +26,10 @@ export default function Invoices() {
         <Stack direction='row' alignItems='center' justifyContent='space-between' mb={5}>
           <HeaderMenu handleOnClick={data => navigate(`/dashboard/${data}/`)} page={'Invoices'} listOfButtons={button} />
         </Stack>
-        {/* If invoice detail needed pass a route below in DataTable - route='/dashboard/invoiceDetails/' */}
         <DataTable {...invoices} route='/dashboard/invoiceDetails/' />
       </Container>
     </Page>
   );
 }
 
-const button = [
-  { name: 'newInvoice', variant: 'contained', icon: plusFill, htmlName: 'Create Monthly Invoices' },
-  { name: 'newInvoice', variant: 'contained', icon: plusFill, htmlName: 'New Invoice' }
-];
+const button = [{ name: 'newInvoice', variant: 'contained', icon: plusFill, htmlName: 'New Invoices' }];

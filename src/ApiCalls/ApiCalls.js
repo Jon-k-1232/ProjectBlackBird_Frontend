@@ -405,3 +405,52 @@ export const getAnInvoice = pMemoize(
   },
   { cacheKey: arguments_ => JSON.stringify(arguments_) }
 );
+
+export const getAllReadyToBillInvoices = () => {
+  return fetch(`${config.API_ENDPOINT}/create/createInvoices/readyToBill`, {
+    method: 'GET'
+    // headers: {
+    //   'content-type': 'application/json',
+    //   Authorization: `Bearer ${config.API_KEY2}`,
+    //   Origin: `${config.FRONT_WEB}`
+    // }
+  })
+    .then(resp => {
+      if (!resp.ok) {
+        throw new Error(resp.status);
+      }
+      return resp.json();
+    })
+    .then(data => {
+      const { readyToBillContacts } = data;
+      return readyToBillContacts.length > 0 ? tableAndLabelCreation(readyToBillContacts, 'oid', 'firstName') : [];
+    })
+    .catch(error => {
+      console.log(error);
+      return error;
+    });
+};
+
+export const getZippedInvoices = () => {
+  return fetch(`${config.API_ENDPOINT}/create/download`, {
+    method: 'GET',
+    headers: {
+      'content-type': 'application/octet-stream'
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+    }
+  })
+    .then(res => res.blob())
+    .then(data => {
+      var url = window.URL.createObjectURL(data);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'downloaded_file.zip';
+      // We need to append the element to the dom -> otherwise it will not work in firefox
+      document.body.appendChild(a);
+      a.click();
+      //afterwards we remove the element again
+      a.remove();
+    })
+    .catch(error => error);
+};
