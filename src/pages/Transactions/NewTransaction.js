@@ -177,7 +177,7 @@ export default function NewTransactions({ passedCompany }) {
                       }
                     }}
                     label='Invoice Number'
-                    helperText='This field is required in order to match the payment to the invoice. For anything not linked to an invoice, or an invoice has not been created, input 0.'
+                    helperText='This field is required in order to match the payment to the invoice. INVOICE NUMBER IS REQUIRED.'
                   />
 
                   <TextField
@@ -196,7 +196,7 @@ export default function NewTransactions({ passedCompany }) {
                       }
                     }}
                     label='Invoice Confirmation'
-                    helperText='This field is required in order to match the payment to the invoice. For anything not linked to an invoice, or an invoice has not been created, input 0.'
+                    helperText='This field is required in order to match the payment to the invoice. INVOICE NUMBER IS REQUIRED.'
                   />
                 </Stack>
               )}
