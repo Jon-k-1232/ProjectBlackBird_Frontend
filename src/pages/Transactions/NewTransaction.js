@@ -63,9 +63,9 @@ export default function NewTransactions({ passedCompany }) {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    const objectToPost = formObjectForPost();
-    const stat = await postTransactions(objectToPost);
-    setPostStatus(stat.status);
+    const dataToPost = formObjectForPost();
+    const postedItem = await postTransactions(dataToPost);
+    setPostStatus(postedItem.status);
     setTimeout(() => setPostStatus(null), 4000);
     resetState();
   };
@@ -73,7 +73,7 @@ export default function NewTransactions({ passedCompany }) {
   const formObjectForPost = () => {
     const postObj = {
       company: selectedCompany.oid,
-      job: selectedJob.jobDefinition,
+      job: selectedJob.oid,
       employee: selectedEmployee.oid,
       transactionType: selectedTransaction.displayValue,
       transactionDate: dayjs(selectedDate).format(),

@@ -134,3 +134,18 @@ export const createInvoices = async invoiceIds => {
     .then(res => res)
     .catch(error => error);
 };
+
+export const postInvoiceUpdate = async invoice => {
+  return fetch(`${config.API_ENDPOINT}/invoices/updateInvoice`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json'
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+    },
+    body: JSON.stringify(invoice)
+  })
+    .then(res => res.json())
+    .then(res => res)
+    .catch(error => error);
+};

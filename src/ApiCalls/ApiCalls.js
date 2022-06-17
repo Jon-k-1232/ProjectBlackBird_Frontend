@@ -379,33 +379,34 @@ export const getAllInvoices = pMemoize(
  * @param {*} oid oid of invoice
  * @returns [{}] array of objects. object is invoice
  */
-export const getAnInvoice = pMemoize(
-  (invoiceId, companyId) => {
-    return fetch(`${config.API_ENDPOINT}/invoices/single/${invoiceId}/${companyId}`, {
-      method: 'GET'
-      // headers: {
-      //   'content-type': 'application/json',
-      //   Authorization: `Bearer ${config.API_KEY2}`,
-      //   Origin: `${config.FRONT_WEB}`
-      // }
+export const getAnInvoice = (invoiceId, companyId) => {
+  return fetch(`${config.API_ENDPOINT}/invoices/single/${invoiceId}/${companyId}`, {
+    method: 'GET'
+    // headers: {
+    //   'content-type': 'application/json',
+    //   Authorization: `Bearer ${config.API_KEY2}`,
+    //   Origin: `${config.FRONT_WEB}`
+    // }
+  })
+    .then(resp => {
+      if (!resp.ok) {
+        throw new Error(resp.status);
+      }
+      return resp.json();
     })
-      .then(resp => {
-        if (!resp.ok) {
-          throw new Error(resp.status);
-        }
-        return resp.json();
-      })
-      .then(data => {
-        const { returnedInvoice, invoiceDetails } = data;
-        const invoice = returnedInvoice[0];
-        const details = invoiceDetails.length > 0 ? tableAndLabelCreation(invoiceDetails, 'oid', 'contactName') : [];
-        return { invoice, details };
-      })
-      .catch(error => error);
-  },
-  { cacheKey: arguments_ => JSON.stringify(arguments_) }
-);
+    .then(data => {
+      const { returnedInvoice, invoiceDetails } = data;
+      const invoice = returnedInvoice[0];
+      const details = invoiceDetails.length > 0 ? tableAndLabelCreation(invoiceDetails, 'oid', 'contactName') : [];
+      return { invoice, details };
+    })
+    .catch(error => error);
+};
 
+/**
+ * Gets all users that are ready for billing
+ * @returns
+ */
 export const getAllReadyToBillInvoices = () => {
   return fetch(`${config.API_ENDPOINT}/create/createInvoices/readyToBill`, {
     method: 'GET'
@@ -431,6 +432,10 @@ export const getAllReadyToBillInvoices = () => {
     });
 };
 
+/**
+ *
+ * @returns Creates and gets zip file from backend
+ */
 export const getZippedInvoices = () => {
   return fetch(`${config.API_ENDPOINT}/create/download`, {
     method: 'GET',

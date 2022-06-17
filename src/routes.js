@@ -21,6 +21,7 @@ import Profile from './Pages/Profile/Profile';
 import ClientDetails from './Pages/Clients/ClientDetails';
 import NewJobDefinition from './Pages/JobDefinitions/NewJobDefinition';
 import JobDefinitions from './Pages/JobDefinitions/JobDefinitions';
+import ChangeInvoice from './Pages/Transactions/ChangeInvoice';
 
 export default function Router(allClients, allEmployees) {
   return useRoutes([
@@ -45,7 +46,8 @@ export default function Router(allClients, allEmployees) {
         { path: 'jobDetails', element: <JobDetails /> },
         { path: 'jobDefinitions', element: <JobDefinitions /> },
         { path: 'createNewJobDefinition', element: <NewJobDefinition /> },
-        { path: 'profile', element: <Profile /> }
+        { path: 'profile', element: <Profile /> },
+        { path: 'changeInvoice', element: <ChangeInvoice /> }
       ]
     },
     {
