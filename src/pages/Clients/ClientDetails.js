@@ -13,12 +13,12 @@ import baselineWork from '@iconify/icons-ic/baseline-work';
 import clockFill from '@iconify/icons-eva/clock-fill';
 import statisticsIcon from '@iconify/icons-whh/statistics';
 import plusFill from '@iconify/icons-eva/plus-fill';
-import NewTransactions from '../Transactions/NewTransaction';
 import NewJob from '../Jobs/NewJob';
 import NewClient from '../Clients/NewClient';
+import NewTransactionsPage from '../Transactions/NewTransactionPage';
 
 export default function ClientDetails() {
-  const [dataToShow, setDataToShow] = useState('notes');
+  const [dataToShow, setDataToShow] = useState('invoices');
   const [company, setCompany] = useState(null);
   const [companyJobs, setCompanyJobs] = useState(null);
   const [jobTransactions, setJobTransactions] = useState(null);
@@ -56,11 +56,11 @@ export default function ClientDetails() {
       <Container style={{ maxWidth: '1280px' }}>
         <HeaderMenu handleOnClick={data => setDataToShow(data)} page={'Client Details'} listOfButtons={button} />
         <ContactCard {...company} />
+        {dataToShow === 'invoices' && <DataTable {...companyInvoices} route='/dashboard/invoiceDetails/' />}
         {dataToShow === 'transactions' && <DataTable {...jobTransactions} />}
-        {dataToShow === 'newTransactions' && <NewTransactions passedCompany={company} />}
+        {dataToShow === 'newTransactions' && <NewTransactionsPage passedCompany={company} />}
         {dataToShow === 'jobs' && <DataTable {...companyJobs} route='/dashboard/jobDetails/' />}
         {dataToShow === 'newJob' && <NewJob passedCompany={company} />}
-        {dataToShow === 'invoices' && <DataTable {...companyInvoices} />}
         {dataToShow === 'notes' && <ComingSoon />}
         {dataToShow === 'statistics' && <ComingSoon />}
         {dataToShow === 'newClient' && <NewClient passedCompany={company} updateContactCard={companyUpdates => setCompany(companyUpdates)} />}
@@ -70,11 +70,11 @@ export default function ClientDetails() {
 }
 
 const button = [
+  { name: 'invoices', variant: 'contained', icon: fileTextFill, htmlName: 'Invoices' },
   { name: 'transactions', variant: 'contained', icon: clockFill, htmlName: 'Transactions' },
   { name: 'newTransactions', variant: 'contained', icon: plusFill, htmlName: 'New Transaction' },
   { name: 'jobs', variant: 'contained', icon: baselineWork, htmlName: 'Jobs' },
   { name: 'newJob', variant: 'contained', icon: plusFill, htmlName: 'New Job' },
-  { name: 'invoices', variant: 'contained', icon: fileTextFill, htmlName: 'Invoices' },
   { name: 'notes', variant: 'contained', icon: clipboardNotes, htmlName: 'Notes' },
   { name: 'statistics', variant: 'contained', icon: statisticsIcon, htmlName: 'Statistics' },
   { name: 'newClient', variant: 'contained', icon: clipboardNotes, htmlName: 'Edit Contact' }

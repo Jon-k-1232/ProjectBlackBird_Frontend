@@ -44,7 +44,6 @@ export default function ChangeInvoice() {
   const handleSubmit = async e => {
     e.preventDefault();
     const dataToPost = formObjectForPost();
-    console.log(dataToPost);
     const postedItem = await postInvoiceUpdate(dataToPost);
     setPostStatus(postedItem.status);
     setTimeout(() => setPostStatus(null), 4000);

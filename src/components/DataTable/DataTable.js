@@ -8,6 +8,7 @@ import MUIDataTable from 'mui-datatables';
  */
 export default function DataTable(props) {
   const navigate = useNavigate();
+  const { useCheckboxes, selectOnRowClick, route, rawData, tableData, tableHeaders } = props;
 
   const responsive = 'vertical';
   const tableBodyHeight = '1000px';
@@ -23,18 +24,18 @@ export default function DataTable(props) {
     filter: true,
     filterType: 'dropdown',
     searchOpen: true,
-    selectableRowsHideCheckboxes: props.useCheckboxes ? false : true,
-    selectableRowsOnClick: props.selectOnRowClick ? true : false,
+    selectableRowsHideCheckboxes: useCheckboxes ? false : true,
+    selectableRowsOnClick: selectOnRowClick ? true : false,
     responsive,
     tableBodyHeight,
     tableBodyMaxHeight,
     onRowClick: rowData => {
       // Whole row of data will be stored in router state
       // If 'route' is not present onClick will not fire.
-      props.route && navigate(`${props.route}`, { state: { rowData } });
+      route && navigate(`${route}`, { state: { rowData } });
     },
     onRowSelectionChange: (rowsSelected, allRows, selectedIndex) => {
-      const data = props.rawData;
+      const data = rawData;
       const dataToState = selectedIndex.map(item => data[item]);
       props.selectedList(dataToState);
     }
@@ -43,7 +44,7 @@ export default function DataTable(props) {
   return (
     <>
       <div style={{ marginTop: '25px' }}>
-        <MUIDataTable data={props.tableData} columns={props.tableHeaders} options={options} />
+        <MUIDataTable data={tableData} columns={tableHeaders} options={options} />
       </div>
     </>
   );

@@ -31,6 +31,64 @@ export const getAllCompanies = () => {
 };
 
 /**
+ * Gets active company information
+ * @returns [{},{},{}] Array of objects
+ */
+export const getActiveCompanies = () => {
+  return fetch(`${config.API_ENDPOINT}/contacts/allActiveContacts`, {
+    method: 'GET',
+    headers: {
+      'content-type': 'application/json'
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+    }
+  })
+    .then(resp => {
+      if (!resp.ok) {
+        throw new Error(resp.status);
+      }
+      return resp.json();
+    })
+    .then(data => {
+      const { activeContacts } = data;
+      return activeContacts.length > 0 ? tableAndLabelCreation(activeContacts, 'oid', 'company') : [];
+    })
+    .catch(error => {
+      console.log(error);
+      return error;
+    });
+};
+
+/**
+ * Gets prior clients
+ * @returns
+ */
+export const getPriorCompanies = () => {
+  return fetch(`${config.API_ENDPOINT}/contacts/allPriorContacts`, {
+    method: 'GET',
+    headers: {
+      'content-type': 'application/json'
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+    }
+  })
+    .then(resp => {
+      if (!resp.ok) {
+        throw new Error(resp.status);
+      }
+      return resp.json();
+    })
+    .then(data => {
+      const { priorContacts } = data;
+      return priorContacts.length > 0 ? tableAndLabelCreation(priorContacts, 'oid', 'company') : [];
+    })
+    .catch(error => {
+      console.log(error);
+      return error;
+    });
+};
+
+/**
  * Gets company information via query
  * @param {*} companyId Integer oid of company
  * @returns {object} Object is company information
@@ -379,12 +437,12 @@ export const getAnInvoice = (invoiceId, companyId) => {
  */
 export const getAllReadyToBillInvoices = () => {
   return fetch(`${config.API_ENDPOINT}/create/createInvoices/readyToBill`, {
-    method: 'GET'
-    // headers: {
-    //   'content-type': 'application/json',
-    //   Authorization: `Bearer ${config.API_KEY2}`,
-    //   Origin: `${config.FRONT_WEB}`
-    // }
+    method: 'GET',
+    headers: {
+      'content-type': 'application/json'
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+    }
   })
     .then(resp => {
       if (!resp.ok) {
@@ -428,4 +486,32 @@ export const getZippedInvoices = () => {
       a.remove();
     })
     .catch(error => error);
+};
+
+export const getOutstandingInvoiceForCompany = selectedCompany => {
+  return fetch(`${config.API_ENDPOINT}/invoices/outstandingInvoices/${selectedCompany.oid}`, {
+    method: 'GET',
+    headers: {
+      'content-type': 'application/json'
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+    }
+  })
+    .then(resp => {
+      if (!resp.ok) {
+        throw new Error(resp.status);
+      }
+      return resp.json();
+    })
+    .then(data => {
+      const { outstandingInvoices } = data;
+      const companyName = selectedCompany.companyName;
+      const updateObject = { companyName, ...outstandingInvoices };
+      const companyPassedDueInvoice = [updateObject];
+      return Object.keys(outstandingInvoices).length > 0 ? tableAndLabelCreation(companyPassedDueInvoice, 'oid', 'companyName') : null;
+    })
+    .catch(error => {
+      console.log(error);
+      return error;
+    });
 };

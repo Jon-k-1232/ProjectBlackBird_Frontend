@@ -18,7 +18,6 @@ export default function InvoiceDetails() {
       const invoiceId = invoiceData[2];
       const companyId = invoiceData[1];
       const invoice = await getAnInvoice(invoiceId, companyId);
-      console.log(invoice);
       setInvoice(invoice.invoice);
       setInvoiceDetails(invoice.details);
     };

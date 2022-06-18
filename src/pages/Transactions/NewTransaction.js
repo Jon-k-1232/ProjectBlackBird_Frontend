@@ -8,9 +8,7 @@ import AdapterDayjs from '@mui/lab/AdapterDayjs';
 import { postTransactions } from '../../ApiCalls/PostApiCalls';
 import AlertBanner from 'src/Components/AlertBanner/AlertBanner';
 
-// ToDo Need Form validation
-
-export default function NewTransactions({ passedCompany }) {
+export default function NewTransactions({ passedCompany, setCompanyToGetOutstandingInvoice, outstandingInvoices, setTransaction }) {
   const [selectedCompany, setSelectedCompany] = useState(passedCompany ? passedCompany : null);
   const [allCompanies, setAllCompanies] = useState(null);
   const [selectedJob, setSelectedJob] = useState(null);
@@ -28,6 +26,7 @@ export default function NewTransactions({ passedCompany }) {
   const [postStatus, setPostStatus] = useState(null);
   const [invoiceAlert, setInvoiceAlert] = useState(false);
   const [disableSubmit, setDisableSubmit] = useState(false);
+  const [invoiceFound, setInvoiceFound] = useState(null);
 
   useEffect(() => {
     const fetchData = async passedCompany => {
@@ -45,13 +44,19 @@ export default function NewTransactions({ passedCompany }) {
       if (selectedCompany) {
         const allJobs = passedCompany ? await getCompanyJobs(passedCompany.oid, null) : await getCompanyJobs(selectedCompany.oid, null);
         setCompanyJobList(allJobs.rawData);
+        setCompanyToGetOutstandingInvoice(selectedCompany);
       }
     };
     fetchData();
+    // eslint-disable-next-line
   }, [selectedCompany]);
 
   useEffect(() => {
     resetQuantityAmountAndTotal();
+    if (selectedTransaction) {
+      setTransaction(selectedTransaction.value);
+    }
+    // eslint-disable-next-line
   }, [selectedTransaction]);
 
   // Resets amount fields when type of transaction is switched. This solves amount carrying over from charge to write of and others.
@@ -104,6 +109,24 @@ export default function NewTransactions({ passedCompany }) {
     setTotalTransaction(0);
     setInvoice(null);
     setConfirmInvoice(null);
+  };
+
+  const confirmIfInvoiceFound = (invoiceNum, field) => {
+    const matchInvoices = outstandingInvoices.rawData.find(invoice => Number(invoice.invoiceNumber) === Number(invoiceNum));
+
+    if (matchInvoices && invoiceNum === invoice && field === 'confirmField') {
+      setInvoiceFound(true);
+      setInvoiceAlert(false);
+      setDisableSubmit(false);
+    } else if (matchInvoices && invoiceNum === confirmInvoice && field === 'firstInvoiceField') {
+      setInvoiceFound(true);
+      setInvoiceAlert(false);
+      setDisableSubmit(false);
+    } else {
+      setInvoiceFound(false);
+      setDisableSubmit(true);
+      setInvoiceAlert(true);
+    }
   };
 
   return (
@@ -166,15 +189,8 @@ export default function NewTransactions({ passedCompany }) {
                     type='number'
                     value={invoice}
                     onChange={e => {
-                      if (e.target.value !== confirmInvoice) {
-                        setInvoiceAlert(true);
-                        setDisableSubmit(true);
-                        setInvoice(e.target.value);
-                      } else {
-                        setInvoiceAlert(false);
-                        setDisableSubmit(false);
-                        setInvoice(e.target.value);
-                      }
+                      setInvoice(e.target.value);
+                      confirmIfInvoiceFound(e.target.value, 'firstInvoiceField');
                     }}
                     label='Invoice Number'
                     helperText='This field is required in order to match the payment to the invoice. INVOICE NUMBER IS REQUIRED.'
@@ -185,22 +201,18 @@ export default function NewTransactions({ passedCompany }) {
                     type='number'
                     value={confirmInvoice}
                     onChange={e => {
-                      if (e.target.value !== invoice) {
-                        setInvoiceAlert(true);
-                        setDisableSubmit(true);
-                        setConfirmInvoice(e.target.value);
-                      } else {
-                        setInvoiceAlert(false);
-                        setDisableSubmit(false);
-                        setConfirmInvoice(e.target.value);
-                      }
+                      setConfirmInvoice(e.target.value);
+                      confirmIfInvoiceFound(e.target.value, 'confirmField');
                     }}
                     label='Invoice Confirmation'
                     helperText='This field is required in order to match the payment to the invoice. INVOICE NUMBER IS REQUIRED.'
                   />
                 </Stack>
               )}
-              {invoiceAlert && <Alert severity='warning'>Invoice does not match</Alert>}
+              {invoiceAlert && <Alert severity='error'>Invoice does not match</Alert>}
+              {!invoiceFound && invoiceFound !== null && <Alert severity='error'>No Invoice Record Found</Alert>}
+              {invoiceFound && !invoiceAlert && <Alert severity='success'>Invoice Record Found</Alert>}
+
               {selectedTransaction && selectedTransaction.value === 'charge' && (
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
                   <TextField
@@ -329,3 +341,5 @@ const type = [
     value: 'each'
   }
 ];
+
+// getOutstandingInvoiceForCompany;
