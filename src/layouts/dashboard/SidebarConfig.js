@@ -1,8 +1,8 @@
 import { Icon } from '@iconify/react';
-import pieChart2Fill from '@iconify/icons-eva/pie-chart-2-fill';
+// import pieChart2Fill from '@iconify/icons-eva/pie-chart-2-fill';
 import peopleFill from '@iconify/icons-eva/people-fill';
 import fileTextFill from '@iconify/icons-eva/file-text-fill';
-import personAddFill from '@iconify/icons-eva/person-add-fill';
+// import personAddFill from '@iconify/icons-eva/person-add-fill';
 import clockFill from '@iconify/icons-eva/clock-fill';
 import printerFill from '@iconify/icons-eva/printer-fill';
 import baselineWork from '@iconify/icons-ic/baseline-work';

@@ -33,6 +33,7 @@ export default function JobDetails() {
       setJobTransactions(jobTransactions);
     };
     fetchData();
+    // eslint-disable-next-line
   }, []);
 
   return (

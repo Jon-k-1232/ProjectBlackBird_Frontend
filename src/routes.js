@@ -3,7 +3,7 @@ import DashboardLayout from './Layouts/dashboard';
 import LogoOnlyLayout from './Layouts/LogoOnlyLayout';
 import Login from './Pages/Login/Login';
 import Register from './Pages/Register/Register';
-import DashboardApp from './Pages/DashboardApp';
+// import DashboardApp from './Pages/DashboardApp';
 import Transactions from './Pages/Transactions/Transactions';
 import Invoices from './Pages/Invoices/Invoices';
 import NewInvoice from './Pages/Invoices/NewInvoice';

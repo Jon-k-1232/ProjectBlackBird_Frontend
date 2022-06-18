@@ -30,6 +30,7 @@ export default function NewEmployee() {
       }
     };
     fetchData();
+    // eslint-disable-next-line
   }, []);
 
   const handleSubmit = async e => {

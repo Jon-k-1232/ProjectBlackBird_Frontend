@@ -49,6 +49,7 @@ export default function ClientDetails() {
       setCompanyInvoices(companyInvoices);
     };
     fetchData();
+    // eslint-disable-next-line
   }, []);
 
   return (

@@ -22,6 +22,7 @@ export default function InvoiceDetails() {
       setInvoiceDetails(invoice.details);
     };
     fetchData();
+    // eslint-disable-next-line
   }, []);
 
   const {

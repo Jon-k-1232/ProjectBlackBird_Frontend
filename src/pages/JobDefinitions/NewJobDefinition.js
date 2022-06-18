@@ -9,7 +9,7 @@ export default function NewJobDefinition() {
 
   const [jobDescription, setJobDescription] = useState('');
   const [targetPrice, setTargetPrice] = useState('');
-  const [billable, setBillable] = useState(null);
+  const [billable, setBillable] = useState(location.state ? location.state.rowData[3] : null);
   const [checked, setChecked] = useState(false);
   const [postStatus, setPostStatus] = useState(null);
 
@@ -24,6 +24,7 @@ export default function NewJobDefinition() {
       }
     };
     fetchData();
+    // eslint-disable-next-line
   }, []);
 
   const handleSubmit = async e => {
@@ -40,7 +41,7 @@ export default function NewJobDefinition() {
     return {
       description: jobDescription,
       defaultTargetPrice: targetPrice,
-      billable: checked
+      billable: checked || billable
     };
   };
 

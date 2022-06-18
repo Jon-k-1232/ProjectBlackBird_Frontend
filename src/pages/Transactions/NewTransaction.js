@@ -69,9 +69,11 @@ export default function NewTransactions({ passedCompany, setCompanyToGetOutstand
   const handleSubmit = async e => {
     e.preventDefault();
     const dataToPost = formObjectForPost();
+    console.log(dataToPost);
     const postedItem = await postTransactions(dataToPost);
     setPostStatus(postedItem.status);
     setTimeout(() => setPostStatus(null), 4000);
+    setTimeout(() => setInvoiceFound(null), 4000);
     resetState();
   };
 
@@ -86,7 +88,7 @@ export default function NewTransactions({ passedCompany, setCompanyToGetOutstand
       unitOfMeasure: selectedType ? selectedType.displayValue : 'Each',
       unitTransaction: selectedAmount,
       totalTransaction: totalTransaction,
-      discount: selectedTransaction === 'writeOff' ? selectedAmount : 0,
+      discount: 0,
       invoice: confirmInvoice,
       paymentApplied: false,
       ignoreInAgeing: false
@@ -182,7 +184,9 @@ export default function NewTransactions({ passedCompany, setCompanyToGetOutstand
                   renderInput={params => <TextField {...params} />}
                 />
               </Stack>
-              {selectedTransaction && selectedTransaction.value !== 'charge' && (
+
+              {/* TODO add 'writeOff' */}
+              {selectedTransaction && selectedTransaction.value === 'writeOff' && (
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
                   <TextField
                     required
