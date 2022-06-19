@@ -3,9 +3,8 @@ import DashboardLayout from './Layouts/dashboard';
 import LogoOnlyLayout from './Layouts/LogoOnlyLayout';
 import Login from './Pages/Login/Login';
 import Register from './Pages/Register/Register';
-import DashboardApp from './Pages/DashboardApp';
+// import DashboardApp from './Pages/DashboardApp';
 import Transactions from './Pages/Transactions/Transactions';
-import NewTransactions from './Pages/Transactions/NewTransaction';
 import Invoices from './Pages/Invoices/Invoices';
 import NewInvoice from './Pages/Invoices/NewInvoice';
 import InvoiceDetails from './Pages/InvoiceDetails/InvoiceDetails';
@@ -21,20 +20,22 @@ import Profile from './Pages/Profile/Profile';
 import ClientDetails from './Pages/Clients/ClientDetails';
 import NewJobDefinition from './Pages/JobDefinitions/NewJobDefinition';
 import JobDefinitions from './Pages/JobDefinitions/JobDefinitions';
+import ChangeInvoice from './Pages/Transactions/ChangeInvoice';
+import NewTransactionsPage from './Pages/Transactions/NewTransactionPage';
 
-export default function Router(allClients, allEmployees) {
+export default function Router(allEmployees) {
   return useRoutes([
     {
       path: '/dashboard',
       element: <DashboardLayout />,
       children: [
         { element: <Navigate to='/dashboard/app' replace /> },
-        { path: 'app', element: <DashboardApp /> },
+        // { path: 'app', element: <DashboardApp /> },
         { path: 'clients', element: <Clients /> },
         { path: 'clientDetails', element: <ClientDetails /> },
         { path: 'newClient', element: <NewClient /> },
         { path: 'transactions', element: <Transactions /> },
-        { path: 'newTransaction', element: <NewTransactions {...allClients} {...allEmployees} /> },
+        { path: 'newTransaction', element: <NewTransactionsPage /> },
         { path: 'invoices', element: <Invoices /> },
         { path: 'newInvoice', element: <NewInvoice /> },
         { path: 'invoiceDetails', element: <InvoiceDetails /> },
@@ -45,7 +46,8 @@ export default function Router(allClients, allEmployees) {
         { path: 'jobDetails', element: <JobDetails /> },
         { path: 'jobDefinitions', element: <JobDefinitions /> },
         { path: 'createNewJobDefinition', element: <NewJobDefinition /> },
-        { path: 'profile', element: <Profile /> }
+        { path: 'profile', element: <Profile /> },
+        { path: 'changeInvoice', element: <ChangeInvoice /> }
       ]
     },
     {
@@ -55,7 +57,7 @@ export default function Router(allClients, allEmployees) {
         { path: 'login', element: <Login /> },
         { path: 'register', element: <Register /> },
         { path: '404', element: <NotFound /> },
-        { path: '/', element: <Navigate to='/dashboard/app' /> },
+        { path: '/', element: <Navigate to='/dashboard/clients' /> },
         { path: '*', element: <Navigate to='/404' /> }
       ]
     },

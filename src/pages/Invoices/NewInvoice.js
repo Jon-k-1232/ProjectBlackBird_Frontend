@@ -26,7 +26,6 @@ export default function NewInvoice() {
     const arrayOfInvoicesToCreate = selectedRowData.map(company => company.oid);
     const postedItem = await createInvoices(arrayOfInvoicesToCreate);
     setPostStatus(postedItem.status);
-    console.log(postedItem.newInvoices[0]);
     await getZippedInvoices();
     setTimeout(() => setPostStatus(null), 4000);
   };

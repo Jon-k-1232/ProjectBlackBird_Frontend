@@ -45,7 +45,6 @@ export default function old({ allClients, allEmployees, passedCompany }) {
     },
     onSubmit: (values, { resetForm }) => {
       // const updatedValues = checkValuesOne(values);
-      console.log(values);
       checkValuesOne(values);
       resetForm({ values: '' });
     }

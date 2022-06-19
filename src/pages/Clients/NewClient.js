@@ -103,11 +103,11 @@ export default function NewClient({ passedCompany, updateContactCard }) {
 
             <FormGroup style={{ display: 'inline' }}>
               <FormControlLabel
-                control={<Checkbox checked={billableChecked} onChange={e => setBillableChecked(e.target.billableChecked)} />}
+                control={<Checkbox checked={billableChecked} onChange={e => setBillableChecked(e.target.checked)} />}
                 label='Billable'
               />
               <FormControlLabel
-                control={<Checkbox checked={activeChecked} onChange={e => setActiveChecked(e.target.activeChecked)} />}
+                control={<Checkbox checked={activeChecked} onChange={e => setActiveChecked(e.target.checked)} />}
                 label='Active'
               />
             </FormGroup>
@@ -122,27 +122,3 @@ export default function NewClient({ passedCompany, updateContactCard }) {
     </Card>
   );
 }
-
-/**
- * react-hook-form
- * 
- * <TextField
-     type="number"
-     {...register("phonenum",{
-         required: {
-             value: true,
-             message: 'Please fill this field',
-         },
-         pattern: {
-             value: /^[1-9]\d*(\d+)?$/i,
-             message: 'Please enter an integer',
-         },
-         min: {
-             value: 1,
-             message: 'Value should be atleast 1',
-         },
-   })}
-   error={errors?.index ? true : false}
-   helperText={errors?.index?.message}
-/>
- */

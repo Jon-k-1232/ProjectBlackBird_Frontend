@@ -36,7 +36,7 @@ export default function ProfileForm() {
   return (
     <FormikProvider value={formik}>
       <Typography variant='h4' sx={{ mb: 5 }}>
-        Enter New Client
+        Profile
       </Typography>
       <Form autoComplete='off' noValidate onSubmit={handleSubmit}>
         <Stack spacing={3}>
