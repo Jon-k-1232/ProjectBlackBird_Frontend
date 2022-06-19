@@ -1,6 +1,14 @@
 import { Autocomplete, TextField } from '@mui/material';
 
-export default function SingleSelectionDropDown({ setSelection, options, dropValue, labelPropertyOne, labelPropertyTwo, dropPlaceholder }) {
+export default function SingleSelectionDropDown({
+  setSelection,
+  options,
+  dropValue,
+  labelPropertyOne,
+  labelPropertyTwo,
+  dropPlaceholder,
+  setTransaction
+}) {
   const optionslist = options ? options : [];
 
   return (
@@ -13,6 +21,9 @@ export default function SingleSelectionDropDown({ setSelection, options, dropVal
       onChange={(e, v) => {
         if (v != null) {
           setSelection(v);
+          if (dropPlaceholder === 'Select Transaction Type') {
+            setTransaction(v);
+          }
         }
       }}
       sx={{ width: 350 }}
