@@ -18,18 +18,18 @@ export default function JobDetails() {
     const fetchData = async () => {
       // Data is being stored in props of routing
       const companyId = Number(location.state.rowData[2]);
-      const companyJobs = await getCompanyJobs(companyId, null);
 
       // Getting contact info for company
       const contactDetails = await getCompanyInformation(companyId);
       setCompany(contactDetails);
 
-      // Gets all transactions for job.
+      // Selected job info
       const jobNumber = Number(location.state.rowData[0]);
+      const companyJobs = await getCompanyJobs(companyId, null);
       const selectedJob = companyJobs.rawData.find(jobItem => jobItem.oid === jobNumber);
       setSelectedJob(selectedJob);
 
-      const jobTransactions = await getJobTransactions(companyId, selectedJob.jobDefinition);
+      const jobTransactions = await getJobTransactions(companyId, jobNumber);
       setJobTransactions(jobTransactions);
     };
     fetchData();

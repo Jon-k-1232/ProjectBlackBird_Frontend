@@ -5,12 +5,13 @@ import DataTable from '../../Components/DataTable/DataTable';
 import { getOutstandingInvoiceForCompany } from '../../ApiCalls/ApiCalls';
 import NewTransactions from './NewTransaction';
 
-export default function NewTransactionsPage({ passedCompany }) {
+export default function NewTransactionsPage({ passedCompany, updateContactCard }) {
   const [outstandingInvoices, setOutstandingInvoices] = useState(null);
   const [transactionType, setTransactionType] = useState(null);
 
   const handleChange = async company => {
     const invoices = await getOutstandingInvoiceForCompany(company);
+    console.log(invoices);
     setOutstandingInvoices(invoices);
   };
 
@@ -22,6 +23,7 @@ export default function NewTransactionsPage({ passedCompany }) {
           setCompanyToGetOutstandingInvoice={company => handleChange(company)}
           outstandingInvoices={outstandingInvoices}
           setTransaction={transactionType => setTransactionType(transactionType)}
+          setContactCard={companyUpdates => updateContactCard(companyUpdates)}
         />
         {/* Displays Graph for outstanding Invoices.*/}
         {outstandingInvoices !== null && transactionType !== null && transactionType !== 'charge' && <DataTable {...outstandingInvoices} />}

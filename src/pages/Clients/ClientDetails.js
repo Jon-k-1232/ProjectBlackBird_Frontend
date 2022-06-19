@@ -25,7 +25,6 @@ export default function ClientDetails() {
   const [companyInvoices, setCompanyInvoices] = useState(null);
 
   const location = useLocation();
-
   useEffect(() => {
     const fetchData = async () => {
       // Data is being stored in props of routing.
@@ -59,7 +58,9 @@ export default function ClientDetails() {
         <ContactCard {...company} />
         {dataToShow === 'invoices' && <DataTable {...companyInvoices} route='/dashboard/invoiceDetails/' />}
         {dataToShow === 'transactions' && <DataTable {...jobTransactions} />}
-        {dataToShow === 'newTransactions' && <NewTransactionsPage passedCompany={company} />}
+        {dataToShow === 'newTransactions' && (
+          <NewTransactionsPage passedCompany={company} updateContactCard={companyUpdates => setCompany(companyUpdates)} />
+        )}
         {dataToShow === 'jobs' && <DataTable {...companyJobs} route='/dashboard/jobDetails/' />}
         {dataToShow === 'newJob' && <NewJob passedCompany={company} />}
         {dataToShow === 'notes' && <ComingSoon />}

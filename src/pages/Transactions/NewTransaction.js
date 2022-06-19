@@ -1,14 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Stack, Alert, TextField, Card, Button, Typography, CardContent } from '@mui/material';
+import { DesktopDatePicker, TimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { getCompanyJobs, getAllEmployees, getAllCompanies } from '../../ApiCalls/ApiCalls';
 import dayjs from 'dayjs';
 import SingleSelectionDropDown from '../../Components/DropDowns/SingleSelectionDropDown';
-import { DesktopDatePicker, LocalizationProvider } from '@mui/lab';
 import AdapterDayjs from '@mui/lab/AdapterDayjs';
 import { postTransactions } from '../../ApiCalls/PostApiCalls';
 import AlertBanner from 'src/Components/AlertBanner/AlertBanner';
 
-export default function NewTransactions({ passedCompany, setCompanyToGetOutstandingInvoice, outstandingInvoices, setTransaction }) {
+export default function NewTransactions({
+  passedCompany,
+  setCompanyToGetOutstandingInvoice,
+  outstandingInvoices,
+  setTransaction,
+  setContactCard
+}) {
   const [selectedCompany, setSelectedCompany] = useState(passedCompany ? passedCompany : null);
   const [allCompanies, setAllCompanies] = useState(null);
   const [selectedJob, setSelectedJob] = useState(null);
@@ -18,7 +24,10 @@ export default function NewTransactions({ passedCompany, setCompanyToGetOutstand
   const [selectedTransaction, setSelectedTransaction] = useState(null);
   const [selectedDate, setSelectedDate] = useState(dayjs().format());
   const [selectedQuantity, setSelectedQuantity] = useState(1);
-  const [selectedType, setSelectedType] = useState(null);
+  const [selectedType, setSelectedType] = useState({
+    displayValue: 'Each',
+    value: 'each'
+  });
   const [selectedAmount, setSelectedAmount] = useState(null);
   const [totalTransaction, setTotalTransaction] = useState(0);
   const [invoice, setInvoice] = useState(null);
@@ -27,6 +36,9 @@ export default function NewTransactions({ passedCompany, setCompanyToGetOutstand
   const [invoiceAlert, setInvoiceAlert] = useState(false);
   const [disableSubmit, setDisableSubmit] = useState(false);
   const [invoiceFound, setInvoiceFound] = useState(null);
+  const [calculationAlert, setCalculationAlert] = useState(false);
+  const [startTime, setStartTime] = useState(dayjs().format());
+  const [endTime, setEndTime] = useState(dayjs().format());
 
   useEffect(() => {
     const fetchData = async passedCompany => {
@@ -56,6 +68,11 @@ export default function NewTransactions({ passedCompany, setCompanyToGetOutstand
     if (selectedTransaction) {
       setTransaction(selectedTransaction.value);
     }
+
+    if (selectedTransaction !== 'payment' || selectedTransaction !== 'writeOff') {
+      setInvoiceAlert(false);
+      setInvoiceFound(null);
+    }
     // eslint-disable-next-line
   }, [selectedTransaction]);
 
@@ -69,11 +86,12 @@ export default function NewTransactions({ passedCompany, setCompanyToGetOutstand
   const handleSubmit = async e => {
     e.preventDefault();
     const dataToPost = formObjectForPost();
-    console.log(dataToPost);
     const postedItem = await postTransactions(dataToPost);
     setPostStatus(postedItem.status);
+    passedCompany && setContactCard(postedItem.updatedAccountInfo[0]);
     setTimeout(() => setPostStatus(null), 4000);
     setTimeout(() => setInvoiceFound(null), 4000);
+    setTimeout(() => setCalculationAlert(null), 4000);
     resetState();
   };
 
@@ -85,7 +103,7 @@ export default function NewTransactions({ passedCompany, setCompanyToGetOutstand
       transactionType: selectedTransaction.displayValue,
       transactionDate: dayjs(selectedDate).format(),
       quantity: selectedQuantity,
-      unitOfMeasure: selectedType ? selectedType.displayValue : 'Each',
+      unitOfMeasure: selectedType.displayValue,
       unitTransaction: selectedAmount,
       totalTransaction: totalTransaction,
       discount: 0,
@@ -115,7 +133,6 @@ export default function NewTransactions({ passedCompany, setCompanyToGetOutstand
 
   const confirmIfInvoiceFound = (invoiceNum, field) => {
     const matchInvoices = outstandingInvoices.rawData.find(invoice => Number(invoice.invoiceNumber) === Number(invoiceNum));
-
     if (matchInvoices && invoiceNum === invoice && field === 'confirmField') {
       setInvoiceFound(true);
       setInvoiceAlert(false);
@@ -128,6 +145,24 @@ export default function NewTransactions({ passedCompany, setCompanyToGetOutstand
       setInvoiceFound(false);
       setDisableSubmit(true);
       setInvoiceAlert(true);
+    }
+  };
+
+  const handleTimeCalculation = () => {
+    const loggedTime = timeCalculation(startTime, endTime);
+    setSelectedQuantity(loggedTime);
+    setSelectedType({
+      displayValue: 'Hour',
+      value: 'hour'
+    });
+    if (selectedEmployee) {
+      const employeeRate = selectedEmployee.hourlyCost;
+      setSelectedAmount(employeeRate);
+      const total = (Number(employeeRate) * Number(loggedTime)).toFixed(2);
+      setTotalTransaction(total);
+      setCalculationAlert(false);
+    } else {
+      setCalculationAlert(true);
     }
   };
 
@@ -186,7 +221,7 @@ export default function NewTransactions({ passedCompany, setCompanyToGetOutstand
               </Stack>
 
               {/* TODO add 'writeOff' */}
-              {selectedTransaction && selectedTransaction.value === 'writeOff' && (
+              {selectedTransaction && selectedTransaction.value === 'payment' && (
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
                   <TextField
                     required
@@ -269,20 +304,60 @@ export default function NewTransactions({ passedCompany, setCompanyToGetOutstand
                   />
                 </Stack>
               )}
+              {selectedTransaction && selectedTransaction.value === 'time' && (
+                <Stack spacing={3}>
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
+                    <TimePicker label='Start Time' value={startTime} onChange={setStartTime} renderInput={params => <TextField {...params} />} />
+                    <TimePicker label='End Time' value={endTime} onChange={setEndTime} renderInput={params => <TextField {...params} />} />
+                    <Button onClick={handleTimeCalculation} style={{ height: '30px', margin: '10px' }}>
+                      Calculate Time
+                    </Button>
+                  </Stack>
+
+                  {calculationAlert && (
+                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
+                      <AlertBanner
+                        message='There is an Error. Please check that employee is selected and that start and end times are in order.'
+                        severity='error'
+                      />
+                    </Stack>
+                  )}
+
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
+                    <Typography style={{ color: '#92999f' }} variant='subtitle2'>
+                      Time:{selectedQuantity}
+                    </Typography>
+                    <Typography style={{ color: '#92999f' }} variant='subtitle2'>
+                      Rate: {selectedAmount}
+                    </Typography>
+                  </Stack>
+                </Stack>
+              )}
+
               {selectedTransaction && selectedTransaction.value === 'adjustment' && (
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
-                  <TextField
-                    required
-                    type='number'
-                    max='10'
-                    label='Adjustment Amount'
-                    value={selectedAmount}
-                    onChange={e => {
-                      setSelectedAmount(e.target.value);
-                      setTotalTransaction((e.target.value * selectedQuantity).toFixed(2));
-                    }}
-                    helperText='* To make a credit to the job use the minus ( - ) in front of the amount.'
-                  />
+                <Stack spacing={3}>
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
+                    <TextField
+                      required
+                      type='number'
+                      max='10'
+                      label='Adjustment Amount'
+                      value={selectedAmount}
+                      onChange={e => {
+                        setSelectedAmount(e.target.value);
+                        setTotalTransaction((e.target.value * selectedQuantity).toFixed(2));
+                      }}
+                      helperText='* To make a credit to the job use the minus ( - ) in front of the amount.'
+                    />
+                  </Stack>
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
+                    <Typography style={{ color: '#92999f' }} variant='subtitle2'>
+                      *Please note that NEGATIVE adjustments can only be made to an account that has current transactions that have not yet been
+                      invoiced. You can only adjust to the point that the current transactions hit "0". DO NOT OVER ADJUST THE CURRENT CYCLE
+                      TRANSACTIONS TO A NEGATIVE BALANCE, STOP AT "0". If you wish to adjust an amount that appeared on a prior invoice, please
+                      use 'Write Off' and reference the invoice.
+                    </Typography>
+                  </Stack>
                 </Stack>
               )}
               {selectedTransaction && selectedTransaction.value === 'writeOff' && (
@@ -322,6 +397,10 @@ const transactionTypes = [
     value: 'charge'
   },
   {
+    displayValue: 'Time',
+    value: 'time'
+  },
+  {
     displayValue: 'Payment',
     value: 'payment'
   },
@@ -346,4 +425,46 @@ const type = [
   }
 ];
 
-// getOutstandingInvoiceForCompany;
+const timeCalculation = (startTime, endTime) => {
+  const mins = endTime.diff(startTime, 'minutes', true);
+  const totalHours = parseInt(mins / 60);
+  const totalMins = dayjs().minute(mins).$m + 1;
+  let total = 0;
+
+  switch (true) {
+    case totalMins >= 0 && totalMins <= 6:
+      total = `${totalHours}.1`;
+      break;
+    case totalMins >= 7 && totalMins <= 12:
+      total = `${totalHours}.2`;
+      break;
+    case totalMins >= 13 && totalMins <= 18:
+      total = `${totalHours}.3`;
+      break;
+    case totalMins >= 19 && totalMins <= 24:
+      total = `${totalHours}.4`;
+      break;
+    case totalMins >= 25 && totalMins <= 30:
+      total = `${totalHours}.5`;
+      break;
+    case totalMins >= 31 && totalMins <= 36:
+      total = `${totalHours}.6`;
+      break;
+    case totalMins >= 37 && totalMins <= 42:
+      total = `${totalHours}.7`;
+      break;
+    case totalMins >= 43 && totalMins <= 48:
+      total = `${totalHours}.8`;
+      break;
+    case totalMins >= 49 && totalMins <= 54:
+      total = `${totalHours}.9`;
+      break;
+    case totalMins >= 55 && totalMins <= 60:
+      total = `${totalHours + 1}.0`;
+      break;
+    default:
+      console.log('error caught at handleTimeCalculation()');
+  }
+
+  return total;
+};
