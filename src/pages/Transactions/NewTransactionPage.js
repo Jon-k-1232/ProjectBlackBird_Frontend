@@ -11,7 +11,6 @@ export default function NewTransactionsPage({ passedCompany, updateContactCard }
 
   const handleChange = async company => {
     const invoices = await getOutstandingInvoiceForCompany(company);
-    console.log(invoices);
     setOutstandingInvoices(invoices);
   };
 
