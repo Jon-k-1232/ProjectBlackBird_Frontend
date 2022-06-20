@@ -6,7 +6,8 @@ export default function ChargeOptions({
   setTotalTransaction,
   selectedAmount,
   setSelectedAmount,
-  selectedType
+  selectedType,
+  setDisableSubmit
 }) {
   return (
     <Container>
@@ -34,6 +35,7 @@ export default function ChargeOptions({
             onChange={e => {
               e.target.value >= 0 && setSelectedAmount(e.target.value);
               setTotalTransaction(Math.abs(e.target.value * selectedQuantity).toFixed(2));
+              setDisableSubmit(false);
             }}
           />
         </Stack>

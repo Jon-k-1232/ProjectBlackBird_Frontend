@@ -6,8 +6,8 @@ import { getOutstandingInvoiceForCompany } from '../../ApiCalls/ApiCalls';
 import NewTransactions from './NewTransaction';
 
 export default function NewTransactionsPage({ passedCompany, updateContactCard }) {
-  const [outstandingInvoices, setOutstandingInvoices] = useState(null);
-  const [transactionType, setTransactionType] = useState(null);
+  const [outstandingInvoices, setOutstandingInvoices] = useState([]);
+  const [transactionType, setTransactionType] = useState('');
 
   const handleChange = async company => {
     const invoices = await getOutstandingInvoiceForCompany(company);

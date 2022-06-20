@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Stack, TextField, Card, Button, CardContent, Typography, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
+import { Stack, TextField, Card, Button, CardContent, Typography, Checkbox, FormGroup, FormControlLabel, Autocomplete } from '@mui/material';
 import { DesktopDatePicker, LocalizationProvider } from '@mui/lab';
 import AdapterDayjs from '@mui/lab/AdapterDayjs';
-import SingleSelectionDropDown from '../../Components/DropDowns/SingleSelectionDropDown';
 import { getAllCompanies, getAllJobDefinitions } from '../../ApiCalls/ApiCalls';
 import { createNewJob } from '../../ApiCalls/PostApiCalls';
 import dayjs from 'dayjs';
@@ -17,6 +16,9 @@ export default function NewJob({ passedCompany }) {
   const [subDescription, setSubDescription] = useState('');
   const [checked, setChecked] = useState(false);
   const [postStatus, setPostStatus] = useState(null);
+
+  const [selectedCompanyInputValue, setSelectedCompanyInputValue] = useState('');
+  const [selectedJobInputValue, setSelectedJobInputValue] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,8 +55,8 @@ export default function NewJob({ passedCompany }) {
   };
 
   const resetForm = () => {
-    setSelectedCompany(null);
-    setJobDescription(null);
+    setSelectedCompany([]);
+    setJobDescription([]);
     setSelectedDate(dayjs().format());
     setSubDescription('');
     setChecked(false);
@@ -67,21 +69,27 @@ export default function NewJob({ passedCompany }) {
           <form onSubmit={handleSubmit}>
             <Stack spacing={3}>
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
-                <SingleSelectionDropDown
-                  setSelection={setSelectedCompany}
+                <Autocomplete
+                  value={selectedCompany}
+                  onChange={(event, newValue) => setSelectedCompany(newValue)}
+                  inputValue={selectedCompanyInputValue}
+                  onInputChange={(event, newInputValue) => setSelectedCompanyInputValue(newInputValue)}
+                  getOptionLabel={option => option['companyName']}
                   options={allCompanies}
-                  dropValue={selectedCompany}
-                  labelPropertyOne='companyName'
-                  valueProperty='oid'
-                  dropPlaceholder='Select Company'
+                  sx={{ width: 350 }}
+                  renderInput={params => <TextField {...params} label='Select Company' />}
                 />
-                <SingleSelectionDropDown
-                  setSelection={setJobDescription}
+
+                <Autocomplete
+                  value={selectedJobDescription}
+                  onChange={(event, newValue) => setJobDescription(newValue)}
+                  inputValue={selectedJobInputValue}
+                  onInputChange={(event, newInputValue) => setSelectedJobInputValue(newInputValue)}
                   options={allJobDescriptions}
-                  dropValue={selectedJobDescription}
-                  labelPropertyOne='description'
-                  dropPlaceholder='Select Job Description'
+                  sx={{ width: 350 }}
+                  renderInput={params => <TextField {...params} label='Select Job Description' />}
                 />
+
                 <DesktopDatePicker
                   label='Select Transaction Date'
                   inputFormat='MM/DD/YYYY'

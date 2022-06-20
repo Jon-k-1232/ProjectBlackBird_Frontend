@@ -8,7 +8,7 @@ import HeaderMenu from '../../Components/HeaderMenu/HeaderMenu';
 import { getAllTransactions } from '../../ApiCalls/ApiCalls';
 
 export default function Transactions() {
-  const [transactions, setTransactions] = useState(null);
+  const [transactions, setTransactions] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {

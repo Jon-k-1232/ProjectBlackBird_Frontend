@@ -1,12 +1,6 @@
 import { Container, Stack, TextField, Typography } from '@mui/material';
 
-export default function AdjustmentOptions({
-  selectedQuantity,
-
-  setTotalTransaction,
-  selectedAmount,
-  setSelectedAmount
-}) {
+export default function AdjustmentOptions({ selectedQuantity, setTotalTransaction, selectedAmount, setSelectedAmount, setDisableSubmit }) {
   return (
     <Container>
       <Stack spacing={3}>
@@ -20,6 +14,7 @@ export default function AdjustmentOptions({
             onChange={e => {
               setSelectedAmount(e.target.value);
               setTotalTransaction((e.target.value * selectedQuantity).toFixed(2));
+              setDisableSubmit(false);
             }}
             helperText='* To make a credit to the job use the minus ( - ) in front of the amount.'
           />

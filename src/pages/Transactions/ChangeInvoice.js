@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Stack, Alert, TextField, Card, Button, CardContent } from '@mui/material';
+import { Stack, Alert, TextField, Card, Button, CardContent, Autocomplete } from '@mui/material';
 import { getAnInvoice, getAllCompanies } from '../../ApiCalls/ApiCalls';
-import SingleSelectionDropDown from '../../Components/DropDowns/SingleSelectionDropDown';
 import { postInvoiceUpdate } from '../../ApiCalls/PostApiCalls';
 import AlertBanner from 'src/Components/AlertBanner/AlertBanner';
 
 // ToDo Need Form validation
 
 export default function ChangeInvoice() {
-  const [allCompanies, setAllCompanies] = useState(null);
+  const [allCompanies, setAllCompanies] = useState([]);
 
   const [oid, setOid] = useState(null);
   const [company, setCompany] = useState(null);
@@ -27,7 +26,7 @@ export default function ChangeInvoice() {
   const [invoiceDate, setInvoiceDate] = useState(null);
   const [paymentDueDate, setPaymentDueDate] = useState(null);
   const [dataEndDate, setDataEndDate] = useState(null);
-
+  const [selectedCompanyInputValue, setSelectedCompanyInputValue] = useState('');
   const [invoice, setInvoice] = useState(null);
   const [confirmInvoice, setConfirmInvoice] = useState(null);
   const [postStatus, setPostStatus] = useState(null);
@@ -123,13 +122,15 @@ export default function ChangeInvoice() {
         <form onSubmit={handleSubmit}>
           <Stack spacing={3}>
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
-              <SingleSelectionDropDown
-                setSelection={setCompany}
+              <Autocomplete
+                value={company}
+                onChange={(event, newValue) => setCompany(newValue)}
+                inputValue={selectedCompanyInputValue}
+                onInputChange={(event, newInputValue) => setSelectedCompanyInputValue(newInputValue)}
+                getOptionLabel={option => option['companyName']}
                 options={allCompanies}
-                dropValue={company}
-                labelPropertyOne='companyName'
-                valueProperty='oid'
-                dropPlaceholder='Select Company'
+                sx={{ width: 350 }}
+                renderInput={params => <TextField {...params} label='Select Company' />}
               />
             </Stack>
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
