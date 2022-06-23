@@ -278,7 +278,7 @@ export const getCompanyJobs = (companyId, time) => {
     })
     .then(data => {
       const { jobs } = data;
-      return jobs.length > 0 ? tableAndLabelCreation(jobs, 'jobDefinition', 'description') : {};
+      return jobs.length > 0 ? tableAndLabelCreation(jobs, 'jobDefinition', 'defaultDescription') : {};
     })
     .catch(error => {
       console.log(error);
