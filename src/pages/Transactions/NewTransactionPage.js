@@ -25,9 +25,11 @@ export default function NewTransactionsPage({ passedCompany, updateContactCard }
           setContactCard={companyUpdates => updateContactCard(companyUpdates)}
         />
         {/* Displays Graph for outstanding Invoices.*/}
-        {outstandingInvoices !== null && transactionType !== null && transactionType !== 'charge' && <DataTable {...outstandingInvoices} />}
+        {outstandingInvoices !== null && transactionType === 'payment' && (
+          <DataTable {...outstandingInvoices} tableSize={5} paginationIncrement={[5, 10, 15]} chartHeight='500' />
+        )}
         {/* If no outstanding invoices than give user feedback, no outstanding invoices  */}
-        {transactionType !== null && transactionType !== 'charge' && (
+        {transactionType === 'payment' && outstandingInvoices === null && (
           <Card style={{ marginTop: '25px' }}>
             <CardContent style={{ padding: '20px' }}>
               <Typography style={{ textAlign: 'center' }} variant='h4'>

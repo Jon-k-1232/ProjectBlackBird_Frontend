@@ -8,16 +8,16 @@ import MUIDataTable from 'mui-datatables';
  */
 export default function DataTable(props) {
   const navigate = useNavigate();
-  const { useCheckboxes, selectOnRowClick, route, rawData, tableData, tableHeaders } = props;
+  const { useCheckboxes, selectOnRowClick, route, rawData, tableData, tableHeaders, tableSize, paginationIncrement, chartHeight } = props;
 
   const responsive = 'vertical';
-  const tableBodyHeight = '1000px';
+  const tableBodyHeight = chartHeight ? chartHeight : '1000px';
   const tableBodyMaxHeight = '';
 
   // https://github.com/gregnb/mui-datatables#api
   const options = {
-    rowsPerPage: 50,
-    rowsPerPageOptions: [50, 150, 300],
+    rowsPerPage: tableSize ? tableSize : 50,
+    rowsPerPageOptions: paginationIncrement ? paginationIncrement : [50, 150, 300],
     rowHover: true,
     jumpToPage: true,
     draggableColumns: { enabled: true },
