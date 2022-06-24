@@ -21,13 +21,14 @@ export default function SelectionOptions({
 
   useEffect(() => {
     const fetchData = async () => {
-      const allCompanies = passedCompany ? passedCompany : await getAllCompanies();
-      setAllCompanies(passedCompany ? passedCompany : allCompanies.rawData);
+      const allCompanies = await getAllCompanies();
+      setAllCompanies(allCompanies.rawData);
 
       const allEmployees = await getAllEmployees();
       setAllEmployees(allEmployees.rawData);
 
       if (passedCompany) {
+        setSelectedCompany(passedCompany);
         const allJobs = await getCompanyJobs(passedCompany.oid, null);
         setCompanyJobList(allJobs.rawData);
         setCompanyToGetOutstandingInvoice(passedCompany);

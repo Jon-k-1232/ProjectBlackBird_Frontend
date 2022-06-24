@@ -51,7 +51,7 @@ export const getActiveCompanies = () => {
     })
     .then(data => {
       const { activeContacts } = data;
-      return activeContacts.length > 0 ? tableAndLabelCreation(activeContacts, 'oid', 'company') : [];
+      return activeContacts.length > 0 ? tableAndLabelCreation(activeContacts, 'oid', 'company') : noData;
     })
     .catch(error => {
       console.log(error);
@@ -80,7 +80,7 @@ export const getPriorCompanies = () => {
     })
     .then(data => {
       const { priorContacts } = data;
-      return priorContacts.length > 0 ? tableAndLabelCreation(priorContacts, 'oid', 'company') : [];
+      return priorContacts.length > 0 ? tableAndLabelCreation(priorContacts, 'oid', 'company') : noData;
     })
     .catch(error => {
       console.log(error);
@@ -137,7 +137,7 @@ export const getCompanyTransactions = (companyId, time) => {
     })
     .then(data => {
       const { sortedCompanyTransactions } = data;
-      return sortedCompanyTransactions.length > 0 ? tableAndLabelCreation(sortedCompanyTransactions, 'oid', 'company') : [];
+      return sortedCompanyTransactions.length > 0 ? tableAndLabelCreation(sortedCompanyTransactions, 'oid', 'company') : noData;
     })
     .catch(error => {
       console.log(error);
@@ -166,7 +166,7 @@ export const getCompanyInvoices = companyId => {
     })
     .then(data => {
       const { invoicesWithNoDetail } = data;
-      return invoicesWithNoDetail.length > 0 ? tableAndLabelCreation(invoicesWithNoDetail, 'oid', 'contactName') : [];
+      return invoicesWithNoDetail.length > 0 ? tableAndLabelCreation(invoicesWithNoDetail, 'oid', 'contactName') : noData;
     })
     .catch(error => {
       console.log(error);
@@ -194,7 +194,7 @@ export const getAllTransactions = time => {
     })
     .then(data => {
       const { allTransactions } = data;
-      return allTransactions.length > 0 ? tableAndLabelCreation(allTransactions, 'oid', 'company') : [];
+      return allTransactions.length > 0 ? tableAndLabelCreation(allTransactions, 'oid', 'company') : noData;
     })
     .catch(error => {
       console.log(error);
@@ -222,7 +222,7 @@ export const getJobTransactions = (companyId, jobId) => {
     })
     .then(data => {
       const { jobTransactions } = data;
-      return jobTransactions.length > 0 ? tableAndLabelCreation(jobTransactions, 'jobDefinition', 'description') : [];
+      return jobTransactions.length > 0 ? tableAndLabelCreation(jobTransactions, 'jobDefinition', 'description') : noData;
     })
     .catch(error => {
       console.log(error);
@@ -250,7 +250,7 @@ export const getAllJobs = time => {
     })
     .then(data => {
       const { allJobsWithinTimeframe } = data;
-      return allJobsWithinTimeframe.length > 0 ? tableAndLabelCreation(allJobsWithinTimeframe, 'jobDefinition', 'description') : [];
+      return allJobsWithinTimeframe.length > 0 ? tableAndLabelCreation(allJobsWithinTimeframe, 'jobDefinition', 'description') : noData;
     })
     .catch(error => {
       console.log(error);
@@ -278,7 +278,7 @@ export const getCompanyJobs = (companyId, time) => {
     })
     .then(data => {
       const { jobs } = data;
-      return jobs.length > 0 ? tableAndLabelCreation(jobs, 'jobDefinition', 'defaultDescription') : {};
+      return jobs.length > 0 ? tableAndLabelCreation(jobs, 'jobDefinition', 'defaultDescription') : noData;
     })
     .catch(error => {
       console.log(error);
@@ -306,7 +306,7 @@ export const getAllJobDefinitions = () => {
     })
     .then(data => {
       const { allJobDescriptions } = data;
-      return allJobDescriptions.length > 0 ? tableAndLabelCreation(allJobDescriptions, 'oid', 'description') : [];
+      return allJobDescriptions.length > 0 ? tableAndLabelCreation(allJobDescriptions, 'oid', 'description') : noData;
     })
     .catch(error => {
       console.log(error);
@@ -335,7 +335,7 @@ export const getAllEmployees = () => {
     })
     .then(data => {
       const { employees } = data;
-      return employees.length > 0 ? tableAndLabelCreation(employees, 'oid', 'firstName', 'lastName', 'employees') : [];
+      return employees.length > 0 ? tableAndLabelCreation(employees, 'oid', 'firstName', 'lastName', 'employees') : noData;
     })
     .catch(error => {
       console.log(error);
@@ -394,7 +394,7 @@ export const getAllInvoices = time => {
     })
     .then(data => {
       const { invoices } = data;
-      return invoices.length > 0 ? tableAndLabelCreation(invoices, 'oid', 'contactName') : [];
+      return invoices.length > 0 ? tableAndLabelCreation(invoices, 'oid', 'contactName') : noData;
     })
     .catch(error => {
       console.log(error);
@@ -425,7 +425,7 @@ export const getAnInvoice = (invoiceId, companyId) => {
     .then(data => {
       const { returnedInvoice, invoiceDetails } = data;
       const invoice = returnedInvoice[0];
-      const details = invoiceDetails.length > 0 ? tableAndLabelCreation(invoiceDetails, 'oid', 'contactName') : [];
+      const details = invoiceDetails.length > 0 ? tableAndLabelCreation(invoiceDetails, 'oid', 'contactName') : noData;
       return { invoice, details };
     })
     .catch(error => error);
@@ -452,7 +452,7 @@ export const getAllReadyToBillInvoices = () => {
     })
     .then(data => {
       const { readyToBillContacts } = data;
-      return readyToBillContacts.length > 0 ? tableAndLabelCreation(readyToBillContacts, 'oid', 'firstName') : [];
+      return readyToBillContacts.length > 0 ? tableAndLabelCreation(readyToBillContacts, 'oid', 'firstName') : noData;
     })
     .catch(error => {
       console.log(error);
@@ -514,4 +514,10 @@ export const getOutstandingInvoiceForCompany = selectedCompany => {
       console.log(error);
       return error;
     });
+};
+
+const noData = {
+  rawData: [],
+  tableData: [],
+  tableHeaders: []
 };
