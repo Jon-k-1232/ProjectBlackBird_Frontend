@@ -6,14 +6,7 @@ import config from '../config';
  * @returns [{},{},{}] Array of objects
  */
 export const getAllCompanies = () => {
-  return fetch(`${config.API_ENDPOINT}/contacts/all`, {
-    method: 'GET'
-    // headers: {
-    //   'content-type': 'application/json',
-    //   Authorization: `Bearer ${config.API_KEY2}`,
-    //   Origin: `${config.FRONT_WEB}`
-    // }
-  })
+  return fetch(`${config.API_ENDPOINT}/contacts/all`, getHeader)
     .then(resp => {
       if (!resp.ok) {
         throw new Error(resp.status);
@@ -35,14 +28,7 @@ export const getAllCompanies = () => {
  * @returns [{},{},{}] Array of objects
  */
 export const getActiveCompanies = () => {
-  return fetch(`${config.API_ENDPOINT}/contacts/allActiveContacts`, {
-    method: 'GET',
-    headers: {
-      'content-type': 'application/json'
-      //   Authorization: `Bearer ${config.API_KEY2}`,
-      //   Origin: `${config.FRONT_WEB}`
-    }
-  })
+  return fetch(`${config.API_ENDPOINT}/contacts/allActiveContacts`, getHeader)
     .then(resp => {
       if (!resp.ok) {
         throw new Error(resp.status);
@@ -64,14 +50,7 @@ export const getActiveCompanies = () => {
  * @returns
  */
 export const getPriorCompanies = () => {
-  return fetch(`${config.API_ENDPOINT}/contacts/allPriorContacts`, {
-    method: 'GET',
-    headers: {
-      'content-type': 'application/json'
-      //   Authorization: `Bearer ${config.API_KEY2}`,
-      //   Origin: `${config.FRONT_WEB}`
-    }
-  })
+  return fetch(`${config.API_ENDPOINT}/contacts/allPriorContacts`, getHeader)
     .then(resp => {
       if (!resp.ok) {
         throw new Error(resp.status);
@@ -94,14 +73,7 @@ export const getPriorCompanies = () => {
  * @returns {object} Object is company information
  */
 export const getCompanyInformation = companyId => {
-  return fetch(`${config.API_ENDPOINT}/contacts/company/${companyId}`, {
-    method: 'GET'
-    // headers: {
-    //   'content-type': 'application/json',
-    //   Authorization: `Bearer ${config.API_KEY2}`,
-    //   Origin: `${config.FRONT_WEB}`
-    // }
-  })
+  return fetch(`${config.API_ENDPOINT}/contacts/company/${companyId}`, getHeader)
     .then(resp => {
       if (!resp.ok) {
         throw new Error(resp.status);
@@ -121,14 +93,7 @@ export const getCompanyInformation = companyId => {
  *
  */
 export const getCompanyTransactions = (companyId, time) => {
-  const allCompanyTransactions = fetch(`${config.API_ENDPOINT}/transactions/companyTransactions/${companyId}/${time}`, {
-    method: 'GET'
-    // headers: {
-    //   'content-type': 'application/json',
-    //   Authorization: `Bearer ${config.API_KEY2}`,
-    //   Origin: `${config.FRONT_WEB}`
-    // }
-  })
+  const allCompanyTransactions = fetch(`${config.API_ENDPOINT}/transactions/companyTransactions/${companyId}/${time}`, getHeader)
     .then(resp => {
       if (!resp.ok) {
         throw new Error(resp.status);
@@ -150,14 +115,7 @@ export const getCompanyTransactions = (companyId, time) => {
  *
  */
 export const getCompanyInvoices = companyId => {
-  return fetch(`${config.API_ENDPOINT}/invoices/all/company/${companyId}`, {
-    method: 'GET'
-    // headers: {
-    //   'content-type': 'application/json',
-    //   Authorization: `Bearer ${config.API_KEY2}`,
-    //   Origin: `${config.FRONT_WEB}`
-    // }
-  })
+  return fetch(`${config.API_ENDPOINT}/invoices/all/company/${companyId}`, getHeader)
     .then(resp => {
       if (!resp.ok) {
         throw new Error(resp.status);
@@ -178,14 +136,7 @@ export const getCompanyInvoices = companyId => {
  *
  */
 export const getAllTransactions = time => {
-  return fetch(`${config.API_ENDPOINT}/transactions/all/${time}`, {
-    method: 'GET'
-    // headers: {
-    //   'content-type': 'application/json',
-    //   Authorization: `Bearer ${config.API_KEY2}`,
-    //   Origin: `${config.FRONT_WEB}`
-    // }
-  })
+  return fetch(`${config.API_ENDPOINT}/transactions/all/${time}`, getHeader)
     .then(resp => {
       if (!resp.ok) {
         throw new Error(resp.status);
@@ -206,14 +157,7 @@ export const getAllTransactions = time => {
  *
  */
 export const getJobTransactions = (companyId, jobId) => {
-  return fetch(`${config.API_ENDPOINT}/transactions/jobTransactions/${companyId}/${jobId}`, {
-    method: 'GET'
-    // headers: {
-    //   'content-type': 'application/json',
-    //   Authorization: `Bearer ${config.API_KEY2}`,
-    //   Origin: `${config.FRONT_WEB}`
-    // }
-  })
+  return fetch(`${config.API_ENDPOINT}/transactions/jobTransactions/${companyId}/${jobId}`, getHeader)
     .then(resp => {
       if (!resp.ok) {
         throw new Error(resp.status);
@@ -234,14 +178,7 @@ export const getJobTransactions = (companyId, jobId) => {
  *
  */
 export const getAllJobs = time => {
-  return fetch(`${config.API_ENDPOINT}/jobs/allJobs/${time}`, {
-    method: 'GET'
-    // headers: {
-    //   'content-type': 'application/json',
-    //   Authorization: `Bearer ${config.API_KEY2}`,
-    //   Origin: `${config.FRONT_WEB}`
-    // }
-  })
+  return fetch(`${config.API_ENDPOINT}/jobs/allJobs/${time}`, getHeader)
     .then(resp => {
       if (!resp.ok) {
         throw new Error(resp.status);
@@ -262,14 +199,7 @@ export const getAllJobs = time => {
  *
  */
 export const getCompanyJobs = (companyId, time) => {
-  return fetch(`${config.API_ENDPOINT}/jobs/all/${companyId}/${time}`, {
-    method: 'GET'
-    // headers: {
-    //   'content-type': 'application/json',
-    //   Authorization: `Bearer ${config.API_KEY2}`,
-    //   Origin: `${config.FRONT_WEB}`
-    // }
-  })
+  return fetch(`${config.API_ENDPOINT}/jobs/all/${companyId}/${time}`, getHeader)
     .then(resp => {
       if (!resp.ok) {
         throw new Error(resp.status);
@@ -290,14 +220,7 @@ export const getCompanyJobs = (companyId, time) => {
  * Gets all job types/descriptions/definitions
  */
 export const getAllJobDefinitions = () => {
-  return fetch(`${config.API_ENDPOINT}/jobDescription/all`, {
-    method: 'GET'
-    // headers: {
-    //   'content-type': 'application/json',
-    //   Authorization: `Bearer ${config.API_KEY2}`,
-    //   Origin: `${config.FRONT_WEB}`
-    // }
-  })
+  return fetch(`${config.API_ENDPOINT}/jobDescription/all`, getHeader)
     .then(resp => {
       if (!resp.ok) {
         throw new Error(resp.status);
@@ -319,14 +242,7 @@ export const getAllJobDefinitions = () => {
  * @returns [{},{},{}] Array of objects. Each object is a employee
  */
 export const getAllEmployees = () => {
-  return fetch(`${config.API_ENDPOINT}/employee/all`, {
-    method: 'GET'
-    // headers: {
-    //   'content-type': 'application/json',
-    //   Authorization: `Bearer ${config.API_KEY2}`,
-    //   Origin: `${config.FRONT_WEB}`
-    // }
-  })
+  return fetch(`${config.API_ENDPOINT}/employee/all`, getHeader)
     .then(resp => {
       if (!resp.ok) {
         throw new Error(resp.status);
@@ -348,14 +264,7 @@ export const getAllEmployees = () => {
  */
 
 export const getEmployee = employeeId => {
-  return fetch(`${config.API_ENDPOINT}/employee/findEmployee/${employeeId}`, {
-    method: 'GET'
-    // headers: {
-    //   'content-type': 'application/json',
-    //   Authorization: `Bearer ${config.API_KEY2}`,
-    //   Origin: `${config.FRONT_WEB}`
-    // }
-  })
+  return fetch(`${config.API_ENDPOINT}/employee/findEmployee/${employeeId}`, getHeader)
     .then(resp => {
       if (!resp.ok) {
         throw new Error(resp.status);
@@ -378,14 +287,7 @@ export const getEmployee = employeeId => {
  * @returns [{},{},{}] arrays of objects, each object is a invoice
  */
 export const getAllInvoices = time => {
-  return fetch(`${config.API_ENDPOINT}/invoices/all/time/${time}`, {
-    method: 'GET'
-    // headers: {
-    //   'content-type': 'application/json',
-    //   Authorization: `Bearer ${config.API_KEY2}`,
-    //   Origin: `${config.FRONT_WEB}`
-    // }
-  })
+  return fetch(`${config.API_ENDPOINT}/invoices/all/time/${time}`, getHeader)
     .then(resp => {
       if (!resp.ok) {
         throw new Error(resp.status);
@@ -408,14 +310,7 @@ export const getAllInvoices = time => {
  * @returns [{}] array of objects. object is invoice
  */
 export const getAnInvoice = (invoiceId, companyId) => {
-  return fetch(`${config.API_ENDPOINT}/invoices/single/${invoiceId}/${companyId}`, {
-    method: 'GET'
-    // headers: {
-    //   'content-type': 'application/json',
-    //   Authorization: `Bearer ${config.API_KEY2}`,
-    //   Origin: `${config.FRONT_WEB}`
-    // }
-  })
+  return fetch(`${config.API_ENDPOINT}/invoices/single/${invoiceId}/${companyId}`, getHeader)
     .then(resp => {
       if (!resp.ok) {
         throw new Error(resp.status);
@@ -436,14 +331,7 @@ export const getAnInvoice = (invoiceId, companyId) => {
  * @returns
  */
 export const getAllReadyToBillInvoices = () => {
-  return fetch(`${config.API_ENDPOINT}/create/createInvoices/readyToBill`, {
-    method: 'GET',
-    headers: {
-      'content-type': 'application/json'
-      //   Authorization: `Bearer ${config.API_KEY2}`,
-      //   Origin: `${config.FRONT_WEB}`
-    }
-  })
+  return fetch(`${config.API_ENDPOINT}/create/createInvoices/readyToBill`, getHeader)
     .then(resp => {
       if (!resp.ok) {
         throw new Error(resp.status);
@@ -465,14 +353,7 @@ export const getAllReadyToBillInvoices = () => {
  * @returns Creates and gets zip file from backend
  */
 export const getZippedInvoices = () => {
-  return fetch(`${config.API_ENDPOINT}/create/download`, {
-    method: 'GET',
-    headers: {
-      'content-type': 'application/octet-stream'
-      //   Authorization: `Bearer ${config.API_KEY2}`,
-      //   Origin: `${config.FRONT_WEB}`
-    }
-  })
+  return fetch(`${config.API_ENDPOINT}/create/download`, getHeader)
     .then(res => res.blob())
     .then(data => {
       var url = window.URL.createObjectURL(data);
@@ -489,14 +370,7 @@ export const getZippedInvoices = () => {
 };
 
 export const getOutstandingInvoiceForCompany = selectedCompany => {
-  return fetch(`${config.API_ENDPOINT}/invoices/outstandingInvoices/${selectedCompany.oid}`, {
-    method: 'GET',
-    headers: {
-      'content-type': 'application/json'
-      //   Authorization: `Bearer ${config.API_KEY2}`,
-      //   Origin: `${config.FRONT_WEB}`
-    }
-  })
+  return fetch(`${config.API_ENDPOINT}/invoices/outstandingInvoices/${selectedCompany.oid}`, getHeader)
     .then(resp => {
       if (!resp.ok) {
         throw new Error(resp.status);
@@ -521,3 +395,19 @@ const noData = {
   tableData: [],
   tableHeaders: []
 };
+
+const getHeader = {
+  method: 'GET',
+  header: {
+    'content-type': 'application/json',
+    //   Authorization: `Bearer ${config.API_KEY2}`,
+    Origin: `${config.FRONT_WEB}`
+  }
+};
+
+// method: 'GET',
+// headers: {
+//   'content-type': 'application/json',
+//   Authorization: `Bearer ${config.API_KEY2}`,
+//   Origin: `${config.FRONT_WEB}`
+// }
