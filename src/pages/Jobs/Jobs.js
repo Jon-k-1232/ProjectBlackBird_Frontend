@@ -25,7 +25,7 @@ export default function Jobs() {
         <Stack direction='row' alignItems='center' justifyContent='space-between' mb={5}>
           <HeaderMenu handleOnClick={data => navigate(`/dashboard/${data}/`)} page={'Jobs'} listOfButtons={button} />
         </Stack>
-        <DataTable {...jobs} route='/dashboard/jobDetails/' />
+        <DataTable {...jobs} route='/dashboard/jobDetails/' columnToSortAscOrDesc='Start Date' ascOrDesc='desc' />
       </CardContent>
     </Page>
   );

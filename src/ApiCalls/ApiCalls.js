@@ -390,6 +390,18 @@ export const getOutstandingInvoiceForCompany = selectedCompany => {
     });
 };
 
+export const rePrintInvoice = async invoiceId => {
+  return fetch(`${config.API_ENDPOINT}/create/createInvoices/rePrint/${invoiceId}`, getHeader)
+    .then(resp => {
+      if (!resp.ok) {
+        throw new Error(resp.status);
+      }
+      return resp.json();
+    })
+    .then(res => res)
+    .catch(error => error);
+};
+
 const noData = {
   rawData: [],
   tableData: [],

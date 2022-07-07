@@ -4,13 +4,17 @@ import { useLocation } from 'react-router-dom';
 import Page from '../../Components/Page';
 import { Typography, Card, CardContent } from '@mui/material';
 import DataTable from '../../Components/DataTable/DataTable';
-import { getAnInvoice } from '../../ApiCalls/ApiCalls';
+import { getAnInvoice, rePrintInvoice, getZippedInvoices } from '../../ApiCalls/ApiCalls';
 import dayjs from 'dayjs';
+import HeaderMenu from 'src/Components/HeaderMenu/HeaderMenu';
+import plusFill from '@iconify/icons-eva/plus-fill';
+import AlertBanner from '../../Components/AlertBanner/AlertBanner';
 
 export default function InvoiceDetails() {
   const location = useLocation();
   const [invoiceDetails, setInvoiceDetails] = useState({});
   const [invoice, setInvoice] = useState({});
+  const [postStatus, setPostStatus] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,8 +43,18 @@ export default function InvoiceDetails() {
     totalPayments
   } = invoice;
 
+  const handleSubmit = async e => {
+    const postedItem = await rePrintInvoice(invoiceNumber);
+    setPostStatus(postedItem.status);
+    console.log(postedItem.invoiceObject);
+    // await getZippedInvoices();
+    setTimeout(() => setPostStatus(null), 4000);
+  };
+
   return (
     <Page title='invoiceDetails'>
+      <HeaderMenu handleOnClick={e => handleSubmit(e)} page={'Invoice Details'} listOfButtons={button} />
+      <AlertBanner postStatus={postStatus} type='Invoice Re-Printed' />
       <Container style={{ maxWidth: '1280px' }}>
         <Card className='contactWrapper'>
           <CardContent style={styles.header} className='contactHeader'>
@@ -122,3 +136,5 @@ const styles = {
     padding: '0px 10px'
   }
 };
+
+const button = [{ name: 'Print', variant: 'contained', icon: plusFill, htmlName: 'Print Again' }];

@@ -26,10 +26,10 @@ export default function Invoices() {
         <Stack direction='row' alignItems='center' justifyContent='space-between' mb={5}>
           <HeaderMenu handleOnClick={data => navigate(`/dashboard/${data}/`)} page={'Invoices'} listOfButtons={button} />
         </Stack>
-        <DataTable {...invoices} route='/dashboard/invoiceDetails/' />
+        <DataTable {...invoices} route='/dashboard/invoiceDetails/' columnToSortAscOrDesc='Invoice Date' ascOrDesc='desc' />
       </Container>
     </Page>
   );
 }
 
-const button = [{ name: 'newInvoice', variant: 'contained', icon: plusFill, htmlName: 'New Invoices' }];
+const button = [{ name: 'newInvoice', variant: 'contained', icon: plusFill, htmlName: 'Create New Invoices' }];

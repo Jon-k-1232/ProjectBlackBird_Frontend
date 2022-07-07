@@ -4,11 +4,23 @@ import MUIDataTable from 'mui-datatables';
 /**
  * @param {*} props props.tableData, props.tableHeaders, props.route
  * Column data is an array of strings. Each string is a new column head
- * Table data is an array of arrays where each array is a seperate item
+ * Table data is an array of arrays where each array is a separate item
  */
 export default function DataTable(props) {
   const navigate = useNavigate();
-  const { useCheckboxes, selectOnRowClick, route, rawData, tableData, tableHeaders, tableSize, paginationIncrement, chartHeight } = props;
+  const {
+    useCheckboxes,
+    selectOnRowClick,
+    route,
+    rawData,
+    tableData,
+    tableHeaders,
+    tableSize,
+    paginationIncrement,
+    chartHeight,
+    columnToSortAscOrDesc,
+    ascOrDesc
+  } = props;
 
   const responsive = 'vertical';
   const tableBodyHeight = chartHeight ? chartHeight : '1000px';
@@ -16,6 +28,10 @@ export default function DataTable(props) {
 
   // https://github.com/gregnb/mui-datatables#api
   const options = {
+    sortOrder: {
+      name: columnToSortAscOrDesc ? columnToSortAscOrDesc : 'Transaction Date',
+      direction: ascOrDesc ? ascOrDesc : 'desc'
+    },
     rowsPerPage: tableSize ? tableSize : 50,
     rowsPerPageOptions: paginationIncrement ? paginationIncrement : [50, 150, 300],
     rowHover: true,

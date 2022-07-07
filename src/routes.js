@@ -22,6 +22,7 @@ import NewJobDefinition from './Pages/JobDefinitions/NewJobDefinition';
 import JobDefinitions from './Pages/JobDefinitions/JobDefinitions';
 import ChangeInvoice from './Pages/Transactions/ChangeInvoice';
 import NewTransactionsPage from './Pages/Transactions/NewTransactionPage';
+import Deactivation from './Pages/Clients/Deactivation';
 
 export default function Router(allEmployees) {
   return useRoutes([
@@ -47,7 +48,8 @@ export default function Router(allEmployees) {
         { path: 'jobDefinitions', element: <JobDefinitions /> },
         { path: 'createNewJobDefinition', element: <NewJobDefinition /> },
         { path: 'profile', element: <Profile /> },
-        { path: 'changeInvoice', element: <ChangeInvoice /> }
+        { path: 'changeInvoice', element: <ChangeInvoice /> },
+        { path: 'deactivation', element: <Deactivation /> }
       ]
     },
     {

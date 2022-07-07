@@ -55,7 +55,14 @@ export default function NewInvoice() {
           <Grid item>Clients Showing Balances</Grid>
         </Grid>
         <AlertBanner postStatus={postStatus} type='Invoices' />
-        <DataTable {...invoices} selectOnRowClick={true} useCheckboxes={true} selectedList={items => setSelectedRowData(items)} />
+        <DataTable
+          {...invoices}
+          selectOnRowClick={true}
+          useCheckboxes={true}
+          selectedList={items => setSelectedRowData(items)}
+          columnToSortAscOrDesc='Company Name'
+          ascOrDesc='asc'
+        />
       </Container>
     </Page>
   );

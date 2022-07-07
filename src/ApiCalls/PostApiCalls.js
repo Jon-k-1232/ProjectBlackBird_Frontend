@@ -149,3 +149,18 @@ export const postInvoiceUpdate = async invoice => {
     .then(res => res)
     .catch(error => error);
 };
+
+export const deactivateClients = async invoiceIds => {
+  return fetch(`${config.API_ENDPOINT}/contacts/cleanAndDeactivate/${invoiceIds}`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json'
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      //   Origin: `${config.FRONT_WEB}`
+    },
+    body: JSON.stringify(invoiceIds)
+  })
+    .then(res => res.json())
+    .then(res => res)
+    .catch(error => error);
+};

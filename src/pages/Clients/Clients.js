@@ -44,7 +44,7 @@ export default function Clients() {
           </Grid>
           <Grid item>Active Clients</Grid>
         </Grid>
-        <DataTable {...allClients} route='/dashboard/clientDetails/' />
+        <DataTable {...allClients} route='/dashboard/clientDetails/' columnToSortAscOrDesc='Company Name' ascOrDesc='asc' />
       </Container>
     </Page>
   );
