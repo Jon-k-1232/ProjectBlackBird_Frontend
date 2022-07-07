@@ -47,7 +47,7 @@ export default function InvoiceDetails() {
     const postedItem = await rePrintInvoice(invoiceNumber);
     setPostStatus(postedItem.status);
     console.log(postedItem.invoiceObject);
-    // await getZippedInvoices();
+    await getZippedInvoices();
     setTimeout(() => setPostStatus(null), 4000);
   };
 
@@ -60,8 +60,6 @@ export default function InvoiceDetails() {
           <CardContent style={styles.header} className='contactHeader'>
             <Typography variant='h4'>{address1 ? address1 : contactName}</Typography>
             <Typography variant='subtitle1'>Invoice: {invoiceNumber}</Typography>
-            {/* <Typography variant='subtitle1'>Invoice Date: {dayjs(invoiceDate).format('MMMM/DD/YYYY')}</Typography>
-            <Typography variant='subtitle1'>Due Date: {dayjs(paymentDueDate).format('MMMM/DD/YYYY')}</Typography> */}
           </CardContent>
           <CardContent style={styles.tableBody} className='contactTables'>
             <table className='contactColumnOne'>

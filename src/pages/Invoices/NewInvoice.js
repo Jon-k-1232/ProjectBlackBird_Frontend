@@ -26,8 +26,9 @@ export default function NewInvoice() {
     const arrayOfInvoicesToCreate = selectedRowData.map(company => company.oid);
     const postedItem = await createInvoices(arrayOfInvoicesToCreate);
     setPostStatus(postedItem.status);
-    await getZippedInvoices();
     setTimeout(() => setPostStatus(null), 4000);
+    // Its odd to have a timer with async call, but needed as facing delay in pdf creation. If zip is created to quickly, then zip will run and some pdf's will fail to fully create.
+    setTimeout(async () => await getZippedInvoices(), 4000);
   };
 
   const handleChange = async e => {
