@@ -46,7 +46,6 @@ export default function InvoiceDetails() {
   const handleSubmit = async e => {
     const postedItem = await rePrintInvoice(invoiceNumber);
     setPostStatus(postedItem.status);
-    console.log(postedItem.invoiceObject);
     await getZippedInvoices();
     setTimeout(() => setPostStatus(null), 4000);
   };

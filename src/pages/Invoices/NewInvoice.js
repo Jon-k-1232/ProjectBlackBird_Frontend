@@ -7,6 +7,7 @@ import HeaderMenu from '../../Components/HeaderMenu/HeaderMenu';
 import { getAllReadyToBillInvoices, getAllCompanies, getZippedInvoices } from '../../ApiCalls/ApiCalls';
 import { createInvoices } from '../../ApiCalls/PostApiCalls';
 import AlertBanner from '../../Components/AlertBanner/AlertBanner';
+import { csvGenerator, updateReviewInvoiceObject } from '../../utils/csvGenerator';
 
 export default function NewInvoice() {
   const [selectedRowData, setSelectedRowData] = useState(null);
@@ -23,12 +24,23 @@ export default function NewInvoice() {
   }, []);
 
   const handleSubmit = async e => {
-    const arrayOfInvoicesToCreate = selectedRowData.map(company => company.oid);
-    const postedItem = await createInvoices(arrayOfInvoicesToCreate);
-    setPostStatus(postedItem.status);
-    setTimeout(() => setPostStatus(null), 4000);
-    // Its odd to have a timer with async call, but needed as facing delay in pdf creation. If zip is created to quickly, then zip will run and some pdf's will fail to fully create.
-    setTimeout(async () => await getZippedInvoices(), 4000);
+    if (e === 'newInvoice') {
+      const arrayOfInvoicesToCreate = selectedRowData.map(company => company.oid);
+      const estimateReview = false;
+      const postedItem = await createInvoices(arrayOfInvoicesToCreate, estimateReview);
+      setPostStatus(postedItem.status);
+      setTimeout(() => setPostStatus(null), 4000);
+      // Its odd to have a timer with async call, but needed as facing delay in pdf creation. If zip is created to quickly, then zip will run and some pdf's will fail to fully create.
+      setTimeout(async () => await getZippedInvoices(), 4000);
+    } else {
+      const arrayOfInvoicesToCreate = selectedRowData.map(company => company.oid);
+      const estimateReview = true;
+      const postedItem = await createInvoices(arrayOfInvoicesToCreate, estimateReview);
+      setPostStatus(postedItem.status);
+      setTimeout(() => setPostStatus(null), 4000);
+      const invoicesForReview = updateReviewInvoiceObject(postedItem.newInvoices);
+      csvGenerator(invoicesForReview, 'Clients Ready to Bill');
+    }
   };
 
   const handleChange = async e => {
@@ -69,4 +81,7 @@ export default function NewInvoice() {
   );
 }
 
-const button = [{ name: 'newInvoice', variant: 'contained', icon: plusFill, htmlName: 'Create Selected Invoices' }];
+const button = [
+  { name: 'csvList', variant: 'contained', icon: plusFill, htmlName: 'Create CSV For Review' },
+  { name: 'newInvoice', variant: 'contained', icon: plusFill, htmlName: 'Create Selected Invoices' }
+];
