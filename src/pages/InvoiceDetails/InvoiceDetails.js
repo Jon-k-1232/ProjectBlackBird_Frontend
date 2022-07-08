@@ -78,15 +78,15 @@ export default function InvoiceDetails() {
                 </tr>
                 <tr>
                   <th>Invoice Date:</th>
-                  <td>{dayjs(invoiceDate).format('MMMM/DD/YYYY')}</td>
+                  <td>{dayjs(invoiceDate).format('MMMM DD, YYYY')}</td>
                 </tr>
                 <tr>
                   <th>Due Date:</th>
-                  <td>{dayjs(paymentDueDate).format('MMMM/DD/YYYY')}</td>
+                  <td>{dayjs(paymentDueDate).format('MMMM DD, YYYY')}</td>
                 </tr>
                 <tr>
                   <th>Data End Date:</th>
-                  <td>{dayjs(dataEndDate).format('MMMM/DD/YYYY HH:mm:ss')}</td>
+                  <td>{dayjs(dataEndDate).format('MMMM DD, YYYY HH:mm:ss')}</td>
                 </tr>
               </tbody>
             </table>
@@ -95,19 +95,19 @@ export default function InvoiceDetails() {
               <tbody>
                 <tr>
                   <th>Beginning Balance:</th>
-                  <td>{beginningBalance}</td>
+                  <td>{(beginningBalance && beginningBalance.toFixed(2)) || '0.00'}</td>
                 </tr>
                 <tr>
                   <th>Payments:</th>
-                  <td>{totalPayments}</td>
+                  <td>{(totalPayments && totalPayments.toFixed(2)) || '0.00'}</td>
                 </tr>
                 <tr>
                   <th>New Charges:</th>
-                  <td>{totalNewCharges}</td>
+                  <td>{(totalNewCharges && totalNewCharges.toFixed(2)) || '0.00'}</td>
                 </tr>
                 <tr>
                   <th>Ending Balance:</th>
-                  <td>{endingBalance}</td>
+                  <td>{(endingBalance && endingBalance.toFixed(2)) || '0.00'}</td>
                 </tr>
               </tbody>
             </table>
