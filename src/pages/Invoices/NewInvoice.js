@@ -23,21 +23,17 @@ export default function NewInvoice() {
     fetchData();
   }, []);
 
-  const handleSubmit = async e => {
-    if (e === 'newInvoice') {
-      const arrayOfInvoicesToCreate = selectedRowData.map(company => company.oid);
-      const estimateReview = false;
-      const postedItem = await createInvoices(arrayOfInvoicesToCreate, estimateReview);
-      setPostStatus(postedItem.status);
-      setTimeout(() => setPostStatus(null), 4000);
-      // Its odd to have a timer with async call, but needed as facing delay in pdf creation. If zip is created to quickly, then zip will run and some pdf's will fail to fully create.
-      setTimeout(async () => await getZippedInvoices(), 4000);
-    } else {
-      const arrayOfInvoicesToCreate = selectedRowData.map(company => company.oid);
-      const estimateReview = true;
-      const postedItem = await createInvoices(arrayOfInvoicesToCreate, estimateReview);
-      setPostStatus(postedItem.status);
-      setTimeout(() => setPostStatus(null), 4000);
+  const handleSubmit = async buttonName => {
+    const arrayOfInvoicesToCreate = selectedRowData.map(company => company.oid);
+    const roughDraft = buttonName !== 'newInvoice' ? true : false;
+    const createPdf = buttonName !== 'csvList' ? true : false;
+    const postedItem = await createInvoices(arrayOfInvoicesToCreate, roughDraft, createPdf);
+    setPostStatus(postedItem.status);
+    setTimeout(() => setPostStatus(null), 4000);
+    // Its odd to have a timer with async call, but needed as facing delay in pdf creation. If zip is created to quickly, then zip will run and some pdf's will fail to fully create.
+    setTimeout(async () => await getZippedInvoices(), 4000);
+
+    if (buttonName === 'csvList') {
       const invoicesForReview = updateReviewInvoiceObject(postedItem.newInvoices);
       csvGenerator(invoicesForReview, 'Clients Ready to Bill');
     }
@@ -58,7 +54,7 @@ export default function NewInvoice() {
     <Page title='Invoices'>
       <Container style={{ maxWidth: '1280px' }}>
         <Stack direction='row' alignItems='center' justifyContent='space-between' mb={5}>
-          <HeaderMenu handleOnClick={e => handleSubmit(e)} page={'Create Invoices'} listOfButtons={button} />
+          <HeaderMenu handleOnClick={buttonName => handleSubmit(buttonName)} page={'Create Invoices'} listOfButtons={button} />
         </Stack>
         <Grid component='label' container alignItems='center' spacing={1}>
           <Grid item>All Clients</Grid>
@@ -82,6 +78,7 @@ export default function NewInvoice() {
 }
 
 const button = [
-  { name: 'csvList', variant: 'contained', icon: plusFill, htmlName: 'Create CSV For Review' },
-  { name: 'newInvoice', variant: 'contained', icon: plusFill, htmlName: 'Create Selected Invoices' }
+  { name: 'csvList', variant: 'contained', icon: plusFill, htmlName: 'Create CSV For Selected Invoices' },
+  { name: 'roughDraftInvoice', variant: 'contained', icon: plusFill, htmlName: 'Create Rough Draft For Selected Invoices' },
+  { name: 'newInvoice', variant: 'contained', icon: plusFill, htmlName: 'Lock and Create Selected Invoices' }
 ];

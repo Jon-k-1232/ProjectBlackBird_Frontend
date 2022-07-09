@@ -120,8 +120,8 @@ export const createJobDefinition = async jobDefinition => {
     .catch(error => error);
 };
 
-export const createInvoices = async (invoiceIds, reviewInvoices) => {
-  return fetch(`${config.API_ENDPOINT}/create/createInvoices/readyToBill/${invoiceIds}/${reviewInvoices}`, {
+export const createInvoices = async (invoiceIds, roughDraft, createPdf) => {
+  return fetch(`${config.API_ENDPOINT}/create/createInvoices/readyToBill/${invoiceIds}/${roughDraft}/${createPdf}`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json'
