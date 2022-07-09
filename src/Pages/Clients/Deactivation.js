@@ -5,7 +5,7 @@ import Page from '../../Components/Page';
 import DataTable from '../../Components/DataTable/DataTable';
 import HeaderMenu from '../../Components/HeaderMenu/HeaderMenu';
 import { getActiveCompanies } from '../../ApiCalls/ApiCalls';
-import { deactivateClients } from '../../ApiCalls/PostApiCalls';
+import { zeroAndDeactivateUserAccount } from '../../ApiCalls/PostApiCalls';
 import AlertBanner from '../../Components/AlertBanner/AlertBanner';
 
 export default function Deactivation() {
@@ -23,7 +23,7 @@ export default function Deactivation() {
 
   const handleSubmit = async e => {
     const arrayOfClientsToDeactivate = selectedRowData.map(company => company.oid);
-    const postedItem = await deactivateClients(arrayOfClientsToDeactivate);
+    const postedItem = await zeroAndDeactivateUserAccount(arrayOfClientsToDeactivate);
     setPostStatus(postedItem.status);
     setTimeout(() => setPostStatus(null), 4000);
   };

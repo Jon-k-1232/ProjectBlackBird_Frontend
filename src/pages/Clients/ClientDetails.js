@@ -16,6 +16,7 @@ import plusFill from '@iconify/icons-eva/plus-fill';
 import NewJob from '../Jobs/NewJob';
 import NewClient from '../Clients/NewClient';
 import NewTransactionsPage from '../Transactions/NewTransactionPage';
+import AccountTools from './AccountTools';
 
 export default function ClientDetails() {
   const [dataToShow, setDataToShow] = useState('invoices');
@@ -25,6 +26,7 @@ export default function ClientDetails() {
   const [companyInvoices, setCompanyInvoices] = useState(null);
 
   const location = useLocation();
+
   useEffect(() => {
     const fetchData = async () => {
       // Data is being stored in props of routing.
@@ -70,6 +72,7 @@ export default function ClientDetails() {
         {dataToShow === 'notes' && <ComingSoon />}
         {dataToShow === 'statistics' && <ComingSoon />}
         {dataToShow === 'newClient' && <NewClient passedCompany={company} updateContactCard={companyUpdates => setCompany(companyUpdates)} />}
+        {dataToShow === 'accountTools' && <AccountTools companyId={company.oid} updateContact={updateContact => setCompany(updateContact)} />}
       </Container>
     </Page>
   );
@@ -83,5 +86,6 @@ const button = [
   { name: 'newJob', variant: 'contained', icon: plusFill, htmlName: 'New Job' },
   { name: 'notes', variant: 'contained', icon: clipboardNotes, htmlName: 'Notes' },
   { name: 'statistics', variant: 'contained', icon: statisticsIcon, htmlName: 'Statistics' },
-  { name: 'newClient', variant: 'contained', icon: clipboardNotes, htmlName: 'Edit Contact' }
+  { name: 'newClient', variant: 'contained', icon: clipboardNotes, htmlName: 'Edit Contact' },
+  { name: 'accountTools', variant: 'contained', icon: clipboardNotes, htmlName: 'Account Tools' }
 ];

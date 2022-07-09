@@ -150,15 +150,30 @@ export const postInvoiceUpdate = async invoice => {
     .catch(error => error);
 };
 
-export const deactivateClients = async invoiceIds => {
-  return fetch(`${config.API_ENDPOINT}/contacts/cleanAndDeactivate/${invoiceIds}`, {
+export const zeroAndDeactivateUserAccount = async companyIds => {
+  return fetch(`${config.API_ENDPOINT}/contacts/zeroAndDeactivate`, {
     method: 'POST',
     headers: {
-      'content-type': 'application/json'
+      'content-type': 'application/json',
       //   Authorization: `Bearer ${config.API_KEY2}`,
-      //   Origin: `${config.FRONT_WEB}`
+      Origin: `${config.FRONT_WEB}`
     },
-    body: JSON.stringify(invoiceIds)
+    body: JSON.stringify({ companyIds: [companyIds] })
+  })
+    .then(res => res.json())
+    .then(res => res)
+    .catch(error => error);
+};
+
+export const zeroCompanyAccount = async companyIds => {
+  return fetch(`${config.API_ENDPOINT}/contacts/zeroOutCompany`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      //   Authorization: `Bearer ${config.API_KEY2}`,
+      Origin: `${config.FRONT_WEB}`
+    },
+    body: JSON.stringify({ companyIds: [companyIds] })
   })
     .then(res => res.json())
     .then(res => res)
