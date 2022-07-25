@@ -379,10 +379,7 @@ export const getOutstandingInvoiceForCompany = selectedCompany => {
     })
     .then(data => {
       const { outstandingInvoices } = data;
-      const companyName = selectedCompany.companyName;
-      const updateObject = { companyName, ...outstandingInvoices };
-      const companyPassedDueInvoice = [updateObject];
-      return Object.keys(outstandingInvoices).length > 0 ? tableAndLabelCreation(companyPassedDueInvoice, 'oid', 'companyName') : null;
+      return outstandingInvoices.length ? tableAndLabelCreation(outstandingInvoices, 'oid', 'companyName') : null;
     })
     .catch(error => {
       console.log(error);
