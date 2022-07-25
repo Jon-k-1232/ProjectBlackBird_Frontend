@@ -242,7 +242,7 @@ export const getAllJobDefinitions = () => {
  * @returns [{},{},{}] Array of objects. Each object is a employee
  */
 export const getAllEmployees = () => {
-  return fetch(`${config.API_ENDPOINT}/employee/all`, getHeader)
+  return fetch(`${config.API_ENDPOINT}/employee/allActiveEmployees`, getHeader)
     .then(resp => {
       if (!resp.ok) {
         throw new Error(resp.status);
