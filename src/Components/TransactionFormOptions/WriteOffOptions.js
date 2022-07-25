@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Container, Stack, TextField } from '@mui/material';
+import { Container, Stack, TextField, Autocomplete } from '@mui/material';
 import InvoiceConfirmation from './InvoiceConfirmation';
 
 export default function WriteOffOptions({
@@ -12,14 +12,31 @@ export default function WriteOffOptions({
   setInvoice
 }) {
   const [disable, setDisable] = useState(true);
+  const [selectedCyclePeriod, setSelectedCyclePeriod] = useState('');
+  const [selectedCycleInputValue, setSelectedCycleInputValue] = useState('');
+
   return (
     <Container>
       <Stack spacing={3}>
-        <InvoiceConfirmation
-          outstandingInvoices={outstandingInvoices}
-          setDisableSubmit={boolValue => setDisable(boolValue)}
-          setInvoice={invoiceNumber => setInvoice(invoiceNumber)}
-        />
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
+          <Autocomplete
+            value={selectedCyclePeriod}
+            onChange={(event, newValue) => setSelectedCyclePeriod(newValue)}
+            inputValue={selectedCycleInputValue}
+            onInputChange={(event, newInputValue) => setSelectedCycleInputValue(newInputValue)}
+            getOptionLabel={option => option['displayValue'] || ''}
+            options={cycleOptions}
+            sx={{ width: 350 }}
+            renderInput={params => <TextField {...params} label='Select Cycle Period' />}
+          />
+        </Stack>
+        {selectedCyclePeriod.value === 'writeOffInvoiced' && (
+          <InvoiceConfirmation
+            outstandingInvoices={outstandingInvoices}
+            setDisableSubmit={boolValue => setDisable(boolValue)}
+            setInvoice={invoiceNumber => setInvoice(invoiceNumber)}
+          />
+        )}
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
           <TextField
             required
@@ -39,3 +56,14 @@ export default function WriteOffOptions({
     </Container>
   );
 }
+
+const cycleOptions = [
+  {
+    displayValue: 'Write Off Not Invoiced',
+    value: 'writeOffNotInvoiced'
+  },
+  {
+    displayValue: 'Write Off Already Invoiced',
+    value: 'writeOffInvoiced'
+  }
+];
