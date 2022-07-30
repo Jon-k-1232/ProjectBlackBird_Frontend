@@ -72,7 +72,7 @@ export default function NewTransactions({
     setSelectedAmount('');
     setTotalTransaction(0);
     setInvoice('');
-    setPostStatus(null);
+    setTimeout(() => setPostStatus(null), 4000);
   };
 
   return (

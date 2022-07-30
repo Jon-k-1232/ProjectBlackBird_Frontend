@@ -14,13 +14,14 @@ export default function TimeOptions({
   setDisableSubmit
 }) {
   const [calculationAlert, setCalculationAlert] = useState(false);
+  const [minuteDuration, setMinuteDuration] = useState('');
   const [startTime, setStartTime] = useState(dayjs().format());
   const [endTime, setEndTime] = useState(dayjs().format());
   const [open, setOpen] = useState(true);
 
   const handleTimeCalculation = () => {
     if (selectedEmployee && (selectedEmployee !== null || selectedEmployee !== undefined)) {
-      const loggedTime = timeCalculation(startTime, endTime);
+      const loggedTime = timeCalculation(startTime, endTime, minuteDuration);
       setSelectedQuantity(loggedTime);
       const employeeRate = selectedEmployee.hourlyCost;
       setSelectedAmount(employeeRate);
@@ -39,6 +40,8 @@ export default function TimeOptions({
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
             <TimePicker label='Start Time' value={startTime} onChange={setStartTime} renderInput={params => <TextField {...params} />} />
             <TimePicker label='End Time' value={endTime} onChange={setEndTime} renderInput={params => <TextField {...params} />} />
+            <Typography variant='subtitle1'>OR</Typography>
+            <TextField type='number' max='10' label='Time In Minutes' value={minuteDuration} onChange={e => setMinuteDuration(e.target.value)} />
             <Button onClick={handleTimeCalculation} style={{ height: '30px', margin: '10px' }}>
               Calculate Time
             </Button>
@@ -49,13 +52,7 @@ export default function TimeOptions({
               <Collapse in={open}>
                 <Alert
                   action={
-                    <IconButton
-                      aria-label='close'
-                      color='inherit'
-                      size='small'
-                      onClick={() => {
-                        setOpen(false);
-                      }}>
+                    <IconButton aria-label='close' color='inherit' size='small' onClick={() => setOpen(false)}>
                       <CloseIcon fontSize='inherit' />
                     </IconButton>
                   }
@@ -80,14 +77,16 @@ export default function TimeOptions({
     </Container>
   );
 }
-const timeCalculation = (startTime, endTime) => {
-  const mins = endTime.diff(startTime, 'minutes', true);
+
+const timeCalculation = (startTime, endTime, userInputMinutes) => {
+  const mins = userInputMinutes ? Number(userInputMinutes) : endTime.diff(startTime, 'minutes', true);
   const totalHours = parseInt(mins / 60);
-  const totalMins = dayjs().minute(mins).$m + 1;
+  // Truthy is for user manually inputting minutes vs time clock times.
+  const totalMins = userInputMinutes ? mins - Math.floor(totalHours) * 60 : dayjs().minute(mins).$m + 1;
   let total = 0;
 
   switch (true) {
-    case totalMins >= 0 && totalMins <= 6:
+    case totalMins >= 1 && totalMins <= 6:
       total = `${totalHours}.1`;
       break;
     case totalMins >= 7 && totalMins <= 12:
