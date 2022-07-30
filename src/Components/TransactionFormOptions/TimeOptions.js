@@ -40,7 +40,9 @@ export default function TimeOptions({
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2, md: 8 }}>
             <TimePicker label='Start Time' value={startTime} onChange={setStartTime} renderInput={params => <TextField {...params} />} />
             <TimePicker label='End Time' value={endTime} onChange={setEndTime} renderInput={params => <TextField {...params} />} />
-            <Typography variant='subtitle1'>OR</Typography>
+            <Typography style={{ alignSelf: 'center' }} variant='subtitle1'>
+              OR
+            </Typography>
             <TextField type='number' max='10' label='Time In Minutes' value={minuteDuration} onChange={e => setMinuteDuration(e.target.value)} />
             <Button onClick={handleTimeCalculation} style={{ height: '30px', margin: '10px' }}>
               Calculate Time
