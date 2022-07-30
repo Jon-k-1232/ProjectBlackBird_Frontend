@@ -43,7 +43,18 @@ export default function TimeOptions({
             <Typography style={{ alignSelf: 'center' }} variant='subtitle1'>
               OR
             </Typography>
-            <TextField type='number' max='10' label='Time In Minutes' value={minuteDuration} onChange={e => setMinuteDuration(e.target.value)} />
+            <TextField
+              type='number'
+              max='10'
+              label='Time In Minutes'
+              value={minuteDuration}
+              onChange={e => {
+                setMinuteDuration(e.target.value);
+                // If user insert time on clock, then changed mind, reset time clock options
+                setStartTime(dayjs().format());
+                setEndTime(dayjs().format());
+              }}
+            />
             <Button onClick={handleTimeCalculation} style={{ height: '30px', margin: '10px' }}>
               Calculate Time
             </Button>
@@ -60,7 +71,8 @@ export default function TimeOptions({
                   }
                   severity='error'
                   sx={{ mb: 2 }}>
-                  There is an Error. Please check that employee is selected and that start and end times are in order.
+                  There is an Error. Please check that employee is selected, that start and end times are in am/pm chronological order, and that
+                  either minutes or the clock is used (not both).
                 </Alert>
               </Collapse>
             </Stack>
@@ -83,12 +95,13 @@ export default function TimeOptions({
 const timeCalculation = (startTime, endTime, userInputMinutes) => {
   const mins = userInputMinutes ? Number(userInputMinutes) : endTime.diff(startTime, 'minutes', true);
   const totalHours = parseInt(mins / 60);
+  const manualMinutes = userInputMinutes < 60 ? mins : mins - Math.floor(totalHours) * 60;
   // Truthy is for user manually inputting minutes vs time clock times.
-  const totalMins = userInputMinutes ? mins - Math.floor(totalHours) * 60 : dayjs().minute(mins).$m + 1;
+  const totalMins = userInputMinutes ? manualMinutes : dayjs().minute(mins).$m + 1;
   let total = 0;
 
   switch (true) {
-    case totalMins >= 1 && totalMins <= 6:
+    case totalMins >= 0 && totalMins <= 6:
       total = `${totalHours}.1`;
       break;
     case totalMins >= 7 && totalMins <= 12:
